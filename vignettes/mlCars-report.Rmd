@@ -1,0 +1,42 @@
+---
+title: "Using Machine Learning and Big Data to Model Car Dependency: an Exploration Using Origin-Destination Data"
+author: Robin Lovelace and Ilan Fridman-Rojas
+date: "`r Sys.Date()`"
+bibliography: ../references.bib
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## What is car dependency?
+
+Car dependency should be easy to define: a measure of the extent to which people *depend* on their cars.
+But what does this actually mean?
+Unless your car doubles as a life-support system, it is unlikley that you literally depend on it for survival.
+More likely you depend on the car for trips that are *seen as essential*, for modern life.
+Whether it's for doing the 'weekly shop', dropping children off at school or taking a sick relative to hospital at an affordable, car use can easily become integral modern life.
+
+Of course, each of these trips could have either been made by a different mode or not made at all and (except potentially in the case of taking a relative to hospital) nobody would die.
+Car dependency is thus about observed behaviour than hypothetical consequences of going *cold turkey*.
+The analogy of a drug dependency is useful.
+Drug dependents will not die if they can no longer indulge their addition.
+But life will be hard, at least for a while after, when they stop.
+Similarly, those who are car dependent will find it hard to adjust to life after their car has been taken away.
+
+From a policy perspective car dependency is problematic due to its negative consequences, not in its own right. 
+Notwithstanding questions of whether government policy encourages car dependency, 
+
+
+It is important to note that car dependency is not necessarily 
+
+## Established methods for car dependency research
+
+There is a long history of reasearch into the concepts of car dependency and, more broadly, mode choice. 
+
+
+[@mogridge_self-defeating_1997]
+
+
+## References

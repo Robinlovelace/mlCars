@@ -1,13 +1,10 @@
-Untitled
+Using Machine Learning and Big Data to Model Car Dependency: an Exploration Using Origin-Destination Data
 ================
 
+This project explores the potential for emerging methods in Big Data and Machine Learning to be applied to transport modelling, with a focus on car dependency at the origin-destination level.
+
+Installing it, after a recent version of R and the package **devtools** have been installed, should be as simple as typing and then executing the following command:
+
 ``` r
-bib = httr::GET("https://www.zotero.org/api/groups/418217/collections/RXVSSSMD/items/top?limit=100&format=bibtex&v=1", httr::write_disk("references.bib", overwrite = T))
+devtools::install_github("robinlovelace/mlCars")
 ```
-
-(Mogridge 1997)
-
-References
-----------
-
-Mogridge, Martin JH. 1997. “The Self-Defeating Nature of Urban Road Capacity Policy: A Review of Theories, Disputes and Available Evidence.” *Transport Policy* 4 (1): 5–23. doi:[10.1016/S0967-070X(96)00030-3](https://doi.org/10.1016/S0967-070X(96)00030-3).

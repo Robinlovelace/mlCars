@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Using Machine Learning and Big Data to Model Car Dependency: an Exploration Using Origin-Destination Data"
 output: github_document
 bibliography: references.bib
 ---
@@ -8,10 +8,16 @@ bibliography: references.bib
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
+```{r, echo=FALSE, eval=curl::has_internet()}
 bib = httr::GET("https://www.zotero.org/api/groups/418217/collections/RXVSSSMD/items/top?limit=100&format=bibtex&v=1", httr::write_disk("references.bib", overwrite = T))
 ```
 
-[@mogridge_self-defeating_1997]
+This project explores the potential for emerging methods in Big Data and Machine Learning to be applied to transport modelling, with a focus on car dependency at the origin-destination level.
 
-## References
+Installing it, after a recent version of R and the package **devtools** have been installed, should be as simple as typing and then executing the following command:
+
+```{r, eval=FALSE}
+devtools::install_github("robinlovelace/mlCars")
+```
+
+
