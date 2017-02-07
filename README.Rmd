@@ -1,0 +1,17 @@
+---
+title: "Untitled"
+output: github_document
+bibliography: references.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+bib = httr::GET("https://www.zotero.org/api/groups/418217/collections/RXVSSSMD/items/top?limit=100&format=bibtex&v=1", httr::write_disk("references.bib", overwrite = T))
+```
+
+[@mogridge_self-defeating_1997]
+
+## References
