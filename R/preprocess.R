@@ -114,24 +114,6 @@ df = left_join(df, homevars, by="homeMSOA")
 # READ IN DATA ON AREA OF WORKPLACE
 
 
-##################################################
-# READ IN THE CENTROIDS TO COMPUTE HOME-WORK EUCLIDEAN DISTANCE
-# http://webarchive.nationalarchives.gov.uk/20160105160709/http://www.ons.gov.uk/ons/guide-method/geography/products/census/spatial/centroids/index.html
-#unzip("data/middle_layer_super_output_areas_(e+w)_2011_population_weighted_centroids_v2.zip")
-cents = raster::shapefile("data/Middle_Layer_Super_Output_Areas_December_2011_Super_Generalised_Clipped_Boundaries_in_England_and_Wales.shp")
-cents = cents[!duplicated(cents@data),]
-#plot(cents)
-#names(cents)
-
-if(!file.exists("data/flows.Rda")){
-  starttime = proc.time()
-  df = df[df$homeMSOA %in% cents$msoa11cd & df$workMSOA %in% cents$msoa11cd, ]
-  flows = od2line(flow=df, zones=cents, origin_code="homeMSOA", dest_code="workMSOA", zone_code="msoa11cd")
-  saveRDS(flows, "data/flows.Rda")
-  print(proc.time() - starttime)
-}else{
-  flows = readRDS("data/flows.Rda")
-}
 
 ################################################
 # NEED TO MATCH THE MSOAS TO LOCAL AUTHORITY SO WE CAN SPLIT OFF WEST YORKSHIRE, WHICH WILL BE OUR CASE STUDY
@@ -147,7 +129,7 @@ lookup = lookup %>% select(MSOA11CD,MSOA11NM,LAD11NM)
 lookup_wy = lookup %>% filter(grepl("Leeds|Bradford|Kirklees|Calderdale|Wakefield", LAD11NM))
 unique(lookup_wy$LAD11NM)
 
-wydf = df %>% filter(`Area of residence` %in% lookup_wy$MSOA11CD & `Area of workplace` %in% lookup_wy$MSOA11CD)
+wydf = df %>% filter(homeMSOA %in% lookup_wy$MSOA11CD & workMSOA %in% lookup_wy$MSOA11CD)
 glimpse(wydf)
 
 
@@ -160,10 +142,35 @@ shpfile = shpfile[!duplicated(shpfile@data),]
 shpfile
 
 summary(shpfile$msoa11cd %in% lookup$MSOA11CD)
-shpfile_wy = shpfile[shpfile$msoa11cd %in% wydf$`Area of residence` | shpfile$msoa11cd %in% wydf$`Area of workplace`,]
+shpfile_wy = shpfile[shpfile$msoa11cd %in% wydf$homeMSOA | shpfile$msoa11cd %in% wydf$workMSOA,]
 plot(shpfile_wy)
 
 #wydf = sp::merge(shpfile_wy, wydf, by)
+
+
+
+##################################################
+# READ IN THE CENTROIDS TO COMPUTE HOME-WORK EUCLIDEAN DISTANCE
+# http://webarchive.nationalarchives.gov.uk/20160105160709/http://www.ons.gov.uk/ons/guide-method/geography/products/census/spatial/centroids/index.html
+#unzip("data/middle_layer_super_output_areas_(e+w)_2011_population_weighted_centroids_v2.zip")
+cents = raster::shapefile("data/Middle_Layer_Super_Output_Areas_December_2011_Super_Generalised_Clipped_Boundaries_in_England_and_Wales.shp")
+cents = cents[!duplicated(cents@data),]
+#plot(cents)
+#names(cents)
+
+if(!file.exists("data/flows.Rda")){
+  starttime = proc.time()
+  #df = df[df$homeMSOA %in% cents$msoa11cd & df$workMSOA %in% cents$msoa11cd, ]
+  wydf = wydf[wydf$homeMSOA %in% cents$msoa11cd & wydf$workMSOA %in% cents$msoa11cd, ]
+  wycents = cents[shpfile_wy,]
+  wyflows = od2line(flow=wydf, zones=wycents, origin_code="homeMSOA", dest_code="workMSOA", zone_code="msoa11cd")
+  saveRDS(wyflows, "data/wyflows.Rda")
+  print(proc.time() - starttime)
+}else{
+  wyflows = readRDS("data/wyflows.Rda")
+}
+
+plot(shpfile_wy); plot(wyflows[wyflows$`All categories: Method of travel to work`>=500,], col="red", add=T)
 #######################################################################
 
 
