@@ -3,9 +3,9 @@
 # WU02EW Location of usual residence and place of work by age
 # WU01EW Location of usual residence and place of work by sex
 
+library(stplanr)
 library(dplyr)
 library(sp)
-library(stplanr)
 
 #unzip("data/wu03ew_v2.zip", exdir="data/")
 #unzip("data/wu02ew_v2.zip", exdir="data/")
@@ -16,19 +16,19 @@ library(stplanr)
 # READ IN THE ORIGIN-DESTINATION MSOA-LEVEL DATA
 odall = readr::read_csv("data/wu03ew_v2.csv")
 odall = odall %>% distinct(., .keep_all=T)
-glimpse(odall)
+#glimpse(odall)
 
 ################################################
 # READ IN THE ORIGIN-DESTINATION MSOA-LEVEL AGE DATA
 locage = readr::read_csv("data/wu02ew_v2.csv")
 locage = locage %>% distinct(., .keep_all=T)
-glimpse(locage)
+#glimpse(locage)
 
 ################################################
 # READ IN THE ORIGIN-DESTINATION MSOA-LEVEL GENDER DATA
 locgen = readr::read_csv("data/wu01ew_v2.csv")
 locgen = locgen %>% distinct(., .keep_all=T)
-glimpse(locgen)
+#glimpse(locgen)
 
 ################################################
 # JOIN THESE THREE ORIGIN-DESTINATION DATASETS
@@ -54,29 +54,29 @@ str(df)
 
 # car or van availability
 # https://www.nomisweb.co.uk/census/2011/ks404ew
-cars = readr::read_csv("data/car_van_availability_KS404EW.csv")
-cars = cars %>% distinct(., .keep_all=T)
+carsdf = readr::read_csv("data/car_van_availability_KS404EW.csv")
+carsdf = carsdf %>% distinct(., .keep_all=T)
 
-names(cars)
-names(cars)[names(cars)=="geography"] = "nameMSOA"
-names(cars)[names(cars)=="geography code"] = "homeMSOA"
-names(cars)[names(cars)=="Cars: All categories: Car or van availability; measures: Value"] = "nhouses"
-names(cars)[names(cars)=="Cars: No cars or vans in household; measures: Value"] = "housesw0car"
-names(cars)[names(cars)=="Cars: 1 car or van in household; measures: Value"] = "housesw1car"
-names(cars)[names(cars)=="Cars: 2 cars or vans in household; measures: Value"] = "housesw2car"
-names(cars)[names(cars)=="Cars: 3 cars or vans in household; measures: Value"] = "housesw3car"
-names(cars)[names(cars)=="Cars: 4 or more cars or vans in household; measures: Value"] = "housesw4ormorecar"
-names(cars)[names(cars)=="Cars: sum of all cars or vans in the area; measures: Value"] = "totalcar"
-cars
+#names(carsdf)
+names(carsdf)[names(carsdf)=="geography"] = "nameMSOA"
+names(carsdf)[names(carsdf)=="geography code"] = "homeMSOA"
+names(carsdf)[names(carsdf)=="Cars: All categories: Car or van availability; measures: Value"] = "nhouses"
+names(carsdf)[names(carsdf)=="Cars: No cars or vans in household; measures: Value"] = "housesw0car"
+names(carsdf)[names(carsdf)=="Cars: 1 car or van in household; measures: Value"] = "housesw1car"
+names(carsdf)[names(carsdf)=="Cars: 2 cars or vans in household; measures: Value"] = "housesw2car"
+names(carsdf)[names(carsdf)=="Cars: 3 cars or vans in household; measures: Value"] = "housesw3car"
+names(carsdf)[names(carsdf)=="Cars: 4 or more cars or vans in household; measures: Value"] = "housesw4ormorecar"
+names(carsdf)[names(carsdf)=="Cars: sum of all cars or vans in the area; measures: Value"] = "totalcar"
+#carsdf
 
-#cars$carsperhouse = cars$totalcars/cars$nhouses
-cars$house0carpct = cars$housesw0car/cars$nhouses
-cars$house1carpct = cars$housesw1car/cars$nhouses
-cars$house2carpct = cars$housesw2car/cars$nhouses
-cars$house3carpct = cars$housesw3car/cars$nhouses
-cars$house4carpct = cars$housesw4ormorecar/cars$nhouses
+#carsdf$carsdfperhouse = carsdf$totalcarsdf/carsdf$nhouses
+carsdf$house0carpct = carsdf$housesw0car/carsdf$nhouses
+carsdf$house1carpct = carsdf$housesw1car/carsdf$nhouses
+carsdf$house2carpct = carsdf$housesw2car/carsdf$nhouses
+carsdf$house3carpct = carsdf$housesw3car/carsdf$nhouses
+carsdf$house4carpct = carsdf$housesw4ormorecar/carsdf$nhouses
 
-cars = cars %>% select(homeMSOA,house0carpct,house1carpct,house2carpct,house3carpct,house4carpct)
+carsdf = carsdf %>% select(homeMSOA,house0carpct,house1carpct,house2carpct,house3carpct,house4carpct)
 
 # population density
 # https://www.nomisweb.co.uk/census/2011/qs102ew
@@ -101,7 +101,7 @@ econact = econact %>% transmute(homeMSOA=`geography code`,econactivpct=`Economic
 
 
 # JOIN THE HOME MSOA DATA IN
-homevars = inner_join(cars, popden, by="homeMSOA")
+homevars = inner_join(carsdf, popden, by="homeMSOA")
 homevars = inner_join(homevars, econact, by="homeMSOA")
 
 df = left_join(df, homevars, by="homeMSOA")
@@ -158,7 +158,7 @@ cents = cents[!duplicated(cents@data),]
 #plot(cents)
 #names(cents)
 
-if(!file.exists("data/flows.Rda")){
+if(!file.exists("data/wyflows.Rda")){
   starttime = proc.time()
   #df = df[df$homeMSOA %in% cents$msoa11cd & df$workMSOA %in% cents$msoa11cd, ]
   wydf = wydf[wydf$homeMSOA %in% cents$msoa11cd & wydf$workMSOA %in% cents$msoa11cd, ]
@@ -171,29 +171,31 @@ if(!file.exists("data/flows.Rda")){
 }
 
 plot(shpfile_wy); plot(wyflows[wyflows$`All categories: Method of travel to work`>=500,], col="red", add=T)
+png("figures/flows_500_westyorkshire.png", res=100)
+plot(shpfile_wy); plot(wyflows[wyflows$`All categories: Method of travel to work`>=500,], col="red", add=T)
+dev.off()
 #######################################################################
 
 
 # SPLIT WEST YORKSHIRE INTO TRAINING, VALIDATION, AND TEST SETS
-nrow(wydf)
-?sample
+nrow(wyflows)
 
-idx = seq(1,nrow(wydf),1)
+idx = seq(1,nrow(wyflows),1)
 set.seed(5)
 idx = sample(idx, replace=F)
 set.seed(NULL)
 #runif(1); .Random.seed[1:6]; runif(1); .Random.seed[1:6]
 
-trainsize = floor(nrow(wydf)*0.5)
-valsize = floor(nrow(wydf)*0.25)
-testsize = floor(nrow(wydf)*0.25)
+trainsize = floor(nrow(wyflows)*0.5)
+valsize = floor(nrow(wyflows)*0.25)
+testsize = floor(nrow(wyflows)*0.25)
 
 splits = split(idx, rep(1:3, c(trainsize,valsize,testsize)))
-traindf = wydf[splits[[1]],]
-valdf = wydf[splits[[2]],]
-testdf = wydf[splits[[3]],]
+traindf = wyflows[splits[[1]],]
+valdf = wyflows[splits[[2]],]
+testdf = wyflows[splits[[3]],]
 
-saveRDS(df, "full_dataset.Rds")
-saveRDS(traindf, "training_set.Rds")
-saveRDS(valdf, "validation_set.Rds")
-saveRDS(testdf, "test_set.Rds")
+#saveRDS(df, "full_dataset.Rds")
+saveRDS(traindf, "data/training_set.Rds")
+saveRDS(valdf, "data/validation_set.Rds")
+saveRDS(testdf, "data/test_set.Rds")
