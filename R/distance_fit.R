@@ -9,7 +9,7 @@ library(gamlss)
 
 traindf = readRDS("data/training_set.Rds")
 
-traindf@data
+#traindf@data
 traindf$driveprop = traindf$`Driving a car or van`/traindf$`All categories: Method of travel to work`
 traindf$distance = rgeos::gLength(traindf, byid=T)/1000
 
@@ -56,7 +56,7 @@ ggplot(obsvspred, aes(x=Distance)) + geom_point(aes(y=Observed), col="red") + ge
 
 
 
-# SINCE WE CAN'T FIT THE RAW DATA, LET'S TRY TO MODEL THE MEAN CAR PROPENSITY INSTEAD
+# SINCE WE CAN'T FIT THE RAW DATA, LET'S TRY TO MODEL THE AVERAGE INSTEAD
 traindf$dbands = cut(x = traindf$distance, 0:60, labels=as.character(0:59))
 dband = traindf@data %>% group_by(dbands) %>% filter(n() > 10) %>% summarise(pdrive = sum(`Driving a car or van`) / sum(`All categories: Method of travel to work`))
 dband$dbands = as.numeric(dband$dbands)

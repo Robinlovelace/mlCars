@@ -94,15 +94,51 @@ econact = readr::read_csv("data/economic_activity_QS601EW.csv")
 econact = econact %>% distinct(., .keep_all=T)
 str(econact)
 
-#names(econact)[names(econact)=="geography code"] = "homeMSOA"
-
 econact = econact %>% select(`geography code`,`Economic Activity: Economically active: Total; measures: Value`,`Economic Activity: Economically inactive: Total; measures: Value`,`Economic Activity: All categories: Economic activity; measures: Value`)
 econact = econact %>% transmute(homeMSOA=`geography code`,econactivpct=`Economic Activity: Economically active: Total; measures: Value`/`Economic Activity: All categories: Economic activity; measures: Value`, econinactivpct=`Economic Activity: Economically inactive: Total; measures: Value`/`Economic Activity: All categories: Economic activity; measures: Value`)
+all(rowSums(econact[, !names(econact) %in% c("homeMSOA")])) == 1
 
+# general health
+# https://www.nomisweb.co.uk/census/2011/qs302ew
+health = readr::read_csv("data/general_health_QS302EW.csv")
+health = health %>% distinct(., .keep_all=T)
+health = health %>% transmute(homeMSOA=`geography code`, vghealth=`General Health: Very good health; measures: Value`/`General Health: All categories: General health; measures: Value`, ghealth=`General Health: Good health; measures: Value`/`General Health: All categories: General health; measures: Value`, fhealth=`General Health: Fair health; measures: Value`/`General Health: All categories: General health; measures: Value`, bhealth=`General Health: Bad health; measures: Value`/`General Health: All categories: General health; measures: Value`, vbhealth=`General Health: Very bad health; measures: Value`/`General Health: All categories: General health; measures: Value`)
+all(rowSums(health[, !names(health) %in% c("homeMSOA")])) == 1
 
-# JOIN THE HOME MSOA DATA IN
+# ethnic group
+# https://www.nomisweb.co.uk/census/2011/ks201ew
+ethnic = readr::read_csv("data/ethnic_group_KS201EW.csv")
+ethnic = ethnic %>% distinct(., .keep_all=T)
+ethnic = ethnic %>% transmute(homeMSOA=`geography code`, white=`Ethnic Group: White; measures: Value`/`Ethnic Group: All usual residents; measures: Value`, mixed=`Ethnic Group: Mixed/multiple ethnic groups; measures: Value`/`Ethnic Group: All usual residents; measures: Value`, asian=`Ethnic Group: Asian/Asian British; measures: Value`/`Ethnic Group: All usual residents; measures: Value`, black=`Ethnic Group: Black/African/Caribbean/Black British; measures: Value`/`Ethnic Group: All usual residents; measures: Value`,other=`Ethnic Group: Other ethnic group; measures: Value`/`Ethnic Group: All usual residents; measures: Value`)
+all(rowSums(ethnic[, !names(ethnic) %in% c("homeMSOA")])) == 1
+
+# education
+# https://www.nomisweb.co.uk/census/2011/qs501ew
+educ = readr::read_csv("data/education_QS501EW.csv")
+educ = educ %>% distinct(., .keep_all=T)
+educ = educ %>% transmute(homeMSOA=`geography code`, noqual=`Qualification: No qualifications; measures: Value`/`Qualification: All categories: Highest level of qualification; measures: Value`,aptshpqual=`Qualification: Apprenticeship; measures: Value`/`Qualification: All categories: Highest level of qualification; measures: Value` , lev1qual=`Qualification: Level 1 qualifications; measures: Value`/`Qualification: All categories: Highest level of qualification; measures: Value`, lev2qual=`Qualification: Level 2 qualifications; measures: Value`/`Qualification: All categories: Highest level of qualification; measures: Value`, lev3qual=`Qualification: Level 3 qualifications; measures: Value`/`Qualification: All categories: Highest level of qualification; measures: Value`, lev4qual=`Qualification: Level 4 qualifications and above; measures: Value`/`Qualification: All categories: Highest level of qualification; measures: Value`,otherqual=`Qualification: Other qualifications; measures: Value`/`Qualification: All categories: Highest level of qualification; measures: Value`)
+all(rowSums(educ[, !names(educ) %in% c("homeMSOA")])) == 1
+
+# # students  # total number of people not included so can't compute fractions
+# # https://www.nomisweb.co.uk/census/2011/ks501ew
+# students = readr::read_csv("data/students_KS501EW.csv")
+# students = students %>% distinct(., .keep_all=T)
+# str(students)
+
+# rooms, bedrooms, and central heating
+# https://www.nomisweb.co.uk/census/2011/ks403ew
+rooms = readr::read_csv("data/rooms_central_heating_KS403EW.csv")
+rooms = rooms %>% distinct(., .keep_all=T)
+rooms = rooms %>% transmute(homeMSOA=`geography code`, centheat=`Central Heating: Does have central heating; measures: Value`/`Central Heating: All categories: Type of central heating in household; measures: Value`, nrooms=`Central Heating: Average number of rooms per household; measures: Value`)
+
+# JOIN ALL THE HOME MSOA DATA IN
 homevars = inner_join(carsdf, popden, by="homeMSOA")
 homevars = inner_join(homevars, econact, by="homeMSOA")
+homevars = inner_join(homevars, health, by="homeMSOA")
+homevars = inner_join(homevars, ethnic, by="homeMSOA")
+homevars = inner_join(homevars, educ, by="homeMSOA")
+homevars = inner_join(homevars, rooms, by="homeMSOA")
+
 
 df = left_join(df, homevars, by="homeMSOA")
 # distance travelled to work
@@ -112,8 +148,29 @@ df = left_join(df, homevars, by="homeMSOA")
 
 # ##############################################
 # READ IN DATA ON AREA OF WORKPLACE
+# THIS DIDN'T WORK BECAUSE CLASSIFICATION IS AT THE OUTPUT AREA LEVEL, SO MANY CLASS
+# http://cowz.geodata.soton.ac.uk/download/
+work = readr::read_csv("data/COWZ_EW_2011_Classification.csv")
+work = work %>% distinct(., .keep_all=T)
+work %>% distinct(COWZEW_SGN, COWZEW_SG) %>% arrange(COWZEW_SG)
+#work %>% group_by(MSOA11CD) %>% summarise(n=n()) %>% arrange(desc(n))
+#table(work %>% group_by(MSOA11CD) %>% summarise(n=n()) %>% arrange(desc(n)) %>% select(n))
 
+# Take the mode of the workplace zone classification of the output areas as the classification of the MSOA
+Mode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
 
+# the WZ classifications within MSOAs look pretty skewed towards a single one, so taking mode should be faithful representation
+#table(work %>% filter(MSOA11CD=="E02000575") %>% select(COWZEW_SG))
+
+work = work %>% group_by(MSOA11CD) %>% summarise(wzclass=Mode(COWZEW_SG))
+names(work)[names(work)=="MSOA11CD"] = "workMSOA"
+
+df = left_join(df, work, by="workMSOA")
+
+#saveRDS(df, "full_dataset.Rds")
 
 ################################################
 # NEED TO MATCH THE MSOAS TO LOCAL AUTHORITY SO WE CAN SPLIT OFF WEST YORKSHIRE, WHICH WILL BE OUR CASE STUDY
@@ -195,7 +252,6 @@ traindf = wyflows[splits[[1]],]
 valdf = wyflows[splits[[2]],]
 testdf = wyflows[splits[[3]],]
 
-#saveRDS(df, "full_dataset.Rds")
 saveRDS(traindf, "data/training_set.Rds")
 saveRDS(valdf, "data/validation_set.Rds")
 saveRDS(testdf, "data/test_set.Rds")
