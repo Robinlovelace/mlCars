@@ -16,27 +16,28 @@ library(sp)
 # READ IN THE ORIGIN-DESTINATION MSOA-LEVEL DATA
 odall = readr::read_csv("data/wu03ew_v2.csv")
 odall = odall %>% distinct(., .keep_all=T)
-#glimpse(odall)
+
+# note that we include both drivers and passengers in the car category!!
+odall = odall %>% transmute(homeMSOA=`Area of residence`, workMSOA=`Area of workplace`, workhome=`Work mainly at or from home`/`All categories: Method of travel to work`, metro=`Underground, metro, light rail, tram`/`All categories: Method of travel to work`, train=Train/`All categories: Method of travel to work`, bus=`Bus, minibus or coach`/`All categories: Method of travel to work`, taxi=Taxi/`All categories: Method of travel to work`, motorcycle=`Motorcycle, scooter or moped`/`All categories: Method of travel to work`, car=(`Driving a car or van`+`Passenger in a car or van`)/`All categories: Method of travel to work`, cycle=Bicycle/`All categories: Method of travel to work`, walk=`On foot`/`All categories: Method of travel to work`, othertransp=`Other method of travel to work`/`All categories: Method of travel to work`)
+all(rowSums(odall[, !names(odall) %in% c("homeMSOA", "workMSOA")])) == 1
 
 ################################################
 # READ IN THE ORIGIN-DESTINATION MSOA-LEVEL AGE DATA
 locage = readr::read_csv("data/wu02ew_v2.csv")
 locage = locage %>% distinct(., .keep_all=T)
-#glimpse(locage)
+locage = locage %>% transmute(homeMSOA=`Area of residence`, workMSOA=`Area of workplace`, `16-24`=`16-24`/`All categories: Age 16 and over`, `25-34`=`25-34`/`All categories: Age 16 and over`, `35-49`=`35-49`/`All categories: Age 16 and over`, `50-54`=`50-64`/`All categories: Age 16 and over`, `65-74`=`65-74`/`All categories: Age 16 and over`, `75+`=`75+`/`All categories: Age 16 and over`)
+all(rowSums(locage[, !names(locage) %in% c("homeMSOA", "workMSOA")])) == 1
 
 ################################################
 # READ IN THE ORIGIN-DESTINATION MSOA-LEVEL GENDER DATA
 locgen = readr::read_csv("data/wu01ew_v2.csv")
 locgen = locgen %>% distinct(., .keep_all=T)
-#glimpse(locgen)
+locgen = locgen %>% transmute(homeMSOA=`Area of residence`, workMSOA=`Area of workplace`, female=Female/`All categories: Sex`)
 
 ################################################
 # JOIN THESE THREE ORIGIN-DESTINATION DATASETS
-df = left_join(odall, locage, by=c("Area of residence","Area of workplace"))
-df = left_join(df, locgen, by=c("Area of residence","Area of workplace"))
-
-names(df)[names(df)=="Area of residence"] = "homeMSOA"
-names(df)[names(df)=="Area of workplace"] = "workMSOA"
+df = left_join(odall, locage, by=c("homeMSOA","workMSOA"))
+df = left_join(df, locgen, by=c("homeMSOA","workMSOA"))
 
 str(df)
 
@@ -76,7 +77,7 @@ carsdf$house2carpct = carsdf$housesw2car/carsdf$nhouses
 carsdf$house3carpct = carsdf$housesw3car/carsdf$nhouses
 carsdf$house4carpct = carsdf$housesw4ormorecar/carsdf$nhouses
 
-carsdf = carsdf %>% select(homeMSOA,house0carpct,house1carpct,house2carpct,house3carpct,house4carpct)
+carsdf = carsdf %>% dplyr::select(homeMSOA,house0carpct,house1carpct,house2carpct,house3carpct,house4carpct)
 
 # population density
 # https://www.nomisweb.co.uk/census/2011/qs102ew
@@ -86,15 +87,14 @@ popden = popden %>% distinct(., .keep_all=T)
 names(popden)[names(popden)=="geography code"] = "homeMSOA"
 names(popden)[names(popden)=="Area/Population Density: Density (number of persons per hectare); measures: Value"] = "ppperhect"
 
-popden = popden %>% select(homeMSOA,ppperhect)
+popden = popden %>% dplyr::select(homeMSOA,ppperhect)
 
 # economic activity
 # https://www.nomisweb.co.uk/census/2011/qs601ew
 econact = readr::read_csv("data/economic_activity_QS601EW.csv")
 econact = econact %>% distinct(., .keep_all=T)
-str(econact)
 
-econact = econact %>% select(`geography code`,`Economic Activity: Economically active: Total; measures: Value`,`Economic Activity: Economically inactive: Total; measures: Value`,`Economic Activity: All categories: Economic activity; measures: Value`)
+econact = econact %>% dplyr::select(`geography code`,`Economic Activity: Economically active: Total; measures: Value`,`Economic Activity: Economically inactive: Total; measures: Value`,`Economic Activity: All categories: Economic activity; measures: Value`)
 econact = econact %>% transmute(homeMSOA=`geography code`,econactivpct=`Economic Activity: Economically active: Total; measures: Value`/`Economic Activity: All categories: Economic activity; measures: Value`, econinactivpct=`Economic Activity: Economically inactive: Total; measures: Value`/`Economic Activity: All categories: Economic activity; measures: Value`)
 all(rowSums(econact[, !names(econact) %in% c("homeMSOA")])) == 1
 
@@ -109,7 +109,7 @@ all(rowSums(health[, !names(health) %in% c("homeMSOA")])) == 1
 # https://www.nomisweb.co.uk/census/2011/ks201ew
 ethnic = readr::read_csv("data/ethnic_group_KS201EW.csv")
 ethnic = ethnic %>% distinct(., .keep_all=T)
-ethnic = ethnic %>% transmute(homeMSOA=`geography code`, white=`Ethnic Group: White; measures: Value`/`Ethnic Group: All usual residents; measures: Value`, mixed=`Ethnic Group: Mixed/multiple ethnic groups; measures: Value`/`Ethnic Group: All usual residents; measures: Value`, asian=`Ethnic Group: Asian/Asian British; measures: Value`/`Ethnic Group: All usual residents; measures: Value`, black=`Ethnic Group: Black/African/Caribbean/Black British; measures: Value`/`Ethnic Group: All usual residents; measures: Value`,other=`Ethnic Group: Other ethnic group; measures: Value`/`Ethnic Group: All usual residents; measures: Value`)
+ethnic = ethnic %>% transmute(homeMSOA=`geography code`, white=`Ethnic Group: White; measures: Value`/`Ethnic Group: All usual residents; measures: Value`, mixed=`Ethnic Group: Mixed/multiple ethnic groups; measures: Value`/`Ethnic Group: All usual residents; measures: Value`, asian=`Ethnic Group: Asian/Asian British; measures: Value`/`Ethnic Group: All usual residents; measures: Value`, black=`Ethnic Group: Black/African/Caribbean/Black British; measures: Value`/`Ethnic Group: All usual residents; measures: Value`,otherethn=`Ethnic Group: Other ethnic group; measures: Value`/`Ethnic Group: All usual residents; measures: Value`)
 all(rowSums(ethnic[, !names(ethnic) %in% c("homeMSOA")])) == 1
 
 # education
@@ -154,7 +154,7 @@ work = readr::read_csv("data/COWZ_EW_2011_Classification.csv")
 work = work %>% distinct(., .keep_all=T)
 work %>% distinct(COWZEW_SGN, COWZEW_SG) %>% arrange(COWZEW_SG)
 #work %>% group_by(MSOA11CD) %>% summarise(n=n()) %>% arrange(desc(n))
-#table(work %>% group_by(MSOA11CD) %>% summarise(n=n()) %>% arrange(desc(n)) %>% select(n))
+#table(work %>% group_by(MSOA11CD) %>% summarise(n=n()) %>% arrange(desc(n)) %>% dplyr::select(n))
 
 # Take the mode of the workplace zone classification of the output areas as the classification of the MSOA
 Mode <- function(x) {
@@ -163,7 +163,7 @@ Mode <- function(x) {
 }
 
 # the WZ classifications within MSOAs look pretty skewed towards a single one, so taking mode should be faithful representation
-#table(work %>% filter(MSOA11CD=="E02000575") %>% select(COWZEW_SG))
+#table(work %>% filter(MSOA11CD=="E02000575") %>% dplyr::select(COWZEW_SG))
 
 work = work %>% group_by(MSOA11CD) %>% summarise(wzclass=Mode(COWZEW_SG))
 names(work)[names(work)=="MSOA11CD"] = "workMSOA"
@@ -180,14 +180,14 @@ df = left_join(df, work, by="workMSOA")
 lookup = readr::read_csv("data/PCD11_OA11_LSOA11_MSOA11_LAD11_EW_LU.csv")
 glimpse(lookup)
 
-lookup = lookup %>% select(MSOA11CD,MSOA11NM,LAD11NM)
+lookup = lookup %>% dplyr::select(MSOA11CD,MSOA11NM,LAD11NM)
 
 # select only West Yorkshire for now
 lookup_wy = lookup %>% filter(grepl("Leeds|Bradford|Kirklees|Calderdale|Wakefield", LAD11NM))
 unique(lookup_wy$LAD11NM)
 
 wydf = df %>% filter(homeMSOA %in% lookup_wy$MSOA11CD & workMSOA %in% lookup_wy$MSOA11CD)
-glimpse(wydf)
+#glimpse(wydf)
 
 
 # READ IN THE SPATIAL DATA##############################################
