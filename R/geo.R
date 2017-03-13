@@ -16,6 +16,11 @@ qtm(wyflows[wyflows$npeople > 200,], lines.col = "response", lines.style = "pret
 
 # most important geographical vars for car dependency
 # distance from motorway. hypothesis: more % (relative distance) drive
+# devtools::install_github("osmdatar/osmdata") # use new osmdata package
+library(osmdata)
+q_motorways = opq(bbox = bbox(wyflows)) %>%
+  add_feature(key = "motorway", value = "motorway")
+motorways = osmdata_sf(q_m)
 # parks
 # bus stops
 
