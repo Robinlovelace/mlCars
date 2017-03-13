@@ -234,6 +234,9 @@ dev.off()
 #######################################################################
 
 
+# SAVE WEST YORKSHIRE DATA
+saveRDS(wyflows, "data/WY_data.RDS")
+
 # SPLIT WEST YORKSHIRE INTO TRAINING, VALIDATION, AND TEST SETS
 nrow(wyflows)
 

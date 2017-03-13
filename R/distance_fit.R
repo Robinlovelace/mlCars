@@ -102,4 +102,4 @@ traindf@data$response = computeResidual(traindf@data$distance, traindf@data$car)
 ggplot(traindf@data, aes(x=distance, y=response)) + geom_point()
 
 saveRDS(traindf, "data/training_set_dist_subtracted.Rds")
-#readr::write_csv(traindf@data, "data/training_set_dist_subtracted.csv")
+readr::write_csv(traindf@data, "data/training_set_dist_subtracted.csv")
