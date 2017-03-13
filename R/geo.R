@@ -1,8 +1,26 @@
 # Aim: add geographical variables to flow data
 
-wyflows = readRDS("data/wyflows.Rds")
 library(tmap)
 library(dplyr)
+library(sp)
+
+wyflows = readRDS("data/wyflows.Rds")
+
+summary(wyflows$response)
+
 names(wyflows)
-wyflows$all = rowSums(wyflows@data[4:11])
-qtm(wyflows[sample(nrow(wyflows), 1000),], lines.col = "all") 
+tmap_mode("view")
+wyflows_all = wyflows
+wyflows = wyflows[wyflows$distance > 0,]
+qtm(wyflows[wyflows$npeople > 200,], lines.col = "response", lines.style = "pretty") # fails when interactive
+
+# most important geographical vars for car dependency
+# distance from motorway. hypothesis: more % (relative distance) drive
+# parks
+# bus stops
+
+
+# out-takes
+# summary(is.na(coords)) # no nas
+# summary(wyflows$distance)
+
