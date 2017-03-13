@@ -10,7 +10,7 @@ library(gamlss)
 traindf = readRDS("data/training_set.Rds")
 
 #traindf@data
-traindf$distance = rgeos::gLength(traindf, byid=T)/1000
+#traindf$distance = rgeos::gLength(traindf, byid=T)/1000
 
 ggplot(traindf@data, aes(x=distance, y=car)) + geom_point()
 

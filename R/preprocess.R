@@ -18,7 +18,7 @@ odall = readr::read_csv("data/wu03ew_v2.csv")
 odall = odall %>% distinct(., .keep_all=T)
 
 # note that we include both drivers and passengers in the car category!!
-odall = odall %>% transmute(homeMSOA=`Area of residence`, workMSOA=`Area of workplace`, workhome=`Work mainly at or from home`/`All categories: Method of travel to work`, metro=`Underground, metro, light rail, tram`/`All categories: Method of travel to work`, train=Train/`All categories: Method of travel to work`, bus=`Bus, minibus or coach`/`All categories: Method of travel to work`, taxi=Taxi/`All categories: Method of travel to work`, motorcycle=`Motorcycle, scooter or moped`/`All categories: Method of travel to work`, car=(`Driving a car or van`+`Passenger in a car or van`)/`All categories: Method of travel to work`, cycle=Bicycle/`All categories: Method of travel to work`, walk=`On foot`/`All categories: Method of travel to work`, othertransp=`Other method of travel to work`/`All categories: Method of travel to work`)
+odall = odall %>% transmute(homeMSOA=`Area of residence`, workMSOA=`Area of workplace`, workhome=`Work mainly at or from home`/`All categories: Method of travel to work`, metro=`Underground, metro, light rail, tram`/`All categories: Method of travel to work`, train=Train/`All categories: Method of travel to work`, bus=`Bus, minibus or coach`/`All categories: Method of travel to work`, taxi=Taxi/`All categories: Method of travel to work`, motorcycle=`Motorcycle, scooter or moped`/`All categories: Method of travel to work`, car=(`Driving a car or van`+`Passenger in a car or van`)/`All categories: Method of travel to work`, cycle=Bicycle/`All categories: Method of travel to work`, walk=`On foot`/`All categories: Method of travel to work`, othertransp=`Other method of travel to work`/`All categories: Method of travel to work`, npeople=`All categories: Method of travel to work`)
 all(rowSums(odall[, !names(odall) %in% c("homeMSOA", "workMSOA")])) == 1
 
 ################################################
@@ -221,10 +221,11 @@ if(!file.exists("data/wyflows.Rda")){
   wydf = wydf[wydf$homeMSOA %in% cents$msoa11cd & wydf$workMSOA %in% cents$msoa11cd, ]
   wycents = cents[shpfile_wy,]
   wyflows = od2line(flow=wydf, zones=wycents, origin_code="homeMSOA", dest_code="workMSOA", zone_code="msoa11cd")
-  saveRDS(wyflows, "data/wyflows.Rda")
+  wyflows$distance = rgeos::gLength(wyflows, byid=T)/1000
+  saveRDS(wyflows, "data/wyflows.Rds")
   print(proc.time() - starttime)
 }else{
-  wyflows = readRDS("data/wyflows.Rda")
+  wyflows = readRDS("data/wyflows.Rds")
 }
 
 plot(shpfile_wy); plot(wyflows[wyflows$`All categories: Method of travel to work`>=500,], col="red", add=T)
@@ -233,9 +234,6 @@ plot(shpfile_wy); plot(wyflows[wyflows$`All categories: Method of travel to work
 dev.off()
 #######################################################################
 
-
-# SAVE WEST YORKSHIRE DATA
-saveRDS(wyflows, "data/WY_data.RDS")
 
 # SPLIT WEST YORKSHIRE INTO TRAINING, VALIDATION, AND TEST SETS
 nrow(wyflows)
