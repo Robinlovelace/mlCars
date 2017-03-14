@@ -19,7 +19,7 @@ odall = odall %>% distinct(., .keep_all=T)
 
 # note that we include both drivers and passengers in the car category!!
 odall = odall %>% transmute(homeMSOA=`Area of residence`, workMSOA=`Area of workplace`, workhome=`Work mainly at or from home`/`All categories: Method of travel to work`, metro=`Underground, metro, light rail, tram`/`All categories: Method of travel to work`, train=Train/`All categories: Method of travel to work`, bus=`Bus, minibus or coach`/`All categories: Method of travel to work`, taxi=Taxi/`All categories: Method of travel to work`, motorcycle=`Motorcycle, scooter or moped`/`All categories: Method of travel to work`, car=(`Driving a car or van`+`Passenger in a car or van`)/`All categories: Method of travel to work`, cycle=Bicycle/`All categories: Method of travel to work`, walk=`On foot`/`All categories: Method of travel to work`, othertransp=`Other method of travel to work`/`All categories: Method of travel to work`, npeople=`All categories: Method of travel to work`)
-all(rowSums(odall[, !names(odall) %in% c("homeMSOA", "workMSOA")])) == 1
+all(rowSums(odall[, !names(odall) %in% c("homeMSOA", "workMSOA")]), na.rm = T) == 1
 
 ################################################
 # READ IN THE ORIGIN-DESTINATION MSOA-LEVEL AGE DATA
@@ -228,9 +228,9 @@ if(!file.exists("data/wyflows.Rda")){
   wyflows = readRDS("data/wyflows.Rds")
 }
 
-plot(shpfile_wy); plot(wyflows[wyflows$`All categories: Method of travel to work`>=500,], col="red", add=T)
+plot(shpfile_wy); plot(wyflows[wyflows$npeople>=500,], col="red", add=T)
 png("figures/flows_500_westyorkshire.png", res=100)
-plot(shpfile_wy); plot(wyflows[wyflows$`All categories: Method of travel to work`>=500,], col="red", add=T)
+plot(shpfile_wy); plot(wyflows[wyflows$npeople,], col="red", add=T)
 dev.off()
 #######################################################################
 

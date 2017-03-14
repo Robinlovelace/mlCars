@@ -4,7 +4,7 @@ library(tmap)
 library(dplyr)
 library(sp)
 
-wyflows = readRDS("data/wyflows.Rds")
+wyflows = readRDS("data/wyflows_w_response.Rds")
 wyflows = spTransform(wyflows, CRS("+init=epsg:4326"))
 summary(wyflows$response)
 
@@ -12,6 +12,7 @@ names(wyflows)
 tmap_mode("view")
 wyflows_all = wyflows
 wyflows = wyflows[wyflows$distance > 0,]
+qtm(wyflows[wyflows$npeople > 200,], lines.col = "response", lines.style = "pretty")
 (m = qtm(wyflows[wyflows$npeople > 200,], lines.col = "response", lines.style = "pretty") )# fails when interactive
 
 # most important geographical vars for car dependency
