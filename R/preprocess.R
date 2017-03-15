@@ -202,6 +202,8 @@ summary(shpfile$msoa11cd %in% lookup$MSOA11CD)
 shpfile_wy = shpfile[shpfile$msoa11cd %in% wydf$homeMSOA | shpfile$msoa11cd %in% wydf$workMSOA,]
 plot(shpfile_wy)
 
+saveRDS(shpfile_wy, "data/WY_zones.Rds")
+
 #wydf = sp::merge(shpfile_wy, wydf, by)
 
 

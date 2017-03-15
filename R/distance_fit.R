@@ -23,7 +23,7 @@ traindf@data = traindf@data %>% filter(npeople >= 10)
 # we cannot arbitrarily remove these as we would then fall prey to sampling bias:
 #   https://medium.com/machine-intelligence-report/new-to-machine-learning-avoid-these-three-mistakes-73258b3848a4#.m8rwu44aw
 # and we would also lose a lot of perfectly valid data
-ggplot(traindf@data, aes(x=distance, y=car)) + geom_point(alpha = 0.05)
+ggplot(traindf@data, aes(x=distance, y=car, size=npeople)) + geom_point(alpha = 0.1) + scale_size_area()
 nrow(traindf@data %>% filter(car==1))
 nrow(traindf@data %>% filter(car==0))
 nrow(traindf@data %>% filter(car>0 & car<1))
@@ -111,7 +111,8 @@ distbands$dband = cut(x = distbands$distance, 0:30, labels=as.character(0:29))
 dband = distbands %>%
   group_by(dband) %>%
   filter(n() > 10) %>%
-  summarise(pdrive = mean(car), npeople = sum(npeople))
+  summarise(pdrive = weighted.mean(car, npeople), npeople = sum(npeople))
+  #summarise(pdrive = mean(car), npeople = sum(npeople))
 dband$dband = as.numeric(dband$dband)
 plot(dband$dband, dband$pdrive)
 
@@ -133,15 +134,16 @@ MeanmodPredict(10, mod_mean)
 
 # check how well it fits the actual data, not just the means: not bad, better than the others
 ypred = MeanmodPredict(traindf@data$distance, mod_mean)
-obsvspred = as.data.frame(cbind(traindf@data$distance,traindf@data$car, ypred))
-names(obsvspred) = c("Distance","Observed","Predicted")
+obsvspred = as.data.frame(cbind(traindf@data$distance,traindf@data$car, ypred, traindf@data$npeople))
+names(obsvspred) = c("Distance","Observed","Predicted","npeople")
 ggplot(obsvspred, aes(x=Distance)) + geom_point(aes(y=Observed), col="red", alpha=0.05) + geom_line(aes(y=Predicted), col="blue", size=1)
 mean((obsvspred$Observed - obsvspred$Predicted)^2)
 
 # FOR REFERENCE, WHAT WOULD BE THE MSE OF A MODEL WHICH ALWAYS PREDICTS 1
 mean((obsvspred$Observed - 1)^2)
-# OR A MODEL WHICH ALWAYS PREDICTS THE MEAN
+# OR A MODEL WHICH ALWAYS PREDICTS THE MEAN (OR THE WEIGHTED MEAN)
 mean((obsvspred$Observed - mean(obsvspred$Observed))^2)
+mean((obsvspred$Observed - weighted.mean(obsvspred$Observed, obsvspred$npeople))^2)
 
 # randomly assign data points to a fold
 k = 10
@@ -222,7 +224,7 @@ traindf$response = traindf$car - MeanmodPredict(traindf@data$distance, mod_mean)
 # IF THE SUBTRACTION OF DISTANCE HAS WORKED PROPERLY THE RESPONSE VARIABLE SHOULD NOW HAVE LITTLE TO NO DISTANCE-DEPENDENCE
 #   I.E. BE FLAT AS A FUNCTION OF DISTANCE
 # THIS IS INDEED APPROXIMATELY THE CASE
-ggplot(traindf@data, aes(x=distance, y=response)) + geom_point(alpha=0.1)
+ggplot(traindf@data, aes(x=distance, y=response, size=npeople)) + geom_point(alpha=0.1) + scale_size_area()
 
 saveRDS(traindf, "data/training_set_dist_subtracted.Rds")
 readr::write_csv(traindf@data, "data/training_set_dist_subtracted.csv")
@@ -233,7 +235,7 @@ wyflows = readRDS("data/wyflows.Rds")
 wyflows$response = wyflows$car - MeanmodPredict(wyflows@data$distance, mod_mean)
 saveRDS(wyflows, "data/wyflows_w_response.Rds")
 
-ggplot(wyflows@data, aes(x=distance, y=response)) + geom_point(alpha=0.02)
+ggplot(wyflows@data, aes(x=distance, y=response, size=npeople)) + geom_point(alpha=0.2) + scale_size_area()
 
 
 
