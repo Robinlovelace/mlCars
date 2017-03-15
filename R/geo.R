@@ -44,8 +44,7 @@ trainstn = trainstn %>% distinct(., .keep_all=T) %>% dplyr::select(StationName,E
 coachstn = readr::read_csv("data/naptan/CoachReferences.csv")
 coachstn = coachstn %>% distinct(., .keep_all=T) %>%  dplyr::select(Name,Easting,Northing)
 busstops = readr::read_csv("data/naptan/StopAreas.csv")
-busstops = busstops %>% distinct(., .keep_all=T) %>% dplyr::select(Name,Easting,Northing) %>% filter(!is.na(Easting)&!is.na(Northing))
-
+busstops = busstops %>% distinct(., .keep_all=T) %>% filter(Status == "act") %>% dplyr::select(Name,Easting,Northing) %>% filter(!is.na(Easting)&!is.na(Northing))
 
 trains_sp = SpatialPointsDataFrame(
   coords = as.matrix(trainstn[c("Easting", "Northing")]),
@@ -85,12 +84,25 @@ bus_sp = SpatialPointsDataFrame(
 bus_sp = spTransform(bus_sp, CRSobj = proj4string(wyflow_proj))
 bus_sp = bus_sp[wyzones,]
 plot(wyzones); plot(bus_sp, col="red", add=T)
-bus_dm = rgeos::gDistance(wyflow_proj, bus_sp, byid = T)
+
+# bus_test = spTransform(bus_sp, CRSobj = CRS("+init=epsg:4326"))
+# wyflows_coords = as.matrix(coordinates(wyflows)[,1], coordinates(wyflows)[,2])
+# dists = spDistsN1(wyflows, bus_test[1,], longlat = T)
+# for(i in 1:nrow(bus_test)){
+#   
+# }
+
+gc()
+set.seed(5)
+bus_sp_sample = bus_sp[sample(1:nrow(bus_sp), size=floor(0.5*nrow(bus_sp))), ]
+set.seed(NULL)
+bus_dm = rgeos::gDistance(wyflow_proj, bus_sp_sample, byid = T)
 bus_dm = unlist(bus_dm)
 dmin = apply(bus_dm, 2, min)
 summary(dmin) / 1000
 wyflows$distbusstop = dmin/1000
 rm(bus_dm)
+gc()
 
 # spDistsN1(wyflows, motorways$osm_points[sel_mways,])
 mpoints_proj = spTransform(motorways$osm_points[sel_mways,], proj4string(wyflow_proj))
@@ -105,6 +117,13 @@ wyflows$distmway = dmin/1000
 
 plot(wyflows[wyflows$distmway > 5,])
 plot(motorways$osm_lines, col="red" , add = T)
+
+
+
+
+saveRDS(wyflows, "data/wyflows_w_response_and_geo.Rds")
+readr::write_csv(wyflows@data, "data/wyflows_w_response_and_geo.csv")
+
 
 
 
