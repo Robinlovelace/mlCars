@@ -46,6 +46,7 @@ The primary aim of this project is to show the power and potential benefits of m
 
 ## Definition of car dependency
 
+There are many possible ways of defining and measuring car use. In this work as a measure of car use we have chosen to use the fraction of people (commuting between two particular geographical zones) which stated in the Census that they either drive, or are passengers in a car or van.
 <!-- Say how we define car dependency, and something about the model used to estimate 'expected level of driving' here please. -->
 
 ## Input data
@@ -67,7 +68,10 @@ The basic input data used was a table reporting the number of people travelling,
 To convert the non-geographical OD dataset into geographic data we used the function `od2line()` from the **stplanr** R package.
 
 <!-- Maybe add example code here. -->
-<!-- More important: add a figure showing the flows -->
+
+```{r, echo=F, out.width="49%", fig.show='hold', fig.cap="A sample of work commute flows in the West Yorkshire region (left), and a sample of the result of the code which calculates the distance between motorways (red) and flows (black), in this case discarding all flows within a certain distance of the motorway, as an example."}
+knitr::include_graphics(c("../figures/flows_500_westyorkshire.png", "../figures/dist_motorways.png"))
+```
 
 We will hereon refer to each home-work (origin-destination) pair and its corresponding number of commuters, in geographic form, as a *flow*. This table ([available online](http://wicid.ukdataservice.ac.uk/)) contains the code for each origin and destination zone, as well as the number of people which employed each of the following modes of transport: work at home (no transport used), some form of metro, train, bus or coach, taxi, motorcycle or scooter, drive a car or van, passenger in car or van, bicycle, walk, other. We grouped together people who drive or are passengers to estimate the car propensity (fraction).
 
@@ -78,16 +82,22 @@ To this base table there are two ways to further increase the data included for 
 
 The geodemographic data relevant to each origin (home) MSOA which was deemed relevant and annexed to the flows data consists of the following variables: number of people in particular age brackets, number of people of each gender, car or van availability (including number of homes with 0,1,2,etc. cars), population density, number of economically active and inactive people, general health (number of people with very good, fair, etc. general health), number of people per ethnicity group, number of people by maximum qualification level, and lastly, average number of rooms, bedrooms and fraction of homes with central heating.
 
-<!-- This table does not work - please update -->
-
 In addition to this we included the workplace zone classification which assigns each destination MSOA (workplace) to one of the following groups:
-                         Retail         1
-                       Top jobs         2
-                  Metro suburbs         3
-              Suburban services         4
- Manufacturing and distribution         5
-                          Rural         6
-            Servants of society         7
+```{r wzclasstable, echo=F, eval=T}
+df = readr::read_csv(
+'Workplace zone classification, Code
+                         Retail,1
+                       Top jobs,2
+                  Metro suburbs,3
+              Suburban services,4
+ Manufacturing and distribution,5
+                          Rural,6
+            Servants of society,7
+'
+)
+knitr::kable(df, caption="The classification of workplace zones.")
+```
+
             
 ### Spatial data
 
@@ -97,12 +107,35 @@ In addition to this Census data we gathered and computed spatial data as well. W
 
 A complete list of the variable names used in the input dataset for the machine learning algorithms is provided below.
 
-<!-- Please add list of all ~50 variables here. -->
+```{r variablestable, echo=F, eval=T}
+df = readr::read_csv("../Table_of_variables.csv")
+knitr::kable(df, caption="The variables in the full dataset.")
+```
+
+## Preparing the target variable: removing distance-dependence
+
+From the outset one can foresee that out of our dataset one of the most important variables in predicting car dependency will be the distance between the origin (home MSOA) and the destination (workplace MSOA). However given our stated aim of better understanding the driving factors behind car dependency for policy decision-making purposes, distance is not something we can alter by policy and it is therefore of secondary interest. In order to prevent our models from focussing on distance dependence we would therefore like to remove the distance-dependence of the car fraction data as best as possible.
+
+We do this by using a model to fit the distance dependence of the car fraction, ensuring it has a good fit to the data, and then subtracting from the observed car use fractions the car use predicted by the model. The result of this is a variable which has a much diminished distance-dependence, and it is this variable which we will then apply machine learning to model in the next stage.
+
+The model which best fit how the car use fraction varies with distance turned out to be a logistic regression model fit on the mean car fraction by 1km distance band (i.e. a curve where the first point is the average car use fraction for distances of 0-1km, etc.) using the distance and the natural logarithm of the distance as input variables. The figure below shows the fit obtained.
+
+```{r, echo=F, out.width="49%", fig.show='hold', fig.cap="The model fit obtained for car useage fraction as a function of distance. The fit against the mean by distance band is shown on the left, and the fit against all data points is shown on the right."}
+knitr::include_graphics(c("../figures/dist_fit_mean.png", "../figures/dist_fit.png"))
+```
+
+After subtractin the car fraction predicted by the model from the observed car fraction we obtain a variable which a much reduced dependence on distance (i.e. it is centred on zero and does not significantly increase or decrease with distance), as shown in the figure below.
+
+```{r, echo=F, out.width="49%", fig.show='hold', fig.cap="The variable obtained by subtracting predicted car fraction from observed car fraction."}
+knitr::include_graphics("../figures/response.png")
+```
+
+Now that we have approximately removed the dominant influence of the distance, we can proceed to use machine learning to tease out the patterns in the data from all the other more subtle variables. 
 
 ## Next steps
 
-Based on the input data documented in the previous sections, we have already made a start on developing and running code to identify the variables associated with car dependency. We will use the following approaches (in order of complexity and implementation):
+Based on the input data documented in the previous sections, we have already made a start on developing and running code to identify the variables associated with car dependency. To do this we will perform model selection of a wide range of machine learning regression models, checking their performance in prediction car dependency (car use fraction as defined above) on a new dataset.
 
-
+Once the best-performing model has been found we will do some model validation to ensure the model gives sensible predictions on new data, and then proceed to attempt to extract which variables the model deems most important in predicting car dependency, in general, or if possible also for individual predictions.
 
 ## References

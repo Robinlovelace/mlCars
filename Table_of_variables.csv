@@ -1,0 +1,54 @@
+Variable,Description
+homeMSOA,MSOA code for origin (place of residence)
+workMSOA,MSOA code for destination (place of work)
+workhome,Fraction of people who work from home (don’t commute)
+metro,"Fraction of people who use the metro, tram or light train to commute"
+train,Fraction of people who use the train
+bus,Fraction of people who use the bus
+taxi,Fraction of people who use a taxi
+motorcycle,"Fraction of people who use a motorcycle, scooter or moped"
+car,Fraction of people who use a car or are passengers in a car or van
+cycle,Fraction of people who cycle
+walk,Fraction of people who walk
+othertransp,Fraction of people who use a form of transport not listed above
+npeople,Total number of people resident in the homeMSOA
+16-24,Fraction of people in the age range 16-24
+25-34,Fraction of people in the age range 25-34
+35-49,Fraction of people in the age range 35-49
+50-54,Fraction of people in the age range 50-54
+65-74,Fraction of people in the age range 65-74
+75,Fraction of people of age 75+
+female,Fraction of people who are female
+house0carpct,Fraction of homes with no cars
+house1carpct,Fraction of homes with 1 car
+house2carpct,Fraction of homes with 2 cars
+house3carpct,Fraction of homes with 3 cars
+house4carpct,Fraction of homes with 4 or more cars
+ppperhect,Population density in people per hectare
+econactivpct,Fraction of people who are economically active
+econinactivpct,Fraction of people who are economically inactive
+vghealth,Fraction of people who are in very good health
+ghealth,Fraction of people who are in good health
+fhealth,Fraction of people with fair health
+bhealth,Fraction of people with bad health
+vbhealth,Fraction of people with very bad health
+white,Fraction of people of white ethnicity
+mixed,Fraction of people of mixed ethnicity
+asian,Fraction of people of asian ethnicity
+black,Fraction of people of black ethnicity
+otherethn,Fraction of people of other ethnicity
+noqual,Fraction of people with no qualifications
+aptshpqual,Fraction of people with apprenticeship-level qualifications
+lev1qual,Fraction of people with level 1 qualifications
+lev2qual,Fraction of people with level 2 qualifications
+lev3qual,Fraction of people with level 3 qualifications
+lev4qual,Fraction of people with level 4 qualifications
+otherqual,Fraction of people with other level of qualifications
+centheat,Fraction of homes with central heating
+nrooms,Average number of rooms in homes
+wzclass,Workplace zone classification (these are defined at a smaller geographical level and we have taken the mode to assign its value to MSOAs
+distance,The cartesian distance between the centroid of the home MSOA and the workplace MSOA
+disttrainstn,The minimum cartesian distance between the flow line and the nearest train station
+distcoachstn,The minimum cartesian distance between the flow line and the nearest coach station
+distbusstop,The minimum cartesian distance between the flow line and the nearest bus stop
+distmway,The minimum cartesian distance between the flow line and the nearest motorway
