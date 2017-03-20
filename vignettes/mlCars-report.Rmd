@@ -1,53 +1,68 @@
 ---
-title: "Using Machine Learning and Big Data to Model Car Dependency: an Exploration Using Origin-Destination Data"
+# title: "Using Machine Learning and Big Data to Model Car Dependency: an Exploration Using Origin-Destination Data"
+title: "Using Machine Learning and Big Data to Model Car Dependency: Progress Report 1 - Input Data"
 author: Robin Lovelace and Ilan Fridman-Rojas
 date: "`r Sys.Date()`"
 bibliography: ../references.bib
-output: rmarkdown::html_vignette
+output: rmarkdown::pdf_document
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-## What is car dependency?
+<!-- ## What is car dependency? -->
 
-Car dependency should be easy to define: a measure of the extent to which people *depend* on their cars.
-But what does this actually mean?
-Unless your car doubles as a life-support system, it is unlikley that you literally depend on it for survival.
-More likely you depend on the car for trips that are *seen as essential*, for modern life.
-Whether it's for doing the 'weekly shop', dropping children off at school or taking a sick relative to hospital at an affordable, car use can easily become integral modern life.
+<!-- Car dependency should be easy to define: a measure of the extent to which people *depend* on their cars. -->
+<!-- But what does this actually mean? -->
+<!-- Unless your car doubles as a life-support system, it is unlikley that you literally depend on it for survival. -->
+<!-- More likely you depend on the car for trips that are *seen as essential*, for modern life. -->
+<!-- Whether it's for doing the 'weekly shop', dropping children off at school or taking a sick relative to hospital at an affordable, car use can easily become integral modern life. -->
 
-Of course, each of these trips could have either been made by a different mode or not made at all and (except potentially in the case of taking a relative to hospital) nobody would die.
-Car dependency is thus about observed behaviour than hypothetical consequences of going *cold turkey*.
-The analogy of a drug dependency is useful.
-Drug dependents will not die if they can no longer indulge their addition.
-But life will be hard, at least for a while after, when they stop.
-Similarly, those who are car dependent will find it hard to adjust to life after their car has been taken away.
+<!-- Of course, each of these trips could have either been made by a different mode or not made at all and (except potentially in the case of taking a relative to hospital) nobody would die. -->
+<!-- Car dependency is thus about observed behaviour than hypothetical consequences of going *cold turkey*. -->
+<!-- The analogy of a drug dependency is useful. -->
+<!-- Drug dependents will not die if they can no longer indulge their addition. -->
+<!-- But life will be hard, at least for a while after, when they stop. -->
+<!-- Similarly, those who are car dependent will find it hard to adjust to life after their car has been taken away. -->
 
-From a policy perspective car dependency is problematic due to its negative consequences, not in its own right. 
-Notwithstanding questions of whether government policy encourages car dependency, 
-
-
-It is important to note that car dependency is not necessarily 
-
-## Established methods for car dependency research
-
-There is a long history of reasearch into the concepts of car dependency and, more broadly, mode choice. 
+<!-- From a policy perspective car dependency is problematic due to its negative consequences, not in its own right.  -->
+<!-- Notwithstanding questions of whether government policy encourages car dependency,  -->
 
 
-[@mogridge_self-defeating_1997]
+<!-- It is important to note that car dependency is not necessarily  -->
+
+<!-- ## Established methods for car dependency research -->
+
+<!-- There is a long history of reasearch into the concepts of car dependency and, more broadly, mode choice.  -->
 
 
-## The dataset
+<!-- [@mogridge_self-defeating_1997] -->
 
-For this proof-of-concept where we aim to show the power and potential benefits of machine learning algorithms in analysing transport data and allowing previously impossible extraction of patterns and insights from evergrowing datasets. The ultimate goal is of course for these patterns to allow for data-driven policy decisions to be taken in an optimal way, potentially drastically improving the outcome compared to decision-making based on basic indicators, intuition, and experience alone.
 
-For simplicity and maximum accessibility we focussed on datasets which are open (publicly available), namely on the 2011 Census data. This dataset provides a wealth of information on mobility patterns at various geographic scales, as well as demographic information on the population resident in each of the relevant geographic units. We will briefly review some of the datasets we decided to include in our modelling in the following section.
+## Introduction
 
-However the expertise present at the Leeds Insitute for Data Analytics provides not only dexterity in using Census data, but also the novel extraction and use of spatial data (provided by the recently created Open Street Maps (OSM) API platform), which is hugely relevant and valuable -most likely crucial indeed- when modelling car usage propensity. To the best of our knowledge this is the first application of this sort of data to model transport in the UK.
+The primary aim of this project is to show the power and potential benefits of machine learning algorithms in analysing transport data and demonstrating previously impossible methods to gain policy-releant insight from evergrowing datasets. The ultimate goal is for these patterns to allow for data-driven policy decisions to be taken. This could lead to improvements compared with decisions based on basic indicators, intuition, and experience alone.
 
-The Census data we used is all available online. The main dataset is a table of counts by mode of transport used by the Census subjects to commute to work between geographical zones known as Middle-Super Output Areas (MSOAs). We will hereon refer to each pair of home-work (origin-destination) pairs and its corresponding number of commuters as a *flow*. This table ([available online](http://wicid.ukdataservice.ac.uk/)) contains the code for each origin and destination zone, as well as the number of people which employed each of the following modes of transport: work at home (no transport used), some form of metro, train, bus or coach, taxi, motorcycle or scooter, drive a car or van, passenger in car or van, bicycle, walk, other. We grouped together people who drive or are passengers to estimate the car propensity (fraction).
+## Input data
+
+For simplicity and maximum accessibility we focussed on datasets which are open (publicly available). Three main input dataset types have been used in this research:
+
+- Origin-destination (OD) commute data from the 2011 Census data.
+- Geographically aggregated socio-demographic data from the 2011 Census.
+- Geographic variables associated with each OD pair.
+
+The Census was used as the primary input dataset because it provides so many variables relevant to car dependency. To our knowledge, the breadth of input datasets have never been analysed together in a single project.
+
+The case study region used for this project was **West Yorkshire**. This case study was selected due to the wide range of social and geographical environments linked to car dependency found here: it includes rural, urban, deprived and privaledged areas.
+
+## Origin-destination data
+
+The basic input data used was a table reporting the number of people travelling, by main mode of transport, commuting to work between Middle-Super Output Areas (MSOAs, average population: ~7,500).
+
+We will hereon refer to each pair of home-work (origin-destination) pairs and its corresponding number of commuters as a *flow*. This table ([available online](http://wicid.ukdataservice.ac.uk/)) contains the code for each origin and destination zone, as well as the number of people which employed each of the following modes of transport: work at home (no transport used), some form of metro, train, bus or coach, taxi, motorcycle or scooter, drive a car or van, passenger in car or van, bicycle, walk, other. We grouped together people who drive or are passengers to estimate the car propensity (fraction).
+
+To convert the non-geographical OD dataset into something to plot
 
 To this base table there are two ways to further increase the data included for modelling: the Census provides numerous other demographic and economic measures and indicators which can be linked to the commuter's home MSOA ([available here](https://www.nomisweb.co.uk/census/2011/data_finder)), and it also provides workplace data which a group of researchers at the University of Southampton have conveniently created a classification of (by work type, [available online as well](http://cowz.geodata.soton.ac.uk/download/)) which can be linked to the workplace MSOA.
 
