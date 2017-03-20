@@ -42,16 +42,25 @@ vignette: >
 
 ## Introduction
 
-The primary aim of this project is to show the power and potential benefits of machine learning algorithms in analysing transport data and demonstrating previously impossible methods to gain policy-releant insight from evergrowing datasets. The ultimate goal is for these patterns to allow for data-driven policy decisions to be taken. This could lead to improvements compared with decisions based on basic indicators, intuition, and experience alone.
+The primary purpose of this project is to show the power and potential benefits of machine learning algorithms in analysing transport data. By demonstrating previously impossible or inaccessible methods we aim to show how new techniques, combined with new and newly open datasets, can generate a strong evidence base for transport planning and policy. The aspiration is that the work will filter into policies, to make them data-driven, transparent, reproducibible and encouraging of citizen science and innovation.
+
+It is well-known that car dependency is close to the root of many problems that are exacerbated by the transport system, economic, environmental and social. However, car dependency is a complex phenomena linked to multiple interrelated factors, the root causes of which are not well understood. This makes it an ideal topic for investigation by machine learning. Therefore, beyond the methodological insights gained by this project, we hope that the results lead to policies that are more evidence-based and effective that decisions based on basic indicators, intuition, and experience alone.
+
+During the first month-and-a-half of the project (2017-02-06 to 2017-03-20) we have spent the majority of the time accessing and organising the data, exploring cutting edge methods in machine learning and researching the literature on car dependency. This **first Progress Report** focuses on the input data, the vital raw material for machine learning algorithms to work. First, however, it is worth considering what is actually meant by car dependency in the context of machine learning, which depends on a categorical or (more frequently) quantitative dependent variable which we are seeking to understand.
 
 ## Definition of car dependency
 
-There are many possible ways of defining and measuring car use. In this work as a measure of car use we have chosen to use the fraction of people (commuting between two particular geographical zones) which stated in the Census that they either drive, or are passengers in a car or van.
+There are many possible ways of defining and measuring car use. In this work we interpret car dependency as more about current behaviour than hypothetical future behaviours. Specifically, we define car dependency as:
+
+> The proportion of people in a zone or along a particular desire line who drive, or are passengers in a car or van, as their main mode of transport, taking account of the distances of those trips.
+
+By 'taking account of the distances of those trips' we mean that a zone in which 50% of the population use a car for trips of 5 miles is more car dependent than a zone in which 50% of the population uses a car for trips of 20 miles. We define car dependency *relative to distance* because the policy motivation of this project is to help identify zones and routes where interventions could reduce car dependency. It is easier to intervene to reduce car use for 5 mile trips (e.g. by providing good walking and cycling facilities) than for 20 mile trips (e.g. by creating new bus routes or public transport stations).
+
 <!-- Say how we define car dependency, and something about the model used to estimate 'expected level of driving' here please. -->
 
 ## Input data
 
-For simplicity and maximum accessibility we focussed on datasets which are open (publicly available). Three main input dataset types have been used in this research:
+For simplicity and maximum accessibility this project uses only datasets which are open (publicly available). There are three main input dataset types:
 
 - Origin-destination (OD) commute data from the 2011 Census data.
 - Geographically aggregated socio-demographic data from the 2011 Census.
