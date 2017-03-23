@@ -1,7 +1,5 @@
 ---
 title: "Tutorial - using OD data and machine learning in R"
-author: "Robin Lovelace"
-date: "23 March 2017"
 output: html_document
 ---
 
