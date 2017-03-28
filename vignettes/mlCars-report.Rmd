@@ -133,7 +133,7 @@ In addition to this Census data we gathered and computed spatial data as well. W
 
 \newpage
 
-## Overview of input data
+### Overview of input data
 
 A list of the variables used in the input dataset for the machine learning algorithms is provided below.
 
@@ -162,16 +162,167 @@ knitr::include_graphics(c("../figures/dist_fit_mean.png", "../figures/dist_fit.p
 ```
 
 
-```{r, echo=F, out.width="49%", fig.show='hold', fig.cap="The variable obtained by subtracting predicted car fraction from observed car fraction."}
+```{r, echo=F, out.width="49%", fig.show='hold', fig.align='center', fig.cap="The variable obtained by subtracting predicted car fraction from observed car fraction."}
 knitr::include_graphics("../figures/response.png")
 ```
 
 \newpage
 
-## Next steps
+<!-- ## Next steps -->
 
-Based on the input data documented in the previous sections, we have already made a start on developing and running code to identify the variables associated with car dependency. To do this we will perform model selection of a wide range of machine learning regression models, checking their performance in prediction car dependency (car use fraction as defined above) on a new dataset.
+<!-- Based on the input data documented in the previous sections, we have already made a start on developing and running code to identify the variables associated with car dependency. To do this we will perform model selection of a wide range of machine learning regression models, checking their performance in prediction car dependency (car use fraction as defined above) on a new dataset. -->
 
-Once the best-performing model has been found we will do some model validation to ensure the model gives sensible predictions on new data, and then proceed to attempt to extract which variables the model deems most important in predicting car dependency, in general, or if possible also for individual predictions.
+<!-- Once the best-performing model has been found we will do some model validation to ensure the model gives sensible predictions on new data, and then proceed to attempt to extract which variables the model deems most important in predicting car dependency, in general, or if possible also for individual predictions. -->
 
 
+## Machine Learning
+
+Now that we have prepared an appropriate response variable with distance-dependence approximately removed (and 1-inflated values also helpfully transformed to continuous lower values in the process) we can begin to fit both linear and non-linear statistical and machine learning models to predict the response variable based on the wealth of geodemographic and spatial covariates we have gathered.
+
+The first step in this process is that of model selection by cross-validation, and it is this procedure which we will now describe. The first step of model selection is to choose the metric of interest, based on which we will select the best-performing model. Given that this is a regression problem there are multiple possible metrics: mean squared error (MSE), mean absolute error, coefficient of determination ($R^2$), etc. From the point of view of policy decision-making, which is our ultimate goal, there is no clear choice of best-suited metric. We have chosen the coefficient of determination as it seems to be the metric of interest for our Data Science contact at the Department for Transport, but it must be noted that this metric is ill-suited for the mostly non-linear [^1] regression models we consider (see for example [@spiess2010evaluation]).
+
+[^1]: For clarity, we are referring to non-linearity in the regression parameters, models non-linear in the covariates (e.g. the Elastic Net model we use) are still linear by this definition.
+
+Having chosen the metric of interest, we proceed to shuffle and split the data in preparation for cross-validation. Flows are unordered data and therefore can be shuffled uniformly with no problem. We shuffle the flows in the West Yorkshire dataset, and then split off half of the data for model selection and validation, the other half is left for final model testing to estimate the generalisation error (or parts of it may used for further model selection, e.g. parameter tuning, if needed).
+
+We then perform 10-fold cross-validation on the validation half of the dataset. At this point we do not perform any hyperparameter tuning and use the default parameters set in scikit-learn's implementation [@scikit-learn] of these algorithms[^2]. The regression models considered and the result of the model selection are shown in the table below.
+
+[^2]: Grid search or random search hyperparameter tuning by cross-validation could be carried out at a later date on a separate dataset for a subset of the selected models to extract further gains in predictive performance.
+
+```{r modelseltable, echo=FALSE, message=FALSE}
+df = readr::read_csv(
+'Model, $R^2$
+XGBoost, 0.18683495340829917
+ ElasticNetCV, 0.14689197361179665
+ TheilSen, 0.12264099250943154
+ Multi-LayerPerceptron, 0.096875782382435549
+ RandomForest, 0.078340325161809443
+ KNeighbors, 0.040983543493443464
+ ExtraTrees, 0.032621071535337588
+ --MEAN MODEL--, 0.0
+ Dummy, -0.00010168044681220974
+ PassiveAggressive, -0.57304780004802169
+ DecisionTrees, -0.64736807548249409
+ RANSAC, -1.1436804189325766e+22
+ SGD, -1.5174384327981293e+26
+'
+)
+knitr::kable(df, caption="10-fold cross-validation $R^2$ scores of the the regression models considered. The `MEAN MODEL` is a model which always predicts the mean of the response variable, and is included as a reference point and benchmark. The RANSAC and Stochastic Gradient Descent (SGD) regressors have clearly not converged but we will not attempt to tune them for now. ")
+```
+
+Without engaging in extensive hyperparameter tuning on a separate dataset, we see that the XGBoost regressor [@Chen:2016:XST:2939672.2939785] outperforms the rest of the models by a significant margin, with $R^2 \approx 0.18$. We will therefore select it as a tentative final model and now proceed to perform some model validation to ensure its predictions are sensible.
+
+
+### Model validation
+
+For a regression task such as the one at hand, the model validation checks which can be performed are perhaps less intuitive than the tests available for classification tests. However some basic plots of the model's predictions and checks of the model's residuals and the correlation of the model's predictions with observed values can and should be carried out.
+
+The figure below shows the residuals of the XGBoost regressor on a validation dataset, showing no obvious trend or asymmetry which would be indicative of a poorly-fit model.
+
+```{r, echo=F, out.width="49%", fig.show='hold', fig.align='center', fig.cap="The residuals of the XGBoost regressor on a validation dataset."}
+knitr::include_graphics("../figures/xgb_residuals.png")
+```
+
+We can further inspect the distribution and correlation of the predicted and observed values, as well as a histogram of their distribution.
+
+```{r, echo=F, out.width="49%", fig.show='hold', fig.align='center', fig.cap="The distribution and correlation of predictions and observed values."}
+knitr::include_graphics(c("../figures/xgb_pred_obs_correlation.png", "../figures/xgb_hist.png"))
+```
+
+
+### A Deep Learning model
+
+For completeness, we would be remiss if we did not consider fitting a deep learning model. We have constructed a 3-hidden layer Multi-Layer Perceptron (MLP) using the Theano [@2016arXiv160502688T] Python package. The MLP implementation in scikit-learn includes only a single hidden layer, therefore there is value in exploring potential predictive performance gains by considering deeper neural networks.
+
+Numerous contemporary training methods were implemented to enable the successful training of this neural network, including: orthogonal weight initialisation [@2013arXiv1312.6120S], dropout regularisation [@srivastava2014dropout], $L_1$ and $L_2$ regularisation, ReLu activation units, etc. This allowed the neural network to be properly fit over hundred of epochs (passes over the training data), with no sign of significant overfitting, as shown in the training and validation errors in the figure below.
+
+```{r, echo=F, out.width="49%", fig.show='hold', fig.align='center', fig.cap="The training error and validation set errors as training of the MLP progresses."}
+knitr::include_graphics("../figures/nn_training.png")
+```
+
+A deep learning model was therefore successfully fit, with a sensible residual plot and distribution of predictions. However its performance was still below that of the XGBoost regressor previously selected, with a coefficient of determination of $R^2 \approx 0.136$, and a Pearson correlation between predicted and observed values of 0.37. One may speculate that with larger training datasets (e.g. a good fraction of the flows in England), this model may dominate. However with the limited training set of part of West Yorkshire, XGBoost remains dominant.
+
+
+### Interpretable analysis
+
+Thus far we have selected and validated a model which maximises a metric of predictive performance. Should we be interested purely in predictive purposes this is the best model to consider from our analysis thus far. However from a policy perspective the goal is perhaps only partly predictive accuracy (which is of value when considering counterfactual scenarios for future projects, e.g. given the data we have on known flows on particular roads, how heavy a flow can we expect on a hypothetical new road with certain features), but also reliant on gaining a data-driven understanding of the factors which most heavily influence car commuting flows. To this end we must extract interpretable insights from the predictive machine learning models we have fit.
+
+A noteworthy caveat to always be kept in mind when we attempt to extract interpretable knowledge from machine learning models is that the particular set of variables highlighted as most important in making accurate predictions are as much a function of the model itself as they are of the data. Therefore no single set of important features extracted from a single model should be taken without undue caution. Ideally, one may approach the problem as one of consensus, where variables selected by multiple models (each significantly algorithmically different from the rest) would have a stronger evidence-base to claim variable importance.
+
+The simplest visual approach to gauging variable importances is to fit a shallow decision tree, such as the one shown in the figure below.
+
+```{r, echo=F, out.width="60%", fig.show='hold', fig.align='center', fig.cap="A decision tree fit on the West Yorkshire training data. X is the training data matrix with X[i] denoting its i-th column as the variable that split has been based on."}
+knitr::include_graphics("../figures/decision_tree.png")
+```
+
+However decision trees yielded a very poor fit during model selection (see table above), so this gives perhaps a suboptimal understanding of variable importances.
+
+Another tree-based approach however gave much better predictive performance, and can also yield a measure of variable importances based on how often a particular variable was used to create splits in the model's trees: a Random Forest regressor. Extracting variable importances from a Random Forest regressor fit on the training set gives the variable importances shown in the figure below.
+
+```{r, echo=F, out.width="60%", fig.show='hold', fig.align='center', fig.cap="Variable importances from a Random Forest model."}
+knitr::include_graphics("../figures/random_forest_var_importances.png")
+```
+
+A different, linear, model which yielded decent predictive performance and which is interpretable, is the Elastic Net regression model we fit as part of the model selection. The regression coefficients of this model give both a measure of variable importances, as well as directionality of their effect, as shown in the table below.
+
+```{r elastictable, echo=FALSE, message=FALSE}
+df = readr::read_csv(
+'Variable, Coefficient
+house0carpct, -0.054776752111173117
+ 16-24, -0.039986717012222166
+ house2carpct, 0.02339319715616801
+ wzclass, 0.019279327583230203
+ distmway, -0.015871861339193081
+ bhealth, 0.015295607154651067
+ female, -0.014358661391721107
+ black, -0.014144458679228858
+ fhealth, 0.0082149141041497377
+ noqual, -0.0077581268478576059
+ vbhealth, 0.0072882827055536182
+ mixed, 0.0070850099027320382
+ otherethn, -0.0062778655952986633
+ econactivpct, -0.0052560597618020542
+ lev2qual, 0.0046241045861757542
+'
+)
+knitr::kable(df, caption="The regression coefficients of the Elastic Net model, ordered by descending absolute value.")
+```
+
+We have also considered the Boruta [@kursa2010boruta] feature selection algorithm, which is based on Random Forest regressors to yield the following set of important variables:  
+['16-24', 'female', 'house0carpct', 'house2carpct', 'disttrainstn', 'distcoachstn', 'distbusstop', 'distmway']
+
+The top 10 variables by importance according to the Elastic Net regressor, the Random Forest model, and the 8 variables identified by the Boruta algorithm are therefore as follows:  
+{'16-24', 'house2carpct', 'bhealth', 'black', 'noqual', 'distmway', 'fhealth', 'house0carpct', 'female', 'wzclass'}  
+{'16-24', 'house2carpct', 'distcoachstn', 'disttrainstn', 'distmway', 'house0carpct', '35-49', 'female', 'wzclass', 'distbusstop'}  
+{'16-24', 'house2carpct', 'distcoachstn', 'disttrainstn', 'distmway', 'house0carpct', 'female', 'distbusstop'}  
+
+Choosing the common subset of these variables as the set of variables on which we have a strong consensus evidence-base of their importance, we therefore come to the following set of variables, which we conclude have a heavy influence on predicting the response variable:  
+  
+**{'16-24', 'distmway', 'female', 'house0carpct', 'house2carpct'}**
+
+
+#### Interpretability of individual predictions
+
+So far we have focussed on extracting the set of variables which are globally important in predicting the response variable. However often what is of interest is being able to extract some understanding of why individual predictions have been made. To this end we have included the recently devised LIME algorithm [@ribeiro2016should] as implemented by one of the authors of the paper and made [available online](https://github.com/marcotcr/lime).
+
+A typical 'explanation' for a given prediction then looks as follows:  
+[('16-24 <= -0.55', 0.12533686475591391),
+ ('house2carpct > 0.75', 0.10773776968620975),
+ ('female <= -1.27', 0.050245894104752331),
+ ('centheat > 0.84', 0.043881786916929157),
+ ('house0carpct <= -0.74', 0.039521388171645959),
+ ('house3carpct > 0.73', 0.027131249833026956),
+ ('wzclass > 0.60', -0.02432970045350389),
+ ('75+ <= -0.09', 0.021833461847929985),
+ ('-0.18 < vghealth <= 0.52', 0.020612773246808588),
+ ('-0.62 < otherqual <= -0.35', -0.017353392810289966),
+ ('distcoachstn <= -0.67', -0.015832260353557698),
+ ('lev1qual <= -0.48', 0.015421096750167514),
+ ('disttrainstn <= -0.68', -0.011242940585556988),
+ ('otherethn <= -0.57', 0.0099682100686187616),
+ ('35-49 <= -1.16', 0.0098627230705988691)]
+ 
+ The reliability, interpretation, and further uses of the LIME algorithm in our present case study remain to be fully examined, but its potential is clear.
+
+
+# References
