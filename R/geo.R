@@ -28,7 +28,6 @@ sel_mways = seq(from = 1, to = nrow(motorways$osm_poi), by = 100)
 m + qtm(motorways$osm_points[sel_mways,])
 # l_points = stplanr::line2points(wyflows) # takes a while to run
 
-
 wyflow_proj = spTransform(wyflows, CRS("+init=epsg:27700"))
 
 wyzones = readRDS("data/WY_zones.Rds")
