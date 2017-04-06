@@ -230,6 +230,15 @@ knitr::include_graphics(c("../figures/xgb_pred_obs_correlation.png", "../figures
 ```
 
 
+#### A note on data cuts
+
+Two cuts on both the rows and the columns of the dataset were found to be necessary during the machine learning model-fitting procedure. In terms of the variables used it is important to note that --much like with categorical variables in an Ordinary Least Squares-type linear regression-- most of our variables are fractions, and therefore if we have $n$ columns which sum to $1$, we in effect only have $n-1$ independent features, as once $n-1$ of the entries on a given row are known, the last one can be deduced to be 1 minus the sum of the other $n-1$ columns. As such including all $n$ columns induces multicollinearity. In order to manage this we drop one such column (preferably the one which we expect to be least dominant) and include only the other $n-1$ columns, which should now have no strong correlations induced by normalisation.
+
+A further important cut was required, but with respect to the rows in the dataset. Flows with low numbers of total commuters introduce artifacts in the response variable, such as inflation at values corresponding to exact fractions with a low denominator (e.g. $\frac{1}{2}$, $\frac{1}{3}$, etc.). These artifacts from low sample sizes are not representative of global behaviour and may complicate or skew the model-fitting process, resulting in models with poorer generalisation performance. We therefore chose to drop flows with less than 10 commuters, in doing so removing low-sample artifacts and improving model fit.
+
+Consideration of both the variables to be included and potential redundancies or multicollinearity between them, as well as low sample-size artifacts and their removal must therefore be carefully undertaken at the earliest stage, ideally at the data preparation stage, or during model selection, as soon as they are identified. 
+
+
 ### A Deep Learning model
 
 For completeness, we would be remiss if we did not consider fitting a deep learning model. We have constructed a 3-hidden layer Multi-Layer Perceptron (MLP) using the Theano [@2016arXiv160502688T] Python package. The MLP implementation in scikit-learn includes only a single hidden layer, therefore there is value in exploring potential predictive performance gains by considering deeper neural networks.
