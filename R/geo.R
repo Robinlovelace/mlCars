@@ -4,16 +4,18 @@ library(tmap)
 library(dplyr)
 library(sp)
 
-wyflows = readRDS("data/wyflows_w_response.Rds")
+#wyflows = readRDS("data/wyflows_w_response.Rds")
+wyflows = readRDS("data/wyflows.Rds")
 wyflows = spTransform(wyflows, CRS("+init=epsg:4326"))
-summary(wyflows$response)
+#summary(wyflows$response)
+summary(wyflows$car)
 
 names(wyflows)
 tmap_mode("view")
 wyflows_all = wyflows
 wyflows = wyflows[wyflows$distance > 0,]
-qtm(wyflows[wyflows$npeople > 200,], lines.col = "response", lines.style = "pretty")
-(m = qtm(wyflows[wyflows$npeople > 200,], lines.col = "response", lines.style = "pretty") )# fails when interactive
+qtm(wyflows[wyflows$npeople > 200,], lines.col = "car", lines.style = "pretty")
+(m = qtm(wyflows[wyflows$npeople > 200,], lines.col = "car", lines.style = "pretty") )# fails when interactive
 
 # most important geographical vars for car dependency
 # distance from motorway. hypothesis: more % (relative distance) drive
