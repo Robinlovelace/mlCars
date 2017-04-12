@@ -291,13 +291,25 @@ house0carpct, -0.054776752111173117
 knitr::kable(df, caption="The regression coefficients of the Elastic Net model, ordered by descending absolute value.")
 ```
 
-We have also considered the Boruta [@kursa2010boruta] feature selection algorithm, which is based on Random Forest regressors to yield the following set of important variables:  
-['16-24', 'female', 'house0carpct', 'house2carpct', 'disttrainstn', 'distcoachstn', 'distbusstop', 'distmway']
+\newpage
 
-The top 10 variables by importance according to the Elastic Net regressor, the Random Forest model, and the 8 variables identified by the Boruta algorithm are therefore as follows:  
-{'16-24', 'house2carpct', 'bhealth', 'black', 'noqual', 'distmway', 'fhealth', 'house0carpct', 'female', 'wzclass'}  
-{'16-24', 'house2carpct', 'distcoachstn', 'disttrainstn', 'distmway', 'house0carpct', '35-49', 'female', 'wzclass', 'distbusstop'}  
-{'16-24', 'house2carpct', 'distcoachstn', 'disttrainstn', 'distmway', 'house0carpct', 'female', 'distbusstop'}  
+We have also considered the Boruta [@kursa2010boruta] feature selection algorithm, which is based on Random Forest regressors to yield the following set of important variables:  
+
+```
+['16-24', 'female', 'house0carpct', 'house2carpct', 'disttrainstn',
+  'distcoachstn', 'distbusstop', 'distmway']
+```
+
+The top 10 variables by importance according to the Elastic Net regressor, the Random Forest model, and the 8 variables identified by the Boruta algorithm are therefore as follows: 
+
+```
+{'16-24', 'house2carpct', 'bhealth', 'black', 'noqual', 'distmway',
+  'fhealth', 'house0carpct', 'female', 'wzclass'}  
+{'16-24', 'house2carpct', 'distcoachstn', 'disttrainstn', 'distmway',
+  'house0carpct', '35-49', 'female', 'wzclass', 'distbusstop'}  
+{'16-24', 'house2carpct', 'distcoachstn', 'disttrainstn', 'distmway',
+  'house0carpct', 'female', 'distbusstop'} 
+```
 
 Choosing the common subset of these variables as the set of variables on which we have a strong consensus evidence-base of their importance, we therefore come to the following set of variables, which we conclude have a heavy influence on predicting the response variable:  
   
