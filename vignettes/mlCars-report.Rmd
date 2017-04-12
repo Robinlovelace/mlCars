@@ -169,7 +169,7 @@ vignette: >
 <!-- Once the best-performing model has been found we will do some model validation to ensure the model gives sensible predictions on new data, and then proceed to attempt to extract which variables the model deems most important in predicting car dependency, in general, or if possible also for individual predictions. -->
 
 
-## Machine Learning
+# Machine Learning
 
 Progress Report 1 describes the construction of the explanatory variables and definitions of the dependent variable. This second Progress Report describes the work we have done to model the input data using Machine Learning.
 
@@ -321,6 +321,8 @@ Choosing the common subset of these variables as the set of variables on which w
 So far we have focussed on extracting the set of variables which are globally important in predicting the response variable. However often what is of interest is being able to extract some understanding of why individual predictions have been made. To this end we have included the recently devised LIME algorithm [@ribeiro2016should] as implemented by one of the authors of the paper and made [available online](https://github.com/marcotcr/lime).
 
 A typical 'explanation' for a given prediction then looks as follows:  
+
+```
 [('16-24 <= -0.55', 0.12533686475591391),
  ('house2carpct > 0.75', 0.10773776968620975),
  ('female <= -1.27', 0.050245894104752331),
@@ -336,8 +338,10 @@ A typical 'explanation' for a given prediction then looks as follows:
  ('disttrainstn <= -0.68', -0.011242940585556988),
  ('otherethn <= -0.57', 0.0099682100686187616),
  ('35-49 <= -1.16', 0.0098627230705988691)]
+```
  
  The reliability, interpretation, and further uses of the LIME algorithm in our present case study remain to be fully examined, but its potential is clear.
 
+# Next steps
 
 # References
