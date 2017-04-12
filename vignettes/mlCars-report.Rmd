@@ -1,6 +1,6 @@
 ---
 # title: "Using Machine Learning and Big Data to Model Car Dependency: an Exploration Using Origin-Destination Data"
-title: "Using Machine Learning and Big Data to Model Car Dependency: Progress Report 1 - Input Data"
+title: "Using Machine Learning and Big Data to Model Car Dependency: Progress Report 2 - Machine Learning"
 author: Robin Lovelace and Ilan Fridman-Rojas
 date: "`r Sys.Date()`"
 bibliography: ../references.bib
@@ -40,133 +40,127 @@ vignette: >
 <!-- [@mogridge_self-defeating_1997] -->
 
 
-## Introduction
+<!-- ## Introduction -->
 
-The primary purpose of this project is to show the power and potential benefits of machine learning algorithms in analysing transport data. By demonstrating previously impossible or inaccessible methods we aim to show how new techniques, combined with new and newly open datasets, can generate a strong evidence base for transport planning and policy. The aspiration is that the work will filter into policies, to make them data-driven, transparent, reproducibible and encouraging of citizen science and innovation.
+<!-- The primary purpose of this project is to show the power and potential benefits of machine learning algorithms in analysing transport data. By demonstrating previously impossible or inaccessible methods we aim to show how new techniques, combined with new and newly open datasets, can generate a strong evidence base for transport planning and policy. The aspiration is that the work will filter into policies, to make them data-driven, transparent, reproducibible and encouraging of citizen science and innovation. -->
 
-It is well-known that car dependency is close to the root of many problems that are exacerbated by the transport system, economic, environmental and social. However, car dependency is a complex phenomena linked to multiple interrelated factors, the root causes of which are not well understood. This makes it an ideal topic for investigation by machine learning. Therefore, beyond the methodological insights gained by this project, we hope that the results lead to policies that are more evidence-based and effective that decisions based on basic indicators, intuition, and experience alone.
+<!-- It is well-known that car dependency is close to the root of many problems that are exacerbated by the transport system, economic, environmental and social. However, car dependency is a complex phenomena linked to multiple interrelated factors, the root causes of which are not well understood. This makes it an ideal topic for investigation by machine learning. Therefore, beyond the methodological insights gained by this project, we hope that the results lead to policies that are more evidence-based and effective that decisions based on basic indicators, intuition, and experience alone. -->
 
-During the first month-and-a-half of the project (2017-02-06 to 2017-03-20) we have spent the majority of the time accessing and organising the data, exploring cutting edge methods in machine learning and researching the literature on car dependency. This **first Progress Report** focuses on the input data, the vital raw material for machine learning algorithms to work. First, however, it is worth considering what is actually meant by car dependency in the context of machine learning, which depends on a categorical or (more frequently) quantitative dependent variable which we are seeking to understand.
+<!-- During the first month-and-a-half of the project (2017-02-06 to 2017-03-20) we have spent the majority of the time accessing and organising the data, exploring cutting edge methods in machine learning and researching the literature on car dependency. This **first Progress Report** focuses on the input data, the vital raw material for machine learning algorithms to work. First, however, it is worth considering what is actually meant by car dependency in the context of machine learning, which depends on a categorical or (more frequently) quantitative dependent variable which we are seeking to understand. -->
 
-## Definition of car dependency
+<!-- ## Definition of car dependency -->
 
-There are many possible ways of defining and measuring car use. In this work we interpret car dependency as more about current behaviour than hypothetical future behaviours. Specifically, we define car dependency as:
+<!-- There are many possible ways of defining and measuring car use. In this work we interpret car dependency as more about current behaviour than hypothetical future behaviours. Specifically, we define car dependency as: -->
 
-> The proportion of people in a zone or along a particular desire line who drive, or are passengers in a car or van, as their main mode of transport, taking account of the distances of those trips.
+<!-- > The proportion of people in a zone or along a particular desire line who drive, or are passengers in a car or van, as their main mode of transport, taking account of the distances of those trips. -->
 
-By 'taking account of the distances of those trips' we mean that a zone in which 50% of the population use a car for trips of 5 miles is more car dependent than a zone in which 50% of the population uses a car for trips of 20 miles. We define car dependency *relative to distance* because the policy motivation of this project is to help identify zones and routes where interventions could reduce car dependency. It is easier to intervene to reduce car use for 5 mile trips (e.g. by providing good walking and cycling facilities) than for 20 mile trips (e.g. by creating new bus routes or public transport stations).
+<!-- By 'taking account of the distances of those trips' we mean that a zone in which 50% of the population use a car for trips of 5 miles is more car dependent than a zone in which 50% of the population uses a car for trips of 20 miles. We define car dependency *relative to distance* because the policy motivation of this project is to help identify zones and routes where interventions could reduce car dependency. It is easier to intervene to reduce car use for 5 mile trips (e.g. by providing good walking and cycling facilities) than for 20 mile trips (e.g. by creating new bus routes or public transport stations). -->
 
-<!-- Say how we define car dependency, and something about the model used to estimate 'expected level of driving' here please. -->
+<!-- ## Input data -->
 
-## Input data
+<!-- For simplicity and maximum accessibility this project uses only datasets which are open (publicly available). There are three main input dataset types: -->
 
-For simplicity and maximum accessibility this project uses only datasets which are open (publicly available). There are three main input dataset types:
+<!-- - Origin-destination (OD) commute data from the 2011 Census data. -->
+<!-- - Geographically aggregated socio-demographic data from the 2011 Census. -->
+<!-- - Geographic variables associated with each OD pair. -->
 
-- Origin-destination (OD) commute data from the 2011 Census data.
-- Geographically aggregated socio-demographic data from the 2011 Census.
-- Geographic variables associated with each OD pair.
+<!-- The Census was used as the primary input dataset because it provides so many variables relevant to car dependency. To our knowledge, the breadth of input datasets have never been analysed together in a single project. -->
 
-The Census was used as the primary input dataset because it provides so many variables relevant to car dependency. To our knowledge, the breadth of input datasets have never been analysed together in a single project.
+<!-- The case study region used for this project was **West Yorkshire**. This case study was selected due to the wide range of social and geographical environments linked to car dependency found here: it includes rural, urban, deprived and privaledged areas. -->
 
-The case study region used for this project was **West Yorkshire**. This case study was selected due to the wide range of social and geographical environments linked to car dependency found here: it includes rural, urban, deprived and privaledged areas.
+<!-- ### Origin-destination data -->
 
-### Origin-destination data
+<!-- The fundamental input dataset was a table reporting the number of people travelling, by main mode of transport, commuting to work between Middle-Super Output Areas (MSOAs, average population: ~7,500). This is an open dataset ([available online from the official WICID data portal](http://wicid.ukdataservice.ac.uk/)) (dataset WU03EW). The file was downloaded as `wu03ew_v2.zip`, an 11.8 MB zipfile which when unzipped creates the file 109 MB plain text file `wu03ew_v2.csv`, read-in with the following command: -->
 
-The fundamental input dataset was a table reporting the number of people travelling, by main mode of transport, commuting to work between Middle-Super Output Areas (MSOAs, average population: ~7,500). This is an open dataset ([available online from the official WICID data portal](http://wicid.ukdataservice.ac.uk/)) (dataset WU03EW). The file was downloaded as `wu03ew_v2.zip`, an 11.8 MB zipfile which when unzipped creates the file 109 MB plain text file `wu03ew_v2.csv`, read-in with the following command:
+<!-- ```{r, eval=FALSE} -->
+<!-- odall = readr::read_csv("data/wu03ew_v2.csv") -->
+<!-- ``` -->
 
-```{r, eval=FALSE}
-odall = readr::read_csv("data/wu03ew_v2.csv")
-```
+<!-- The result is a data frame the first two columns of which contain a the code for the MSOA of origin and destination, respectively. The subsequent columns report number of people whose main mode of travel to work was: -->
 
-The result is a data frame the first two columns of which contain a the code for the MSOA of origin and destination, respectively. The subsequent columns report number of people whose main mode of travel to work was:
+<!-- - work at home (no transport used) -->
+<!-- - some form of metro -->
+<!-- - train -->
+<!-- - bus or coach -->
+<!-- - taxi -->
+<!-- - motorcycle or scooter -->
+<!-- - drive a car or van -->
+<!-- - passenger in car or van -->
+<!-- - bicycle -->
+<!-- - walk -->
+<!-- - other -->
 
-- work at home (no transport used)
-- some form of metro
-- train
-- bus or coach
-- taxi
-- motorcycle or scooter
-- drive a car or van
-- passenger in car or van
-- bicycle
-- walk
-- other
+<!-- We grouped together people who drive or are passengers to estimate car dependency. Further, we filtered out flows with an origin or destination outside West-Yorkshire, resulting in **53,807** OD pairs in the study region. This amount of data is sufficient for machine learning algorithms to work and extract complex insights, but small enough for experimentation and fast iteration of methods. -->
 
-We grouped together people who drive or are passengers to estimate car dependency. Further, we filtered out flows with an origin or destination outside West-Yorkshire, resulting in **53,807** OD pairs in the study region. This amount of data is sufficient for machine learning algorithms to work and extract complex insights, but small enough for experimentation and fast iteration of methods.
+<!-- To convert the non-geographical OD dataset into geographic data we used the function `od2line()` from the **stplanr** R package. The result is straight lines that can be plotted on the map and about which geographical variables, such as proximity to motorways, can be extracted.  -->
 
-To convert the non-geographical OD dataset into geographic data we used the function `od2line()` from the **stplanr** R package. The result is straight lines that can be plotted on the map and about which geographical variables, such as proximity to motorways, can be extracted. 
+<!-- ```{r, echo=F, out.width="49%", fig.show='hold', fig.cap="A sample of work commute flows in the West Yorkshire region (left), and a sample of the result of the code which calculates the distance between motorways (red) and flows (black), in this case discarding all flows within a certain distance of the motorway, as an example."} -->
+<!-- knitr::include_graphics(c("../figures/flows_500_westyorkshire.png", "../figures/dist_motorways.png")) -->
+<!-- ``` -->
 
-<!-- Maybe add example code here. -->
+<!-- We will hereon refer to each home-work (origin-destination) pair and its corresponding number of commuters, in geographic form, as a *flow* (see Figure 1).  -->
 
-```{r, echo=F, out.width="49%", fig.show='hold', fig.cap="A sample of work commute flows in the West Yorkshire region (left), and a sample of the result of the code which calculates the distance between motorways (red) and flows (black), in this case discarding all flows within a certain distance of the motorway, as an example."}
-knitr::include_graphics(c("../figures/flows_500_westyorkshire.png", "../figures/dist_motorways.png"))
-```
+<!-- To this base table there are two ways to further increase the data included for modelling: the Census provides numerous other demographic and economic measures and indicators which can be linked to the commuter's home MSOA ([available here](https://www.nomisweb.co.uk/census/2011/data_finder)), and it also provides workplace data which a group of researchers at the University of Southampton have conveniently created a classification of (by work type, [available online as well](http://cowz.geodata.soton.ac.uk/download/)) which can be linked to the workplace MSOA. -->
 
-We will hereon refer to each home-work (origin-destination) pair and its corresponding number of commuters, in geographic form, as a *flow* (see Figure 1). 
+<!-- ### Socio-demographic data -->
 
-To this base table there are two ways to further increase the data included for modelling: the Census provides numerous other demographic and economic measures and indicators which can be linked to the commuter's home MSOA ([available here](https://www.nomisweb.co.uk/census/2011/data_finder)), and it also provides workplace data which a group of researchers at the University of Southampton have conveniently created a classification of (by work type, [available online as well](http://cowz.geodata.soton.ac.uk/download/)) which can be linked to the workplace MSOA.
+<!-- The geodemographic data relevant to each origin (home) MSOA which was deemed relevant and annexed to the flows data consists of the following variables: number of people in particular age brackets, number of people of each gender, car or van availability (including number of homes with 0,1,2,etc. cars), population density, number of economically active and inactive people, general health (number of people with very good, fair, etc. general health), number of people per ethnicity group, number of people by maximum qualification level, and lastly, average number of rooms, bedrooms and fraction of homes with central heating. -->
 
-### Socio-demographic data
+<!-- In addition to this we included the workplace zone classification which assigns each destination MSOA (workplace) to one of the following groups: -->
 
-The geodemographic data relevant to each origin (home) MSOA which was deemed relevant and annexed to the flows data consists of the following variables: number of people in particular age brackets, number of people of each gender, car or van availability (including number of homes with 0,1,2,etc. cars), population density, number of economically active and inactive people, general health (number of people with very good, fair, etc. general health), number of people per ethnicity group, number of people by maximum qualification level, and lastly, average number of rooms, bedrooms and fraction of homes with central heating.
+<!-- ```{r wzclasstable, echo=FALSE, message=FALSE} -->
+<!-- df = readr::read_csv( -->
+<!-- 'Workplace zone classification, Code -->
+<!--                          Retail,1 -->
+<!--                        Top jobs,2 -->
+<!--                   Metro suburbs,3 -->
+<!--               Suburban services,4 -->
+<!--  Manufacturing and distribution,5 -->
+<!--                           Rural,6 -->
+<!--             Servants of society,7 -->
+<!-- ' -->
+<!-- ) -->
+<!-- knitr::kable(df, caption="The classification of workplace zones.") -->
+<!-- ``` -->
 
-In addition to this we included the workplace zone classification which assigns each destination MSOA (workplace) to one of the following groups:
+<!-- ### Spatial data -->
 
-```{r wzclasstable, echo=FALSE, message=FALSE}
-df = readr::read_csv(
-'Workplace zone classification, Code
-                         Retail,1
-                       Top jobs,2
-                  Metro suburbs,3
-              Suburban services,4
- Manufacturing and distribution,5
-                          Rural,6
-            Servants of society,7
-'
-)
-knitr::kable(df, caption="The classification of workplace zones.")
-```
+<!-- In addition to this Census data we gathered and computed spatial data as well. We have obtained the location of motorways through the [OSM API](https://osmdatar.github.io/osmdata/articles/osmdata.html), and the positions of train stations, coach stations, and bus stops from the [NAPTAN dataset](http://naptan.app.dft.gov.uk/datarequest/help). This allowed us to calculate geographical distances between flow lines and motorways, train stations, coach stations, and bus stops. This proximity and accessibility data is arguably vital to best understand and model car usage propensity, and has for the first time become readily available via the OSM platform, and analysis of the type we aim to do next should be cutting-edge data analysis. -->
 
-### Spatial data
+<!-- \newpage -->
 
-In addition to this Census data we gathered and computed spatial data as well. We have obtained the location of motorways through the [OSM API](https://osmdatar.github.io/osmdata/articles/osmdata.html), and the positions of train stations, coach stations, and bus stops from the [NAPTAN dataset](http://naptan.app.dft.gov.uk/datarequest/help). This allowed us to calculate geographical distances between flow lines and motorways, train stations, coach stations, and bus stops. This proximity and accessibility data is arguably vital to best understand and model car usage propensity, and has for the first time become readily available via the OSM platform, and analysis of the type we aim to do next should be cutting-edge data analysis.
+<!-- ### Overview of input data -->
 
-\newpage
+<!-- A list of the variables used in the input dataset for the machine learning algorithms is provided below. -->
 
-### Overview of input data
+<!-- ```{r variablestable, echo=F, message=FALSE} -->
+<!-- df = readr::read_csv("../Table_of_variables.csv") -->
+<!-- df$Description = strtrim(df$Description, width = 78) -->
+<!-- knitr::kable(df, caption="The variables in the full dataset.") -->
+<!-- ``` -->
 
-A list of the variables used in the input dataset for the machine learning algorithms is provided below.
+<!-- \newpage -->
 
-```{r variablestable, echo=F, message=FALSE}
-df = readr::read_csv("../Table_of_variables.csv")
-df$Description = strtrim(df$Description, width = 78)
-knitr::kable(df, caption="The variables in the full dataset.")
-```
+<!-- ## Preparing the target variable: removing distance-dependence -->
 
-\newpage
+<!-- From the outset one can foresee that out of our dataset one of the most important variables in predicting car dependency will be the distance between the origin (home MSOA) and the destination (workplace MSOA). However given our stated aim of better understanding the driving factors behind car dependency for policy decision-making purposes, distance is not something we can alter by policy and it is therefore of secondary interest, as mentioned in our definitioni of car dependency above. In order to prevent our models from focussing on distance dependence we would therefore like to remove the distance-dependence of the car fraction data as best as possible. -->
 
-## Preparing the target variable: removing distance-dependence
+<!-- We do this by using a model to fit the distance dependence of the car fraction, ensuring it has a good fit to the data, and then subtracting from the observed car use fractions the car use predicted by the model. The result of this is a variable which has a much diminished distance-dependence, and it is this variable which we will then apply machine learning to model in the next stage. -->
 
-From the outset one can foresee that out of our dataset one of the most important variables in predicting car dependency will be the distance between the origin (home MSOA) and the destination (workplace MSOA). However given our stated aim of better understanding the driving factors behind car dependency for policy decision-making purposes, distance is not something we can alter by policy and it is therefore of secondary interest, as mentioned in our definitioni of car dependency above. In order to prevent our models from focussing on distance dependence we would therefore like to remove the distance-dependence of the car fraction data as best as possible.
+<!-- The model which best fit how the car use fraction varies with distance turned out to be a logistic regression model fit on the mean car fraction by 1km distance band (i.e. a curve where the first point is the average car use fraction for distances of 0-1km, etc.) using the distance and the natural logarithm of the distance as input variables (Figure 2). -->
 
-We do this by using a model to fit the distance dependence of the car fraction, ensuring it has a good fit to the data, and then subtracting from the observed car use fractions the car use predicted by the model. The result of this is a variable which has a much diminished distance-dependence, and it is this variable which we will then apply machine learning to model in the next stage.
+<!-- After subtractin the car fraction predicted by the model from the observed car fraction we obtain a variable which a much reduced dependence on distance (i.e. it is centred on zero and does not significantly increase or decrease with distance), as shown in Figure 3. -->
 
-The model which best fit how the car use fraction varies with distance turned out to be a logistic regression model fit on the mean car fraction by 1km distance band (i.e. a curve where the first point is the average car use fraction for distances of 0-1km, etc.) using the distance and the natural logarithm of the distance as input variables (Figure 2).
+<!-- Now that we have approximately removed the dominant influence of the distance, we can proceed to use machine learning to tease out the patterns in the data from all the other more subtle variables.  -->
 
-After subtractin the car fraction predicted by the model from the observed car fraction we obtain a variable which a much reduced dependence on distance (i.e. it is centred on zero and does not significantly increase or decrease with distance), as shown in Figure 3.
-
-Now that we have approximately removed the dominant influence of the distance, we can proceed to use machine learning to tease out the patterns in the data from all the other more subtle variables. 
-
-```{r, echo=F, out.width="49%", fig.show='hold', fig.cap="The model fit obtained for car useage fraction as a function of distance. The fit against the mean by distance band is shown on the left, and the fit against all data points is shown on the right."}
-knitr::include_graphics(c("../figures/dist_fit_mean.png", "../figures/dist_fit.png"))
-```
+<!-- ```{r, echo=F, out.width="49%", fig.show='hold', fig.cap="The model fit obtained for car useage fraction as a function of distance. The fit against the mean by distance band is shown on the left, and the fit against all data points is shown on the right."} -->
+<!-- knitr::include_graphics(c("../figures/dist_fit_mean.png", "../figures/dist_fit.png")) -->
+<!-- ``` -->
 
 
-```{r, echo=F, out.width="49%", fig.show='hold', fig.align='center', fig.cap="The variable obtained by subtracting predicted car fraction from observed car fraction."}
-knitr::include_graphics("../figures/response.png")
-```
-
-\newpage
+<!-- ```{r, echo=F, out.width="49%", fig.show='hold', fig.align='center', fig.cap="The variable obtained by subtracting predicted car fraction from observed car fraction."} -->
+<!-- knitr::include_graphics("../figures/response.png") -->
+<!-- ``` -->
 
 <!-- ## Next steps -->
 
@@ -177,7 +171,7 @@ knitr::include_graphics("../figures/response.png")
 
 ## Machine Learning
 
-Now that we have prepared an appropriate response variable with distance-dependence approximately removed (and 1-inflated values also helpfully transformed to continuous lower values in the process) we can begin to fit both linear and non-linear statistical and machine learning models to predict the response variable based on the wealth of geodemographic and spatial covariates we have gathered.
+Progress Report 1 describes the construction of the explanatory variables and definitions of the dependent variable. This second Progress Report describes the work we have done to model the input data using Machine Learning.
 
 The first step in this process is that of model selection by cross-validation, and it is this procedure which we will now describe. The first step of model selection is to choose the metric of interest, based on which we will select the best-performing model. Given that this is a regression problem there are multiple possible metrics: mean squared error (MSE), mean absolute error, coefficient of determination ($R^2$), etc. From the point of view of policy decision-making, which is our ultimate goal, there is no clear choice of best-suited metric. We have chosen the coefficient of determination as it seems to be the metric of interest for our Data Science contact at the Department for Transport, but it must be noted that this metric is ill-suited for the mostly non-linear [^1] regression models we consider (see for example [@spiess2010evaluation]).
 
