@@ -222,6 +222,8 @@ shpfile$area = stplanr::gprojected(shpfile, rgeos::gArea, byid = T) / 1000000
 
 df = left_join(df, dplyr::select(shpfile@data, msoa11cd, area), by=c("homeMSOA"="msoa11cd"))
 
+wydf = df %>% filter(homeMSOA %in% lookup_wy$MSOA11CD & workMSOA %in% lookup_wy$MSOA11CD)
+
 summary(shpfile$msoa11cd %in% lookup$MSOA11CD)
 shpfile_wy = shpfile[shpfile$msoa11cd %in% wydf$homeMSOA | shpfile$msoa11cd %in% wydf$workMSOA,]
 plot(shpfile_wy)
@@ -229,7 +231,6 @@ plot(shpfile_wy)
 saveRDS(shpfile_wy, "data/WY_zones.Rds")
 
 
-wydf = df %>% filter(homeMSOA %in% lookup_wy$MSOA11CD & workMSOA %in% lookup_wy$MSOA11CD)
 #glimpse(wydf)
 
 #wydf = sp::merge(shpfile_wy, wydf, by)
