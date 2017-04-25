@@ -1,0 +1,133 @@
+\documentclass[11pt]{article}
+\date{}
+\renewcommand\abstractname{\fontsize{14pt}{0}\textbf{Abstract}\selectfont}
+
+\usepackage[left=25mm, right=25mm, top=25mm, bottom=25mm, includehead=false, includefoot=false]{geometry}
+
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage[round,semicolon]{natbib}  % Citation styles https://www.sharelatex.com/learn/Natbib_citation_styles
+\bibliographystyle{humannat}
+\renewcommand{\bibsection}{}
+\renewcommand{\bibhang}{\setlength{-1px}}
+
+
+\usepackage{authblk} % For author lists
+\renewcommand\Authfont{\fontsize{11}{1}\selectfont}
+\renewcommand\Affilfont{\fontsize{9}{1}\selectfont}
+
+\renewcommand*\footnoterule{}
+
+\usepackage[table]{xcolor}
+\usepackage[parfill]{parskip} % Line between paragraphs
+\usepackage{amsmath}
+\pagenumbering{arabic} 
+
+\usepackage{sectsty}
+\allsectionsfont{\sffamily}
+
+\usepackage[pdftex]{hyperref} 
+\hypersetup{pdfborder={0 0 0} }
+
+
+% **************  TITLE AND AUTHOR INFORMATION **************
+
+\title{\sffamily\fontsize{16}{0}\textbf{Title of Paper}}
+
+\author[1]{A. Author\thanks{}}
+\author[2]{B. C. Author}
+\affil[1]{Address of A. Author}
+\affil[2]{Address of B. Author}
+\affil[*]{\texttt{Email: emailOfCorrespondingAuthor@emailAddress}}
+
+\begin{document}
+
+
+\maketitle
+
+% **************  ABSTRACT  **************
+
+\begin{abstract}
+\noindent
+\setlength{\parindent}{0pt}
+
+This is the abstract. This is the abstract. This is the abstract. This is the abstract. This is the abstract. This is the abstract. This is the abstract. This is the abstract. This is the abstract. This is the abstract. This is the abstract. This is the abstract. This is the abstract. This is the abstract. This is the abstract. This is the abstract. This is the abstract. This is the abstract. This is the abstract. This is the abstract. Abstract this is.
+
+$ $ \\ {\bf Keywords:} Word 1, Word 2.
+
+\end{abstract}
+
+
+% **************  MAIN BODY OF THE PAPER **************
+
+\section{Introduction}
+
+This paper aims to show the potential benefits, and the pitfalls, of machine learning algorithms in analysing transport data. It results from a 3 month 'T-TRIG' (Transport Technology Research Innovation Grant) project funded by the UK's Department for Transport (DfT) entitled "Using Machine Learning and Big Data to Model Car Dependency: an Exploration Using Origin-Destination Data".
+As highlighted by the DfT, Machine Learning is relatively new in the transport sector \citep{hagenauer_comparative_2017}. The research was therefore exploratory and open-ended in its scope. Having completed the first Phase of the work (we will have completed the project in time for the Geocomputation conference), we would like to comunicate some of the findings from the research. 
+
+
+By demonstrating previously impossible or inaccessible methods we aim to show how new techniques, combined with new and newly open datasets, can generate a strong evidence base for transport planning and policy. The aspiration is that the work will filter into policies, to make them data-driven, transparent, reproducibible and encouraging of citizen science and innovation.
+
+It is well-known that car dependency is close to the root of many problems that are exacerbated by the transport system, economic, environmental and social. However, car dependency is a complex phenomena linked to multiple interrelated factors, the root causes of which are not well understood. This makes it an ideal topic for investigation by machine learning. Therefore, beyond the methodological insights gained by this project, we hope that the results lead to policies that are more evidence-based and effective that decisions based on basic indicators, intuition, and experience alone.
+
+During the first month-and-a-half of the project (2017-02-06 to 2017-03-20) we have spent the majority of the time accessing and organising the data, exploring cutting edge methods in machine learning and researching the literature on car dependency. This **first Progress Report** focuses on the input data, the vital raw material for machine learning algorithms to work. First, however, it is worth considering what is actually meant by car dependency in the context of machine learning, which depends on a categorical or (more frequently) quantitative dependent variable which we are seeking to understand.
+
+
+\subsection{Subheading}
+
+This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text.
+
+
+\hfill \break
+\itshape{This is a sub, subheading}\normalfont
+
+\hfill\break
+This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text.
+
+
+\begin{figure}[htbp] \begin{center} 
+\resizebox{0.3\textwidth}{!}{ 
+	\includegraphics{image}
+} \caption{This is a figure} \label{first_figure} \end{center} \end{figure} %
+
+
+
+
+\begin{table}[htp]
+
+\begin{center}
+\begin{tabular}{c c c c}
+\arrayrulecolor{black}
+\hline 
+This & Is & A & Table\\
+\arrayrulecolor{lightgray}
+\hline 
+\arrayrulecolor{black}
+Label & 0.1 & 0.2 & 0.3\\
+Label & 1.0 & 2.0 & 3.0\\
+\hline
+\end{tabular}
+\end{center}
+\label{first_table}
+\caption{This is a table caption}
+\end{table}%
+
+
+
+\begin{equation}
+a^2 + b^2 = c^2
+\tag*{Equation 1}
+\end{equation}
+
+
+\section{Acknowledgements}
+
+These are acknowledgements. These are acknowledgements. These are acknowledgements. These are acknowledgements.
+
+\section{References}
+
+
+\bibliography{references}
+
+
+\end{document}
