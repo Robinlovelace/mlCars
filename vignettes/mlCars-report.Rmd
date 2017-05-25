@@ -1,7 +1,6 @@
 ---
-# title: "Using Machine Learning and Big Data to Model Car Dependency: an Exploration Using Origin-Destination Data"
-title: "Using Machine Learning and Big Data to Model Car Dependency: Progress Report 2 - Machine Learning"
-author: Robin Lovelace and Ilan Fridman-Rojas
+title: "Using Machine Learning and Big Data to Model Car Dependency: an Exploration Using Origin-Destination Data"
+author: Robin Lovelace, Ilan Fridman-Rojas and Liam Bolton
 date: "`r Sys.Date()`"
 bibliography: ../references.bib
 output: rmarkdown::pdf_document
@@ -40,92 +39,92 @@ vignette: >
 <!-- [@mogridge_self-defeating_1997] -->
 
 
-<!-- ## Introduction -->
+## Introduction
 
-<!-- The primary purpose of this project is to show the power and potential benefits of machine learning algorithms in analysing transport data. By demonstrating previously impossible or inaccessible methods we aim to show how new techniques, combined with new and newly open datasets, can generate a strong evidence base for transport planning and policy. The aspiration is that the work will filter into policies, to make them data-driven, transparent, reproducibible and encouraging of citizen science and innovation. -->
+The primary purpose of this project is to show the power and potential benefits of machine learning algorithms in analysing transport data. By demonstrating previously impossible or inaccessible methods we aim to show how new techniques, combined with new and newly open datasets, can generate a strong evidence base for transport planning and policy. The aspiration is that the work will filter into policies, to make them data-driven, transparent, reproducibible and encouraging of citizen science and innovation.
 
-<!-- It is well-known that car dependency is close to the root of many problems that are exacerbated by the transport system, economic, environmental and social. However, car dependency is a complex phenomena linked to multiple interrelated factors, the root causes of which are not well understood. This makes it an ideal topic for investigation by machine learning. Therefore, beyond the methodological insights gained by this project, we hope that the results lead to policies that are more evidence-based and effective that decisions based on basic indicators, intuition, and experience alone. -->
+It is well-known that car dependency is close to the root of many problems that are exacerbated by the transport system, economic, environmental and social. However, car dependency is a complex phenomena linked to multiple interrelated factors, the root causes of which are not well understood. This makes it an ideal topic for investigation by machine learning. Therefore, beyond the methodological insights gained by this project, we hope that the results lead to policies that are more evidence-based and effective that decisions based on basic indicators, intuition, and experience alone.
 
-<!-- During the first month-and-a-half of the project (2017-02-06 to 2017-03-20) we have spent the majority of the time accessing and organising the data, exploring cutting edge methods in machine learning and researching the literature on car dependency. This **first Progress Report** focuses on the input data, the vital raw material for machine learning algorithms to work. First, however, it is worth considering what is actually meant by car dependency in the context of machine learning, which depends on a categorical or (more frequently) quantitative dependent variable which we are seeking to understand. -->
+During the first month-and-a-half of the project (2017-02-06 to 2017-03-20) we have spent the majority of the time accessing and organising the data, exploring cutting edge methods in machine learning and researching the literature on car dependency. This **first Progress Report** focuses on the input data, the vital raw material for machine learning algorithms to work. First, however, it is worth considering what is actually meant by car dependency in the context of machine learning, which depends on a categorical or (more frequently) quantitative dependent variable which we are seeking to understand.
 
-<!-- ## Definition of car dependency -->
+## Definition of car dependency
 
-<!-- There are many possible ways of defining and measuring car use. In this work we interpret car dependency as more about current behaviour than hypothetical future behaviours. Specifically, we define car dependency as: -->
+There are many possible ways of defining and measuring car use. In this work we interpret car dependency as more about current behaviour than hypothetical future behaviours. Specifically, we define car dependency as:
 
-<!-- > The proportion of people in a zone or along a particular desire line who drive, or are passengers in a car or van, as their main mode of transport, taking account of the distances of those trips. -->
+> The proportion of people in a zone or along a particular desire line who drive, or are passengers in a car or van, as their main mode of transport, taking account of the distances of those trips.
 
-<!-- By 'taking account of the distances of those trips' we mean that a zone in which 50% of the population use a car for trips of 5 miles is more car dependent than a zone in which 50% of the population uses a car for trips of 20 miles. We define car dependency *relative to distance* because the policy motivation of this project is to help identify zones and routes where interventions could reduce car dependency. It is easier to intervene to reduce car use for 5 mile trips (e.g. by providing good walking and cycling facilities) than for 20 mile trips (e.g. by creating new bus routes or public transport stations). -->
+By 'taking account of the distances of those trips' we mean that a zone in which 50% of the population use a car for trips of 5 miles is more car dependent than a zone in which 50% of the population uses a car for trips of 20 miles. We define car dependency *relative to distance* because the policy motivation of this project is to help identify zones and routes where interventions could reduce car dependency. It is easier to intervene to reduce car use for 5 mile trips (e.g. by providing good walking and cycling facilities) than for 20 mile trips (e.g. by creating new bus routes or public transport stations).
 
-<!-- ## Input data -->
+## Input data
 
-<!-- For simplicity and maximum accessibility this project uses only datasets which are open (publicly available). There are three main input dataset types: -->
+For simplicity and maximum accessibility this project uses only datasets which are open (publicly available). There are three main input dataset types:
 
-<!-- - Origin-destination (OD) commute data from the 2011 Census data. -->
-<!-- - Geographically aggregated socio-demographic data from the 2011 Census. -->
-<!-- - Geographic variables associated with each OD pair. -->
+- Origin-destination (OD) commute data from the 2011 Census data.
+- Geographically aggregated socio-demographic data from the 2011 Census.
+- Geographic variables associated with each OD pair.
 
-<!-- The Census was used as the primary input dataset because it provides so many variables relevant to car dependency. To our knowledge, the breadth of input datasets have never been analysed together in a single project. -->
+The Census was used as the primary input dataset because it provides so many variables relevant to car dependency. To our knowledge, the breadth of input datasets have never been analysed together in a single project.
 
-<!-- The case study region used for this project was **West Yorkshire**. This case study was selected due to the wide range of social and geographical environments linked to car dependency found here: it includes rural, urban, deprived and privaledged areas. -->
+The case study region used for this project was **West Yorkshire**. This case study was selected due to the wide range of social and geographical environments linked to car dependency found here: it includes rural, urban, deprived and privaledged areas.
 
-<!-- ### Origin-destination data -->
+### Origin-destination data
 
-<!-- The fundamental input dataset was a table reporting the number of people travelling, by main mode of transport, commuting to work between Middle-Super Output Areas (MSOAs, average population: ~7,500). This is an open dataset ([available online from the official WICID data portal](http://wicid.ukdataservice.ac.uk/)) (dataset WU03EW). The file was downloaded as `wu03ew_v2.zip`, an 11.8 MB zipfile which when unzipped creates the file 109 MB plain text file `wu03ew_v2.csv`, read-in with the following command: -->
+The fundamental input dataset was a table reporting the number of people travelling, by main mode of transport, commuting to work between Middle-Super Output Areas (MSOAs, average population: ~7,500). This is an open dataset ([available online from the official WICID data portal](http://wicid.ukdataservice.ac.uk/)) (dataset WU03EW). The file was downloaded as `wu03ew_v2.zip`, an 11.8 MB zipfile which when unzipped creates the file 109 MB plain text file `wu03ew_v2.csv`, read-in with the following command:
 
-<!-- ```{r, eval=FALSE} -->
-<!-- odall = readr::read_csv("data/wu03ew_v2.csv") -->
-<!-- ``` -->
+```{r, eval=FALSE}
+odall = readr::read_csv("data/wu03ew_v2.csv")
+```
 
-<!-- The result is a data frame the first two columns of which contain a the code for the MSOA of origin and destination, respectively. The subsequent columns report number of people whose main mode of travel to work was: -->
+The result is a data frame the first two columns of which contain a the code for the MSOA of origin and destination, respectively. The subsequent columns report number of people whose main mode of travel to work was:
 
-<!-- - work at home (no transport used) -->
-<!-- - some form of metro -->
-<!-- - train -->
-<!-- - bus or coach -->
-<!-- - taxi -->
-<!-- - motorcycle or scooter -->
-<!-- - drive a car or van -->
-<!-- - passenger in car or van -->
-<!-- - bicycle -->
-<!-- - walk -->
-<!-- - other -->
+- work at home (no transport used)
+- some form of metro
+- train
+- bus or coach
+- taxi
+- motorcycle or scooter
+- drive a car or van
+- passenger in car or van
+- bicycle
+- walk
+- other
 
-<!-- We grouped together people who drive or are passengers to estimate car dependency. Further, we filtered out flows with an origin or destination outside West-Yorkshire, resulting in **53,807** OD pairs in the study region. This amount of data is sufficient for machine learning algorithms to work and extract complex insights, but small enough for experimentation and fast iteration of methods. -->
+We grouped together people who drive or are passengers to estimate car dependency. Further, we filtered out flows with an origin or destination outside West-Yorkshire, resulting in **53,807** OD pairs in the study region. This amount of data is sufficient for machine learning algorithms to work and extract complex insights, but small enough for experimentation and fast iteration of methods.
 
-<!-- To convert the non-geographical OD dataset into geographic data we used the function `od2line()` from the **stplanr** R package. The result is straight lines that can be plotted on the map and about which geographical variables, such as proximity to motorways, can be extracted.  -->
+To convert the non-geographical OD dataset into geographic data we used the function `od2line()` from the **stplanr** R package. The result is straight lines that can be plotted on the map and about which geographical variables, such as proximity to motorways, can be extracted.
 
-<!-- ```{r, echo=F, out.width="49%", fig.show='hold', fig.cap="A sample of work commute flows in the West Yorkshire region (left), and a sample of the result of the code which calculates the distance between motorways (red) and flows (black), in this case discarding all flows within a certain distance of the motorway, as an example."} -->
-<!-- knitr::include_graphics(c("../figures/flows_500_westyorkshire.png", "../figures/dist_motorways.png")) -->
-<!-- ``` -->
+```{r, echo=F, out.width="49%", fig.show='hold', fig.cap="A sample of work commute flows in the West Yorkshire region (left), and a sample of the result of the code which calculates the distance between motorways (red) and flows (black), in this case discarding all flows within a certain distance of the motorway, as an example."}
+knitr::include_graphics(c("../figures/flows_500_westyorkshire.png", "../figures/dist_motorways.png"))
+```
 
-<!-- We will hereon refer to each home-work (origin-destination) pair and its corresponding number of commuters, in geographic form, as a *flow* (see Figure 1).  -->
+We will hereon refer to each home-work (origin-destination) pair and its corresponding number of commuters, in geographic form, as a *flow* (see Figure 1).
 
-<!-- To this base table there are two ways to further increase the data included for modelling: the Census provides numerous other demographic and economic measures and indicators which can be linked to the commuter's home MSOA ([available here](https://www.nomisweb.co.uk/census/2011/data_finder)), and it also provides workplace data which a group of researchers at the University of Southampton have conveniently created a classification of (by work type, [available online as well](http://cowz.geodata.soton.ac.uk/download/)) which can be linked to the workplace MSOA. -->
+To this base table there are two ways to further increase the data included for modelling: the Census provides numerous other demographic and economic measures and indicators which can be linked to the commuter's home MSOA ([available here](https://www.nomisweb.co.uk/census/2011/data_finder)), and it also provides workplace data which a group of researchers at the University of Southampton have conveniently created a classification of (by work type, [available online as well](http://cowz.geodata.soton.ac.uk/download/)) which can be linked to the workplace MSOA.
 
-<!-- ### Socio-demographic data -->
+### Socio-demographic data
 
-<!-- The geodemographic data relevant to each origin (home) MSOA which was deemed relevant and annexed to the flows data consists of the following variables: number of people in particular age brackets, number of people of each gender, car or van availability (including number of homes with 0,1,2,etc. cars), population density, number of economically active and inactive people, general health (number of people with very good, fair, etc. general health), number of people per ethnicity group, number of people by maximum qualification level, and lastly, average number of rooms, bedrooms and fraction of homes with central heating. -->
+The geodemographic data relevant to each origin (home) MSOA which was deemed relevant and annexed to the flows data consists of the following variables: number of people in particular age brackets, number of people of each gender, car or van availability (including number of homes with 0,1,2,etc. cars), population density, number of economically active and inactive people, general health (number of people with very good, fair, etc. general health), number of people per ethnicity group, number of people by maximum qualification level, and lastly, average number of rooms, bedrooms and fraction of homes with central heating.
 
-<!-- In addition to this we included the workplace zone classification which assigns each destination MSOA (workplace) to one of the following groups: -->
+In addition to this we included the workplace zone classification which assigns each destination MSOA (workplace) to one of the following groups:
 
-<!-- ```{r wzclasstable, echo=FALSE, message=FALSE} -->
-<!-- df = readr::read_csv( -->
-<!-- 'Workplace zone classification, Code -->
-<!--                          Retail,1 -->
-<!--                        Top jobs,2 -->
-<!--                   Metro suburbs,3 -->
-<!--               Suburban services,4 -->
-<!--  Manufacturing and distribution,5 -->
-<!--                           Rural,6 -->
-<!--             Servants of society,7 -->
-<!-- ' -->
-<!-- ) -->
-<!-- knitr::kable(df, caption="The classification of workplace zones.") -->
-<!-- ``` -->
+```{r wzclasstable, echo=FALSE, message=FALSE}
+df = readr::read_csv(
+'Workplace zone classification, Code
+                         Retail,1
+                       Top jobs,2
+                  Metro suburbs,3
+              Suburban services,4
+ Manufacturing and distribution,5
+                          Rural,6
+            Servants of society,7
+'
+)
+knitr::kable(df, caption="The classification of workplace zones.")
+```
 
-<!-- ### Spatial data -->
+### Spatial data
 
-<!-- In addition to this Census data we gathered and computed spatial data as well. We have obtained the location of motorways through the [OSM API](https://osmdatar.github.io/osmdata/articles/osmdata.html), and the positions of train stations, coach stations, and bus stops from the [NAPTAN dataset](http://naptan.app.dft.gov.uk/datarequest/help). This allowed us to calculate geographical distances between flow lines and motorways, train stations, coach stations, and bus stops. This proximity and accessibility data is arguably vital to best understand and model car usage propensity, and has for the first time become readily available via the OSM platform, and analysis of the type we aim to do next should be cutting-edge data analysis. -->
+In addition to this Census data we gathered and computed spatial data as well. We have obtained the location of motorways through the [OSM API](https://osmdatar.github.io/osmdata/articles/osmdata.html), and the positions of train stations, coach stations, and bus stops from the [NAPTAN dataset](http://naptan.app.dft.gov.uk/datarequest/help). This allowed us to calculate geographical distances between flow lines and motorways, train stations, coach stations, and bus stops. This proximity and accessibility data is arguably vital to best understand and model car usage propensity, and has for the first time become readily available via the OSM platform, and analysis of the type we aim to do next should be cutting-edge data analysis.
 
 <!-- \newpage -->
 
@@ -168,186 +167,193 @@ vignette: >
 
 <!-- Once the best-performing model has been found we will do some model validation to ensure the model gives sensible predictions on new data, and then proceed to attempt to extract which variables the model deems most important in predicting car dependency, in general, or if possible also for individual predictions. -->
 
+# Traditional statistical analysis
 
 # Machine Learning
 
-Progress Report 1 describes the construction of the explanatory variables and definitions of the dependent variable. This second Progress Report describes the work we have done to model the input data using Machine Learning.
+<!-- Progress Report 1 describes the construction of the explanatory variables and definitions of the dependent variable. This second Progress Report describes the work we have done to model the input data using Machine Learning. -->
 
-The first step in this process is that of model selection by cross-validation, and it is this procedure which we will now describe. The first step of model selection is to choose the metric of interest, based on which we will select the best-performing model. Given that this is a regression problem there are multiple possible metrics: mean squared error (MSE), mean absolute error, coefficient of determination ($R^2$), etc. From the point of view of policy decision-making, which is our ultimate goal, there is no clear choice of best-suited metric. We have chosen the coefficient of determination as it seems to be the metric of interest for our Data Science contact at the Department for Transport, but it must be noted that this metric is ill-suited for the mostly non-linear [^1] regression models we consider (see for example [@spiess2010evaluation]).
+<!-- The first step in this process is that of model selection by cross-validation, and it is this procedure which we will now describe. The first step of model selection is to choose the metric of interest, based on which we will select the best-performing model. Given that this is a regression problem there are multiple possible metrics: mean squared error (MSE), mean absolute error, coefficient of determination ($R^2$), etc. From the point of view of policy decision-making, which is our ultimate goal, there is no clear choice of best-suited metric. We have chosen the coefficient of determination as it seems to be the metric of interest for our Data Science contact at the Department for Transport, but it must be noted that this metric is ill-suited for the mostly non-linear [^1] regression models we consider (see for example [@spiess2010evaluation]). -->
 
-[^1]: For clarity, we are referring to non-linearity in the regression parameters, models non-linear in the covariates (e.g. the Elastic Net model we use) are still linear by this definition.
+<!-- [^1]: For clarity, we are referring to non-linearity in the regression parameters, models non-linear in the covariates (e.g. the Elastic Net model we use) are still linear by this definition. -->
 
-Having chosen the metric of interest, we proceed to shuffle and split the data in preparation for cross-validation. Flows are unordered data and therefore can be shuffled uniformly with no problem. We shuffle the flows in the West Yorkshire dataset, and then split off half of the data for model selection and validation, the other half is left for final model testing to estimate the generalisation error (or parts of it may used for further model selection, e.g. parameter tuning, if needed).
+<!-- Having chosen the metric of interest, we proceed to shuffle and split the data in preparation for cross-validation. Flows are unordered data and therefore can be shuffled uniformly with no problem. We shuffle the flows in the West Yorkshire dataset, and then split off half of the data for model selection and validation, the other half is left for final model testing to estimate the generalisation error (or parts of it may used for further model selection, e.g. parameter tuning, if needed). -->
 
-We then perform 10-fold cross-validation on the validation half of the dataset. At this point we do not perform any hyperparameter tuning and use the default parameters set in scikit-learn's implementation [@scikit-learn] of these algorithms[^2]. The regression models considered and the result of the model selection are shown in the table below.
+<!-- We then perform 10-fold cross-validation on the validation half of the dataset. At this point we do not perform any hyperparameter tuning and use the default parameters set in scikit-learn's implementation [@scikit-learn] of these algorithms[^2]. The regression models considered and the result of the model selection are shown in the table below. -->
 
-[^2]: Grid search or random search hyperparameter tuning by cross-validation could be carried out at a later date on a separate dataset for a subset of the selected models to extract further gains in predictive performance.
+<!-- [^2]: Grid search or random search hyperparameter tuning by cross-validation could be carried out at a later date on a separate dataset for a subset of the selected models to extract further gains in predictive performance. -->
 
-```{r modelseltable, echo=FALSE, message=FALSE}
-df = readr::read_csv(
-'Model, $R^2$
-MLP, 0.95480664571211638
- XGB, 0.95221782699878565
- RandomForest, 0.94110527517837894
- ExtraTrees, 0.93660428365175041
- ElasticNetCV, 0.92687784055607514
- PassiveAggressive, 0.88703967983492982
- DecisionTrees, 0.87369739490295328
- TheilSen, 0.85617625169566003
- KNeighbors, 0.8427571341143999
- RANSAC, 0.77661470618074036
- --MEAN MODEL--, 0.0
- Dummy, -0.00037522330595122594
- SGD, -1.2113190001068818e+23
-'
-)
-knitr::kable(df, caption="10-fold cross-validation $R^2$ scores of the the regression models considered. The `MEAN MODEL` is a model which always predicts the mean of the response variable, and is included as a reference point and benchmark. The RANSAC and Stochastic Gradient Descent (SGD) regressors have clearly not converged but we will not attempt to tune them for now. ")
-```
+<!-- ```{r modelseltable, echo=FALSE, message=FALSE} -->
+<!-- df = readr::read_csv( -->
+<!-- 'Model, $R^2$ -->
+<!-- MLP, 0.95480664571211638 -->
+<!--  XGB, 0.95221782699878565 -->
+<!--  RandomForest, 0.94110527517837894 -->
+<!--  ExtraTrees, 0.93660428365175041 -->
+<!--  ElasticNetCV, 0.92687784055607514 -->
+<!--  PassiveAggressive, 0.88703967983492982 -->
+<!--  DecisionTrees, 0.87369739490295328 -->
+<!--  TheilSen, 0.85617625169566003 -->
+<!--  KNeighbors, 0.8427571341143999 -->
+<!--  RANSAC, 0.77661470618074036 -->
+<!--  --MEAN MODEL--, 0.0 -->
+<!--  Dummy, -0.00037522330595122594 -->
+<!--  SGD, -1.2113190001068818e+23 -->
+<!-- ' -->
+<!-- ) -->
+<!-- knitr::kable(df, caption="10-fold cross-validation $R^2$ scores of the the regression models considered. The `MEAN MODEL` is a model which always predicts the mean of the response variable, and is included as a reference point and benchmark. The RANSAC and Stochastic Gradient Descent (SGD) regressors have clearly not converged but we will not attempt to tune them for now. ") -->
+<!-- ``` -->
 
-Without engaging in extensive hyperparameter tuning on a separate dataset, we see that the Multi-Layer Perceptron and the XGBoost regressor [@Chen:2016:XST:2939672.2939785] top the list with $R^2 \approx 0.95$. The difference between the top-performing models is likely not significant, therefore on theoretical grounds we will choose the XGBoost regressor as our tentative final model, as boosting is known to be less likely to overfit [@schapire1999brief], and therefore is likely to generalise best to new datasets. We will therefore select it as a tentative final model and now proceed to perform some model validation to ensure its predictions are sensible.
-
-
-### Model validation
-
-For a regression task such as the one at hand, the model validation checks which can be performed are perhaps less intuitive than the tests available for classification tests. However some basic plots of the model's predictions and checks of the model's residuals and the correlation of the model's predictions with observed values can and should be carried out.
-
-The figure below shows the residuals of the XGBoost regressor on a validation dataset, showing no obvious trend or asymmetry which would be indicative of a poorly-fit model.
-
-```{r, echo=F, out.width="49%", fig.show='hold', fig.align='center', fig.cap="The residuals of the XGBoost regressor on a validation dataset."}
-knitr::include_graphics("../figures/xgb_residuals.png")
-```
-
-We can further inspect the distribution and correlation of the predicted and observed values, as well as a histogram of their distribution.
-
-```{r, echo=F, out.width="49%", fig.show='hold', fig.align='center', fig.cap="The distribution and correlation of predictions and observed values."}
-knitr::include_graphics(c("../figures/xgb_pred_obs_correlation.png", "../figures/xgb_hist.png"))
-```
+<!-- Without engaging in extensive hyperparameter tuning on a separate dataset, we see that the Multi-Layer Perceptron and the XGBoost regressor [@Chen:2016:XST:2939672.2939785] top the list with $R^2 \approx 0.95$. The difference between the top-performing models is likely not significant, therefore on theoretical grounds we will choose the XGBoost regressor as our tentative final model, as boosting is known to be less likely to overfit [@schapire1999brief], and therefore is likely to generalise best to new datasets. We will therefore select it as a tentative final model and now proceed to perform some model validation to ensure its predictions are sensible. -->
 
 
-#### A note on data cuts and variable forms
+<!-- ### Model validation -->
+
+<!-- For a regression task such as the one at hand, the model validation checks which can be performed are perhaps less intuitive than the tests available for classification tests. However some basic plots of the model's predictions and checks of the model's residuals and the correlation of the model's predictions with observed values can and should be carried out. -->
+
+<!-- The figure below shows the residuals of the XGBoost regressor on a validation dataset, showing no obvious trend or asymmetry which would be indicative of a poorly-fit model. -->
+
+<!-- ```{r, echo=F, out.width="49%", fig.show='hold', fig.align='center', fig.cap="The residuals of the XGBoost regressor on a validation dataset."} -->
+<!-- knitr::include_graphics("../figures/xgb_residuals.png") -->
+<!-- ``` -->
+
+<!-- We can further inspect the distribution and correlation of the predicted and observed values, as well as a histogram of their distribution. -->
+
+<!-- ```{r, echo=F, out.width="49%", fig.show='hold', fig.align='center', fig.cap="The distribution and correlation of predictions and observed values."} -->
+<!-- knitr::include_graphics(c("../figures/xgb_pred_obs_correlation.png", "../figures/xgb_hist.png")) -->
+<!-- ``` -->
+
+
+<!-- #### A note on data cuts and variable forms -->
 
 <!-- Two cuts on both the rows and the columns of the dataset were found to be necessary during the machine learning model-fitting procedure. In terms of the variables used it is important to note that --much like with categorical variables in an Ordinary Least Squares-type linear regression-- most of our variables are fractions, and therefore if we have $n$ columns which sum to $1$, we in effect only have $n-1$ independent features, as once $n-1$ of the entries on a given row are known, the last one can be deduced to be 1 minus the sum of the other $n-1$ columns. As such including all $n$ columns induces multicollinearity. In order to manage this we drop one such column (preferably the one which we expect to be least dominant) and include only the other $n-1$ columns, which should now have no strong correlations induced by normalisation. -->
 
-One important cut was required to reduce the noise in the dataset. Flows with low numbers of total commuters introduce artifacts in the response variable, such as inflation at values corresponding to exact fractions with a low denominator (e.g. $\frac{1}{2}$, $\frac{1}{3}$, etc.). These artifacts from low sample sizes are not representative of global behaviour and may complicate or skew the model-fitting process, resulting in models with poorer generalisation performance. We therefore chose to drop flows with less than 10 commuters, in doing so removing low-sample artifacts and improving model fit.
+<!-- One important cut was required to reduce the noise in the dataset. Flows with low numbers of total commuters introduce artifacts in the response variable, such as inflation at values corresponding to exact fractions with a low denominator (e.g. $\frac{1}{2}$, $\frac{1}{3}$, etc.). These artifacts from low sample sizes are not representative of global behaviour and may complicate or skew the model-fitting process, resulting in models with poorer generalisation performance. We therefore chose to drop flows with less than 10 commuters, in doing so removing low-sample artifacts and improving model fit. -->
 
-Consideration of both the variables to be included and potential redundancies or multicollinearity between them, as well as low sample-size artifacts and their removal must therefore be carefully undertaken at the earliest stage, ideally at the data preparation stage, or during model selection, as soon as they are identified. 
+<!-- Consideration of both the variables to be included and potential redundancies or multicollinearity between them, as well as low sample-size artifacts and their removal must therefore be carefully undertaken at the earliest stage, ideally at the data preparation stage, or during model selection, as soon as they are identified.  -->
 
-**A further important point to make regarding the form of the variables fed into the models is that the use of ratios should be entirely avoided, with the use of raw counts always being preferable. This is due to the fact that using ratios of random variables induces strong spurious correlations [@atchley1976statistical] which may hurt predictive performance, but more importantly, will skew measures of relative variable importances.**
-
-
-
-### A Deep Learning model
-
-For completeness, we would be remiss if we did not consider fitting a deep learning model, particularly since the Multi-Layer Perceptron performed well during the previous model selection stage, considering a neural network model with further hidden layers is fully justified. We have constructed a 3-hidden layer Multi-Layer Perceptron (MLP) using the Theano [@2016arXiv160502688T] Python package. The MLP implementation in scikit-learn includes only a single hidden layer, therefore there is value in exploring potential predictive performance gains by considering deeper neural networks.
-
-Numerous contemporary training methods were implemented to enable the successful training of this neural network, including unsupervised pre-training of the layers by Stacked Denoising Auto-encoders [@vincent2010stacked], orthogonal weight initialisation [@2013arXiv1312.6120S], dropout regularisation [@srivastava2014dropout], $L_1$ and $L_2$ regularisation, ReLu activation units, etc. This allowed the neural network to be properly fit over hundred of epochs (passes over the training data), with no sign of significant overfitting, as shown in the training and validation errors in the figure below.
-
-```{r, echo=F, out.width="49%", fig.show='hold', fig.align='center', fig.cap="The MSE on the training and validation sets as training of the MLP progresses."}
-knitr::include_graphics("../figures/nn_training.png")
-```
-
-A deep learning model was therefore successfully fit, with a sensible residual plot and distribution of predictions. However its performance was still below that of the XGBoost regressor previously selected, with a coefficient of determination of $R^2 \approx 0.89$, and a Pearson correlation between predicted and observed values of $0.96$. One may speculate that with larger training datasets (e.g. a good fraction of the flows in England), this model may dominate. However with the limited training set of part of West Yorkshire, XGBoost remains dominant, and the significant computation overhead of training a Deep Learning model is not justified.
+<!-- **A further important point to make regarding the form of the variables fed into the models is that the use of ratios should be entirely avoided, with the use of raw counts always being preferable. This is due to the fact that using ratios of random variables induces strong spurious correlations [@atchley1976statistical] which may hurt predictive performance, but more importantly, will skew measures of relative variable importances.** -->
 
 
-### Interpretable analysis
 
-Thus far we have selected and validated a model which maximises a metric of predictive performance. Should we be interested purely in predictive purposes this is the best model to consider from our analysis thus far. However from a policy perspective the goal is perhaps only partly predictive accuracy (which is of value when considering counterfactual scenarios for future projects, e.g. given the data we have on known flows on particular roads, how heavy a flow can we expect on a hypothetical new road with certain features), but also reliant on gaining a data-driven understanding of the factors which most heavily influence car commuting flows. To this end we must extract interpretable insights from the predictive machine learning models we have fit.
+<!-- ### A Deep Learning model -->
 
-A noteworthy caveat to always be kept in mind when we attempt to extract interpretable knowledge from machine learning models is that the particular set of variables highlighted as most important in making accurate predictions are as much a function of the model itself as they are of the data. Therefore no single set of important features extracted from a single model should be taken without undue caution. Ideally, one may approach the problem as one of consensus, where variables selected by multiple models (each significantly algorithmically different from the rest) would have a stronger evidence-base to claim variable importance.
+<!-- For completeness, we would be remiss if we did not consider fitting a deep learning model, particularly since the Multi-Layer Perceptron performed well during the previous model selection stage, considering a neural network model with further hidden layers is fully justified. We have constructed a 3-hidden layer Multi-Layer Perceptron (MLP) using the Theano [@2016arXiv160502688T] Python package. The MLP implementation in scikit-learn includes only a single hidden layer, therefore there is value in exploring potential predictive performance gains by considering deeper neural networks. -->
 
-The simplest visual approach to gauging variable importances is to fit a shallow decision tree, such as the one shown in the figure below.
+<!-- Numerous contemporary training methods were implemented to enable the successful training of this neural network, including unsupervised pre-training of the layers by Stacked Denoising Auto-encoders [@vincent2010stacked], orthogonal weight initialisation [@2013arXiv1312.6120S], dropout regularisation [@srivastava2014dropout], $L_1$ and $L_2$ regularisation, ReLu activation units, etc. This allowed the neural network to be properly fit over hundred of epochs (passes over the training data), with no sign of significant overfitting, as shown in the training and validation errors in the figure below. -->
 
-```{r, echo=F, out.width="60%", fig.show='hold', fig.align='center', fig.cap="A decision tree fit on the West Yorkshire training data. X is the training data matrix with X[i] denoting its i-th column as the variable that split has been based on."}
-knitr::include_graphics("../figures/decision_tree.png")
-```
+<!-- ```{r, echo=F, out.width="49%", fig.show='hold', fig.align='center', fig.cap="The MSE on the training and validation sets as training of the MLP progresses."} -->
+<!-- knitr::include_graphics("../figures/nn_training.png") -->
+<!-- ``` -->
 
-However decision trees yielded a comparatively poor fit during model selection (see table above), so this gives perhaps a suboptimal understanding of variable importances.
-
-Another tree-based approach however gave much better predictive performance, and can also yield a measure of variable importances based on how often a particular variable was used to create splits in the model's trees: a Random Forest regressor. Extracting variable importances from a Random Forest regressor fit on the training set gives the variable importances shown in the figure below.
-
-```{r, echo=F, out.width="60%", fig.show='hold', fig.align='center', fig.cap="Variable importances from a Random Forest model."}
-knitr::include_graphics("../figures/random_forest_var_importances.png")
-```
-
-A different, linear, model which yielded decent predictive performance and which is interpretable, is the Elastic Net regression model we fit as part of the model selection. The regression coefficients of this model give both a measure of variable importances, as well as directionality of their effect, as shown in the table below.
-
-```{r elastictable, echo=FALSE, message=FALSE}
-df = readr::read_csv(
-'Variable, Coefficient
-35-49, 16.188769481349937
-50-64, 13.798901589801531
-male, 9.3765921374280357
-female, 3.2682303316300758
-25-34, -3.1827789792230803
-16-24, -3.0933284720581131
-65-74, 2.0803314931263297
-housesw0car, -1.7695871426386525
-econactiv, 1.5624933687998543
-lev4qual, -1.2248943600671938
-75+, 0.92604782707287248
-bhealth, 0.85814308758260749
-housesw2car, 0.82524209900248979
-housesw3car, 0.8228935612507442
-black, -0.63749659117157942
-'
-)
-knitr::kable(df, caption="The regression coefficients of the Elastic Net model, ordered by descending absolute value.")
-```
-
-\newpage
-
-We have also considered the Boruta [@kursa2010boruta] feature selection algorithm, which is based on Random Forest regressors to yield the following set of important variables:  
-
-```
-['16-24', '25-34', '35-49', '50-64', 'male', 'female', 'housesw0car', 'housesw2car', 'housesw3car', 'housesw4ormorecar', 'black',
- 'area', 'distmway']
-```
-
-The top 10 variables by importance according to the Elastic Net regressor, the Random Forest model, and the 8 variables identified by the Boruta algorithm are therefore as follows: 
-
-```
-{'male', 'housesw0car', '35-49', '25-34', 'lev4qual', '16-24', '65-74', 'econactiv', 'female', '50-64'}
-{'distcoachstn', 'distmway', 'housesw3car', 'male', '35-49', '25-34', '16-24', 'housesw2car', 'female', '50-64'}
-{'distmway', 'housesw3car', 'housesw4ormorecar', 'male', 'black', 'housesw0car', '35-49', 'area', '25-34', '16-24', 'housesw2car', 'female', '50-64'}
-```
-
-Choosing the common subset of these variables as the set of variables on which we have a strong consensus evidence-base of their importance, we therefore come to the following set of variables, which we conclude have a heavy influence on predicting the response variable:  
-  
-**{'16-24', '25-34', '35-49', '50-64', 'female', 'male'}**
+<!-- A deep learning model was therefore successfully fit, with a sensible residual plot and distribution of predictions. However its performance was still below that of the XGBoost regressor previously selected, with a coefficient of determination of $R^2 \approx 0.89$, and a Pearson correlation between predicted and observed values of $0.96$. One may speculate that with larger training datasets (e.g. a good fraction of the flows in England), this model may dominate. However with the limited training set of part of West Yorkshire, XGBoost remains dominant, and the significant computation overhead of training a Deep Learning model is not justified. -->
 
 
-#### Interpretability of individual predictions
+<!-- ### Interpretable analysis -->
 
-So far we have focussed on extracting the set of variables which are globally important in predicting the response variable. However often what is of interest is being able to extract some understanding of why individual predictions have been made. To this end we have included the recently devised LIME algorithm [@ribeiro2016should] as implemented by one of the authors of the paper and made [available online](https://github.com/marcotcr/lime).
+<!-- Thus far we have selected and validated a model which maximises a metric of predictive performance. Should we be interested purely in predictive purposes this is the best model to consider from our analysis thus far. However from a policy perspective the goal is perhaps only partly predictive accuracy (which is of value when considering counterfactual scenarios for future projects, e.g. given the data we have on known flows on particular roads, how heavy a flow can we expect on a hypothetical new road with certain features), but also reliant on gaining a data-driven understanding of the factors which most heavily influence car commuting flows. To this end we must extract interpretable insights from the predictive machine learning models we have fit. -->
 
-A typical 'explanation' for a given prediction then looks as follows:  
+<!-- A noteworthy caveat to always be kept in mind when we attempt to extract interpretable knowledge from machine learning models is that the particular set of variables highlighted as most important in making accurate predictions are as much a function of the model itself as they are of the data. Therefore no single set of important features extracted from a single model should be taken without undue caution. Ideally, one may approach the problem as one of consensus, where variables selected by multiple models (each significantly algorithmically different from the rest) would have a stronger evidence-base to claim variable importance. -->
 
-```
-[('distmway > 0.38', 1.5658305905564187),
- ('wzclass > 0.64', -0.65392769537881634),
- ('75+ <= -0.28', -0.50537077658088714),
- ('65-74 <= -0.47', 0.15784334084586701),
- ('50-64 <= -0.45', -0.11138315818592245),
- ('-0.66 < distcoachstn <= -0.28', -0.093203330715291008),
- ('-0.32 < distbusstop <= 0.09', 0.066183230441780636),
- ('-0.21 < 16-24 <= -0.02', 0.063091145326841958),
- ('-0.41 < asian <= -0.08', -0.057087600296320297),
- ('housesw1car <= -0.75', 0.054789659285169511),
- ('-0.68 < fhealth <= -0.20', 0.04912114269573125),
- ('econactiv <= -0.77', -0.048831449650547552),
- ('35-49 <= -0.44', -0.048015501255921647),
- ('-0.17 < housesw0car <= 0.54', -0.046159925942110741),
- ('lev2qual <= -0.68', -0.042291716940468689)]
-```
- 
- The reliability, interpretation, and further uses of the LIME algorithm in our present case study remain to be fully examined, but its potential is clear.
+<!-- The simplest visual approach to gauging variable importances is to fit a shallow decision tree, such as the one shown in the figure below. -->
 
-# Next steps
+<!-- ```{r, echo=F, out.width="60%", fig.show='hold', fig.align='center', fig.cap="A decision tree fit on the West Yorkshire training data. X is the training data matrix with X[i] denoting its i-th column as the variable that split has been based on."} -->
+<!-- knitr::include_graphics("../figures/decision_tree.png") -->
+<!-- ``` -->
 
-There is one noteworthy caveat which applies to all studies using Machine Learning (and more generally regression on observational data without Randomised Controlled Trials) to inform decision making: both Machine Learning approaches and standard regression approaches when carried out appropriate can identify correlations, but evidence for these correlations is tentative and correlations by themselves, without evidence of a causal link, are not a sound basis for decision-making or interventions.
+<!-- However decision trees yielded a comparatively poor fit during model selection (see table above), so this gives perhaps a suboptimal understanding of variable importances. -->
 
-The patterns found are therefore a very solid first step in finding potential causal links which could inform decision-making and policy interventions, but they must be informed by causal modelling. To this end, in the next stage we will explore introducing causal information into the machine learning modelling, as well as using standard causal analysis via the use of Directed Acyclic Graphs (DAGs) to tease out which correlations may or may not be causal.
+<!-- Another tree-based approach however gave much better predictive performance, and can also yield a measure of variable importances based on how often a particular variable was used to create splits in the model's trees: a Random Forest regressor. Extracting variable importances from a Random Forest regressor fit on the training set gives the variable importances shown in the figure below. -->
 
-The results so far should thus be taken as tentative as they are in the process of being tested further to guarantee as much as possible their validity and potential for informed, data-driven decision making.
+<!-- ```{r, echo=F, out.width="60%", fig.show='hold', fig.align='center', fig.cap="Variable importances from a Random Forest model."} -->
+<!-- knitr::include_graphics("../figures/random_forest_var_importances.png") -->
+<!-- ``` -->
+
+<!-- A different, linear, model which yielded decent predictive performance and which is interpretable, is the Elastic Net regression model we fit as part of the model selection. The regression coefficients of this model give both a measure of variable importances, as well as directionality of their effect, as shown in the table below. -->
+
+<!-- ```{r elastictable, echo=FALSE, message=FALSE} -->
+<!-- df = readr::read_csv( -->
+<!-- 'Variable, Coefficient -->
+<!-- 35-49, 16.188769481349937 -->
+<!-- 50-64, 13.798901589801531 -->
+<!-- male, 9.3765921374280357 -->
+<!-- female, 3.2682303316300758 -->
+<!-- 25-34, -3.1827789792230803 -->
+<!-- 16-24, -3.0933284720581131 -->
+<!-- 65-74, 2.0803314931263297 -->
+<!-- housesw0car, -1.7695871426386525 -->
+<!-- econactiv, 1.5624933687998543 -->
+<!-- lev4qual, -1.2248943600671938 -->
+<!-- 75+, 0.92604782707287248 -->
+<!-- bhealth, 0.85814308758260749 -->
+<!-- housesw2car, 0.82524209900248979 -->
+<!-- housesw3car, 0.8228935612507442 -->
+<!-- black, -0.63749659117157942 -->
+<!-- ' -->
+<!-- ) -->
+<!-- knitr::kable(df, caption="The regression coefficients of the Elastic Net model, ordered by descending absolute value.") -->
+<!-- ``` -->
+
+<!-- \newpage -->
+
+<!-- We have also considered the Boruta [@kursa2010boruta] feature selection algorithm, which is based on Random Forest regressors to yield the following set of important variables:   -->
+
+<!-- ``` -->
+<!-- ['16-24', '25-34', '35-49', '50-64', 'male', 'female', 'housesw0car', 'housesw2car', 'housesw3car', 'housesw4ormorecar', 'black', -->
+<!--  'area', 'distmway'] -->
+<!-- ``` -->
+
+<!-- The top 10 variables by importance according to the Elastic Net regressor, the Random Forest model, and the 8 variables identified by the Boruta algorithm are therefore as follows:  -->
+
+<!-- ``` -->
+<!-- {'male', 'housesw0car', '35-49', '25-34', 'lev4qual', '16-24', '65-74', 'econactiv', 'female', '50-64'} -->
+<!-- {'distcoachstn', 'distmway', 'housesw3car', 'male', '35-49', '25-34', '16-24', 'housesw2car', 'female', '50-64'} -->
+<!-- {'distmway', 'housesw3car', 'housesw4ormorecar', 'male', 'black', 'housesw0car', '35-49', 'area', '25-34', '16-24', 'housesw2car', 'female', '50-64'} -->
+<!-- ``` -->
+
+<!-- Choosing the common subset of these variables as the set of variables on which we have a strong consensus evidence-base of their importance, we therefore come to the following set of variables, which we conclude have a heavy influence on predicting the response variable:   -->
+
+<!-- **{'16-24', '25-34', '35-49', '50-64', 'female', 'male'}** -->
+
+
+<!-- #### Interpretability of individual predictions -->
+
+<!-- So far we have focussed on extracting the set of variables which are globally important in predicting the response variable. However often what is of interest is being able to extract some understanding of why individual predictions have been made. To this end we have included the recently devised LIME algorithm [@ribeiro2016should] as implemented by one of the authors of the paper and made [available online](https://github.com/marcotcr/lime). -->
+
+<!-- A typical 'explanation' for a given prediction then looks as follows:   -->
+
+<!-- ``` -->
+<!-- [('distmway > 0.38', 1.5658305905564187), -->
+<!--  ('wzclass > 0.64', -0.65392769537881634), -->
+<!--  ('75+ <= -0.28', -0.50537077658088714), -->
+<!--  ('65-74 <= -0.47', 0.15784334084586701), -->
+<!--  ('50-64 <= -0.45', -0.11138315818592245), -->
+<!--  ('-0.66 < distcoachstn <= -0.28', -0.093203330715291008), -->
+<!--  ('-0.32 < distbusstop <= 0.09', 0.066183230441780636), -->
+<!--  ('-0.21 < 16-24 <= -0.02', 0.063091145326841958), -->
+<!--  ('-0.41 < asian <= -0.08', -0.057087600296320297), -->
+<!--  ('housesw1car <= -0.75', 0.054789659285169511), -->
+<!--  ('-0.68 < fhealth <= -0.20', 0.04912114269573125), -->
+<!--  ('econactiv <= -0.77', -0.048831449650547552), -->
+<!--  ('35-49 <= -0.44', -0.048015501255921647), -->
+<!--  ('-0.17 < housesw0car <= 0.54', -0.046159925942110741), -->
+<!--  ('lev2qual <= -0.68', -0.042291716940468689)] -->
+<!-- ``` -->
+
+<!--  The reliability, interpretation, and further uses of the LIME algorithm in our present case study remain to be fully examined, but its potential is clear. -->
+
+<!-- # Next steps -->
+
+<!-- There is one noteworthy caveat which applies to all studies using Machine Learning (and more generally regression on observational data without Randomised Controlled Trials) to inform decision making: both Machine Learning approaches and standard regression approaches when carried out appropriate can identify correlations, but evidence for these correlations is tentative and correlations by themselves, without evidence of a causal link, are not a sound basis for decision-making or interventions. -->
+
+<!-- The patterns found are therefore a very solid first step in finding potential causal links which could inform decision-making and policy interventions, but they must be informed by causal modelling. To this end, in the next stage we will explore introducing causal information into the machine learning modelling, as well as using standard causal analysis via the use of Directed Acyclic Graphs (DAGs) to tease out which correlations may or may not be causal. -->
+
+<!-- The results so far should thus be taken as tentative as they are in the process of being tested further to guarantee as much as possible their validity and potential for informed, data-driven decision making. -->
+
+# Results
+
+# Discussion
+
+# Recommendations
 
 # References
