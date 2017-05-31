@@ -219,6 +219,10 @@ Figures 2 and 3 demonstrate the importance of decisions around visualisation. Bo
 
 Figure 3 shows that each settlement has car dependency issues. However, they are different in nature, with Leeds suffering from high car use primarily due to high numbers of commuters but with smaller settlements having both high numbers and high proportions of people driving to work. Another difference compared with Figure 2 is that Figure 3 clearly shows that in terms of absolute numbers, short car trips dominate: the average distance of flows in which 100+ people drive is less than 5km straight line distance.
 
+Many linear regression models were run to explain the variability in the number of people driving to work. This code is presented in the file [`vignettes/traditional-stats.Rmd`](https://github.com/Robinlovelace/mlCars/blob/master/vignettes/traditional-stats.Rmd) but not discussed further in this document as the focus of the project is on Machine Learning.^[Thanks
+to Rob Long for undertaking the statistical analysis using traditional linear regression techniques.]
+Suffice to say that the 'features' of greatest importance according to Machine Learning (particularly age) cooincided with the most statistically significant explanatory variables. This suggests that traditional statistical techniques should be used along-side machine learning techniques to ensure understanding of the data and cross-checking of results.
+
 
 # Machine Learning
 
