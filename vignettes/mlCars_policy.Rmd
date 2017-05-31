@@ -12,7 +12,7 @@ output:
     latex_engine: xelatex
 link-citations: yes
 subtitle: The Policy Implications
-bibliography: skeleton.bib
+bibliography: ../references.bib
 ---
 ---
 title: "Using Machine Learning and Big Data to Model Car Dependency: The Policy Implications"
