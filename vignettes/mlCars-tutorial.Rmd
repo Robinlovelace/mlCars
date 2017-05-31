@@ -1,0 +1,53 @@
+---
+title: "Big Data and Machine Learning for transport data analysis: A tutorial"
+author: "Robin Lovelace and Liam Bolton"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{mlCars-tutorial}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Introduction
+
+The input data for this tutorial is an origin-destination matrix of travel patterns derived from the 2011 census and augmented with additional variables from open census and OSM data.
+These are represented as spatial lines (of class `SpatialLinesDataFrame` but which could be exported to a range of geographic data formats).
+
+It is not the purpose of this tutorial to explain how such datasets can be generated. This is covered in the [introductory vignette](https://cran.r-project.org/web/packages/stplanr/vignettes/introducing-stplanr.html) of the [stplanr R package](https://github.com/ropensci/stplanr) and the files 
+[`preprocess.R`](https://github.com/Robinlovelace/mlCars/blob/master/vignettes/preprocess.R) and [`geo.R`](https://github.com/Robinlovelace/mlCars/blob/master/vignettes/geo.R) for the mlCars repository.
+
+To reproduce the results demonstrated in this tutorial we assume that:
+
+- Up-to-date versions of R and RStudio are installed on your system. See online resources such as [Efficient R Programming](https://csgillespie.github.io/efficientR/set-up.html#installing-r) [@gillespie_efficient_2016] to learn how.
+
+- You have some experience with programming in general or are not completely new to R.
+A few hours completing an introductory tutorial such as the free [Introduction to R DataCamp online interactive guide](https://www.datacamp.com/courses/free-introduction-to-r).
+
+From your RStudio session, the necessary packages and data can be installed with the following commands, which install the **devtools** and **mlCars** packages:
+
+```{r, eval=FALSE}
+install.packages("devtools")
+devtools::install_github("robinlovelace/mlCars")
+```
+
+The **mlCars** package contains the example data used in this tutorial. Load it with the `library()` command:
+
+```{r}
+library(mlCars)
+```
+
+The main input files resulting from the preprocessing stages is `wyflows`, which can be loaded with the following command:
+
+```{r}
+data("wyflows")
+```
+
+The first thing to do with this data is to gain a basic understanding of it:
+
+```{r}
+class(wyflows)
+```
+
+
+
