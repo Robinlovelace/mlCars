@@ -15,19 +15,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-<!-- Car dependency should be easy to define: a measure of the extent to which people *depend* on their cars. -->
-<!-- But what does this actually mean? -->
-<!-- Unless your car doubles as a life-support system, it is unlikley that you literally depend on it for survival. -->
-<!-- More likely you depend on the car for trips that are *seen as essential*, for modern life. -->
-<!-- Whether it's for doing the 'weekly shop', dropping children off at school or taking a sick relative to hospital at an affordable, car use can easily become integral modern life. -->
-
-<!-- Of course, each of these trips could have either been made by a different mode or not made at all and (except potentially in the case of taking a relative to hospital) nobody would die. -->
-<!-- Car dependency is thus about observed behaviour than hypothetical consequences of going *cold turkey*. -->
-<!-- The analogy of a drug dependency is useful. -->
-<!-- Drug dependents will not die if they can no longer indulge their addition. -->
-<!-- But life will be hard, at least for a while after, when they stop. -->
-<!-- Similarly, those who are car dependent will find it hard to adjust to life after their car has been taken away. -->
-
 <!-- From a policy perspective car dependency is problematic due to its negative consequences, not in its own right.  -->
 <!-- Notwithstanding questions of whether government policy encourages car dependency,  -->
 
@@ -53,6 +40,19 @@ The report is self-standing but links to 3 Appendices, which can be consulted fo
 ## Car dependency: motivations and definitions
 
 It is well-known that car dependency is close to the root of many problems that are exacerbated by the transport system, economic, environmental and social. However, car dependency is a complex phenomena linked to multiple interrelated factors, the root causes of which are not well understood. This makes it an ideal topic for investigation by machine learning. Therefore, beyond the methodological insights gained by this project, we hope that the results lead to policies that are more evidence-based and effective that decisions based on basic indicators, intuition, and experience alone.
+
+Car dependency should be easy to define: a measure of the extent to which people *depend* on their cars.
+But what does this actually mean?
+Unless your car doubles as a life-support system, it is unlikley that you literally depend on it for survival.
+More likely you depend on the car for trips that are *seen as essential*, for modern life.
+Whether it's for doing the 'weekly shop', dropping children off at school or taking a sick relative to hospital at an affordable, car use can easily become integral modern life.
+
+Of course, each of these trips could have either been made by a different mode or not made at all and (except potentially in the case of taking a relative to hospital) nobody would die.
+Car dependency is thus about observed behaviour than hypothetical consequences of going *cold turkey*.
+The analogy of a drug dependency is useful.
+Drug dependents will not die if they can no longer indulge their addition.
+But life will be hard, at least for a while after, when they stop.
+Similarly, those who are car dependent will find it hard to adjust to life after their car has been taken away.
 
 During the first month-and-a-half of the project (2017-02-06 to 2017-03-20) we have spent the majority of the time accessing and organising the data, exploring cutting edge methods in machine learning and researching the literature on car dependency. This **first Progress Report** focuses on the input data, the vital raw material for machine learning algorithms to work. First, however, it is worth considering what is actually meant by car dependency in the context of machine learning, which depends on a categorical or (more frequently) quantitative dependent variable which we are seeking to understand.
 
