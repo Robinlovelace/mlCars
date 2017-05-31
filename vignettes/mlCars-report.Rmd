@@ -7,13 +7,13 @@ output:
   rmarkdown::pdf_document:
     toc: true
     number_sections: true
+fontsize: 12pt
+geometry: margin=1in
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
-<!-- ## What is car dependency? -->
 
 <!-- Car dependency should be easy to define: a measure of the extent to which people *depend* on their cars. -->
 <!-- But what does this actually mean? -->
@@ -34,25 +34,27 @@ vignette: >
 
 <!-- It is important to note that car dependency is not necessarily  -->
 
-<!-- ## Established methods for car dependency research -->
-
-<!-- There is a long history of reasearch into the concepts of car dependency and, more broadly, mode choice.  -->
-
-
-<!-- [@mogridge_self-defeating_1997] -->
-
-
 # Introduction
 
 The primary purpose of this project is to show the power and potential benefits of machine learning for transport data analysis and policy development. By demonstrating previously impossible or inaccessible methods we aim to show how new techniques, combined with new and newly open datasets, can generate a strong evidence base for transport planning and policy. The aspiration is that the work will filter into policies, to make them data-driven, transparent, reproducibible and encouraging of citizen science and innovation.
 
 It is important to understand what we mean by the terms Big Data and Machine Learning, so some definitions are in order. We take a broad view of both. By Big Data we mean "unconventional datasets that are difficult to analyze using established methods" [@lovelace_big_2016]. Thus we are not necessarily talking about size. It's also about data that are unconventional in terms of "form, format, and complexity", making them difficult to analyse using a spreadsheet, for example. By machine learning, we mean simply that the functional form of the model is not specified by the user, but by an algorithm which uses trial and error to find the most appropriate model. A model is simply a mathematical or computer-encoded representation of a phenomenon (in this case car dependency), so the techniques outlined in this report could apply to a wide range of transport (and non transport) issues: car dependency is a useful, and highly policy relevant, case study to illustrate what is now possible and potential future directions of travel.
 
+This report summarises the work undertaken over the course of a 3 month project funded by the UK's Department for Transport (DfT) under the Transport Technology Research Innovation Grant (T-TRIG) stream. This funding stream is part of the Chief Scientist's [office](https://www.gov.uk/government/people/phil-blythe), which, among other things "helps develop the department’s links with the wider science, engineering, technology and innovation community".
+
+The report is self-standing but links to 3 Appendices, which can be consulted for futher details on the input data, methods and policy implications of the research, respectively. They are:
+
+- Progress Report 1, which is focussed on the input data and data generation process and how official datasets were augmented with geographical data from OpenStreetMap.
+
+- Progress Report 2, which describes the Machine Learning algorithms used and provides code snippets and results to show how they performed.
+
+- A report, The Policy Implications of the research, which provides an up-to-date account of the state-of-the-art in terms of machine learning in public policy.
+
+## Car dependency: motivations and definitions
+
 It is well-known that car dependency is close to the root of many problems that are exacerbated by the transport system, economic, environmental and social. However, car dependency is a complex phenomena linked to multiple interrelated factors, the root causes of which are not well understood. This makes it an ideal topic for investigation by machine learning. Therefore, beyond the methodological insights gained by this project, we hope that the results lead to policies that are more evidence-based and effective that decisions based on basic indicators, intuition, and experience alone.
 
 During the first month-and-a-half of the project (2017-02-06 to 2017-03-20) we have spent the majority of the time accessing and organising the data, exploring cutting edge methods in machine learning and researching the literature on car dependency. This **first Progress Report** focuses on the input data, the vital raw material for machine learning algorithms to work. First, however, it is worth considering what is actually meant by car dependency in the context of machine learning, which depends on a categorical or (more frequently) quantitative dependent variable which we are seeking to understand.
-
-## nition of car dependency
 
 There are many possible ways of defining and measuring car use. In this work we interpret car dependency as more about current behaviour than hypothetical future behaviours. Specifically, we define car dependency as:
 
