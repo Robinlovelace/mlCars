@@ -1,4 +1,4 @@
-wyflows<- readRDS("../data/wyflows.Rds")
+wyflows <- readRDS("../data/wyflows.Rds")
 str(wyflows)
 ls()
 df.wyflows <- as.data.frame(wyflows)
@@ -123,7 +123,7 @@ summary(mHealth0)
 # economic activity
 # This doesn't appear in the DAG ! Arguably part of affluence ?
 mEcon <- lm(car ~ econactiv + econinactiv , data=df.wyflows)
-summary(mEcon )
+summary(mEcon)
 #nothing found
 
 #Qualifications

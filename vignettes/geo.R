@@ -37,8 +37,8 @@ wyzones = spTransform(wyzones, CRSobj = proj4string(wyflow_proj))
 
 # Download coordinates of train stations
 # http://naptan.app.dft.gov.uk/datarequest/help
-#download.file("http://naptan.app.dft.gov.uk/DataRequest/Naptan.ashx?format=csv", "data/naptan.zip")
-#unzip("data/naptan.zip", exdir = "data/naptan")
+# download.file("http://naptan.app.dft.gov.uk/DataRequest/Naptan.ashx?format=csv", "data/naptan.zip")
+# unzip("data/NaPTANcsv.zip", exdir = "data")
 
 trainstn = readr::read_csv("data/naptan/RailReferences.csv")
 trainstn = trainstn %>% distinct(., .keep_all=T) %>% dplyr::select(StationName,Easting,Northing)
