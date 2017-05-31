@@ -228,6 +228,17 @@ Suffice to say that the 'features' of greatest importance according to Machine L
 
 Appendix 2 demonstrates and explains the Machine Learning methods that have been applied to the input data. The Python code underlying this work, and the results generated, are available in IPython notebooks (`.ipynb` files) called [`Regression_toolkit.ipynb`](https://github.com/Robinlovelace/mlCars/blob/master/Python/Regression_toolkit.ipynb) and [`Deep_MLP.ipynb`](https://github.com/Robinlovelace/mlCars/blob/master/Python/Deep_MLP.ipynb). These are stored in the Python folder of the [mlCars](https://github.com/Robinlovelace/mlCars) GitHub repository. To ease accessibility, GitHub renders these files so they are human readable on its interface - see https://github.com/Robinlovelace/mlCars/blob/master/Python/Deep_MLP.ipynb an example of this.
 
+The overall finding was that there is a very wide number of software pacakges, in both R and Python.
+Python was used for the majority of the Machine Learning work because the analyst working on the project had most experience in this field, but either can be used.
+For very large scale data, specialist software may be necessary, such as Theano [@the_theano_development_team_theano:_2016], Spark [@meng_mllib:_2016] or TensorFlow [@abadi_tensorflow:_2016]. Fortunately, high level interfaces to such 'low level' Machine Learning programs have been developed in both R and Python, such as the **kerasR**, **tensorflow** and [**sparklyr**](https://github.com/rstudio/sparklyr) packages. 
+
+A demonstration of the Theano approach is demonstrated in Appendix 2. While this proof-of-concept is useful, it did not provide results that were more useful than the simpler algorithms used in ealier sections of that report. In the context of the comparatively small dataset size and simplicity of the problem (compared with machine translation and image recognition), using systems such as Theano on this particular tasks is probably overkill. Metaphorically speaking it's like using a machine gun to swat a fly.
+
+On the other hand, simpler techniques such as random forest and boosted regression trees (as implemented in the package **xgboost**) are easy to set-up and run. Perhaps too easy. It is vital that users understand at least some of the theory underlying the code to ensure appropriate input parameter and interpretation. One advantage of **xgboost** is that it prevents 'overfitting' and deals well with co-linearity, highly correlated predictor variables.
+
+One interesting and somewhat unexpected finding from the Machine Learning experience was that the results in terms of feature importance were sensitive to both the algorithm used and the set-up of the model run.
+
+
 <!-- Progress Report 1 describes the construction of the explanatory variables and definitions of the dependent variable. This second Progress Report describes the work we have done to model the input data using Machine Learning. -->
 
 <!-- The first step in this process is that of model selection by cross-validation, and it is this procedure which we will now describe. The first step of model selection is to choose the metric of interest, based on which we will select the best-performing model. Given that this is a regression problem there are multiple possible metrics: mean squared error (MSE), mean absolute error, coefficient of determination ($R^2$), etc. From the point of view of policy decision-making, which is our ultimate goal, there is no clear choice of best-suited metric. We have chosen the coefficient of determination as it seems to be the metric of interest for our Data Science contact at the Department for Transport, but it must be noted that this metric is ill-suited for the mostly non-linear [^1] regression models we consider (see for example [@spiess2010evaluation]). -->
@@ -407,10 +418,26 @@ Appendix 2 demonstrates and explains the Machine Learning methods that have been
 
 <!-- The results so far should thus be taken as tentative as they are in the process of being tested further to guarantee as much as possible their validity and potential for informed, data-driven decision making. -->
 
-# Results
-
 # Discussion
 
+We have demonstrated that a new generation of statistical tools are available, for free and packaged in mature open source software, for transport researchers.
+
 # Recommendations
+
+Based on our work we offer the following tentative recommendations to researchers in the field:
+
+- Pay attention to the vital stage of data pre-processing. Mistakes made here can have knock-on consequences throughout the project. As with any modelling work, rubbish in will ensure that rubbish comes out so it is important to spend time visualising and statistically summarising the input data before proceeding to the modelling stage.
+
+- Look for opportunities to augment official datasets with novel data sources. An example from our work was the addition of proximity to motorways using OpenStreetMap data as an explanatory variables.
+
+- Making transport data geographical by pre-processing (as illustrated in our conversion of OD data to geographic lines) can add value to the analysis and allow locally specific knowledge be generated.
+
+- Before moving to Machine Learning algorithms such as **xgboost** ensure that traditional statistical models have been run and interpretted. This mitigates against the problem than machine learning models are 'black box' and provides a cross-check to ensure that the results make sense.
+
+- Visualise the data in new ways and interactively. By allowing policy makers and the public to play with the data, new insights can be gleaned. A transparent, interactive visualisation can be more valuable for generating local insight than the results of a complex machine learning method.
+
+- Take care not to allow machine learning methods to hide the raw data or lead to confusing English that risks people being 'blinded by science'. 
+
+- Now that the best machine learning algorithms are open source and can be scripted in code, there is no excuse for results not to be reproducible. **All publicly funded transport models using machine learning should be open access, with code published alongside results, and reproducible.**
 
 # References
