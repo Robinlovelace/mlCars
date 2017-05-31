@@ -59,18 +59,12 @@ Take a look at some summary stats
 summary(wyflows$car)
 ```
 
-Let's create some quick visualisations in base R. First, a boxplot showing the distribution of car distance counts
+Let's create a quick visualisations to explore the dataset. First, a boxplot showing the distribution of car distance counts
 ```{r}
 boxplot(wyflows$car)
 ```
 
-And... a bar chart
-```{r}
-counts <- table(wyflows$car)
-barplot(counts, xlab='Distance', ylab='', ylim = c(0,14000), main="Car")
-```
-
-How about a static map to give our visualisations a spatial element?
+How about a map showing car flows in West Yorkshire?
 ```{r, echo=FALSE}
 library(tmap)
 library(dplyr)
@@ -81,7 +75,7 @@ wyflows = wyflows[wyflows$distance > 0,]
 qtm(wyflows[wyflows$npeople > 200,], lines.col = "car", lines.style = "pretty")
 ```
 
-Let's perform some regression analysis to find out whether there is a statistical relationship between car ownership and health
+We can perform some regression analysis to find out whether there is a statistical relationship between car ownership and health
 ```{r}
 Health <- lm(car ~ vghealth + ghealth + fhealth + bhealth + vbhealth + q1624 + q2534 + q3549 + q5064 + q6574 + q75plus, data=df.wyflows)
 summary(Health)
