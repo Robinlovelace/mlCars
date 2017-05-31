@@ -7,8 +7,6 @@ library(stplanr)
 library(dplyr)
 library(sp)
 
-#unzip("data/wu03ew_v2.zip", exdir="data/")
-#unzip("data/wu02ew_v2.zip", exdir="data/")
 #unzip("data/wu01ew_v2.zip", exdir="data/")
 
 
