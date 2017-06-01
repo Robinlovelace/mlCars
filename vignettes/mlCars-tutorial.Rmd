@@ -17,7 +17,6 @@ To reproduce the results demonstrated in this tutorial we assume that:
 - Up-to-date versions of R and RStudio are installed on your system. See online resources such as [Efficient R Programming](https://csgillespie.github.io/efficientR/set-up.html#installing-r) [@gillespie_efficient_2016] for more info.
 
 ## Data
-
 A note about the **data**: the input data for this tutorial is an origin-destination matrix of travel patterns derived from the 2011 census and augmented with additional variables from open census and OSM data. These are represented as spatial lines (of class `SpatialLinesDataFrame` but which could be exported to a range of geographic data formats). It is not the purpose of this tutorial to explain how such datasets can be generated. This is covered in the [vignette](https://cran.r-project.org/web/packages/stplanr/vignettes/introducing-stplanr.html) of the [stplanr R package](https://github.com/ropensci/stplanr).
 
 From your RStudio session, the necessary packages and data can be installed with the following commands, which install the **devtools** and **mlCars** packages:
@@ -31,15 +30,9 @@ The **mlCars** package contains the example data used in this tutorial. Load it 
 
 ```{r}
 library(mlCars)
-library(stplanr)
 ```
 
 The main input files resulting from the preprocessing stages is `wyflows`, which can be loaded with the following command:
-
-```{r, echo=FALSE}
-wyflows = readRDS("../data/wyflows.Rds")
-```
-
 
 ```{r, eval=FALSE}
 wyflows = readRDS("data/wyflows.Rds")
@@ -52,51 +45,64 @@ class(wyflows)
 ```
 
 Let's have a look at the variables
+
 ```{r}
 names(wyflows)
 ```
 
 Inspect the last few rows
+
 ```{r}
 tail(wyflows)
 ```
 
 Take a look at some summary stats
+
 ```{r}
 summary(wyflows$car)
 ```
 
-Let's create a quick visualisations to explore the dataset. First, a boxplot showing the distribution of car distance counts
+Let's create some quick visualisations in base R. First, a boxplot showing the distribution of car distance counts
+
 ```{r}
 boxplot(wyflows$car)
 ```
 
-How about a map showing car flows in West Yorkshire?
+And... a bar chart
+```{r}
+counts <- table(wyflows$car)
+barplot(counts, xlab='Distance', ylab='', ylim = c(0,14000), main="Car")
+```
+
+How about a static map to give our visualisations a spatial element?
 ```{r, echo=FALSE}
-library(tmap)
-library(dplyr)
-library(sp)
 wyflows = spTransform(wyflows, CRS("+init=epsg:4326"))
-wyflows_all = wyflows
 wyflows = wyflows[wyflows$distance > 0,]
 qtm(wyflows[wyflows$npeople > 200,], lines.col = "car", lines.style = "pretty")
 ```
 
-We can perform some regression analysis to find out whether there is a statistical relationship between car ownership and health
+Let's perform some regression analysis. First, we need to do some data cleaning
+```{r}
+str(wyflows)
 
-<!-- ```{r} -->
-<!-- Health <- -->
-<!--   lm( -->
-<!--   car ~ vghealth + ghealth + fhealth + bhealth -->
-<!--   + vbhealth + q1624 + q2534 + q3549 + q5064 + q6574 + q75plus, -->
-<!--   data = wyflows@data -->
-<!--   ) -->
-<!--   summary(Health) -->
-<!-- ``` -->
+df.wyflows <- as.data.frame(wyflows)
 
-<!-- Machine learning... -->
-<!-- XGBoost -->
+names(df.wyflows)[13] <- "q1624"
+names(df.wyflows)[14] <- "q2534"
+names(df.wyflows)[15] <- "q3549"
+names(df.wyflows)[16] <- "q5064"
+names(df.wyflows)[17] <- "q6574"
+names(df.wyflows)[18] <- "q75plus"
+```
+
+Ok, let's find out whether there is a statistical relationship between car ownership and health
+```{r}
+Health <- lm(car ~ vghealth + ghealth + fhealth + bhealth + vbhealth + q1624 + q2534 + q3549 + q5064 + q6574 + q75plus, data=df.wyflows)
+summary(Health)
+```
+
+Machine learning...
+XGBoost, deep learning
 
 ## Conclusion
-
-We've broadly covered some of the things you can do with the [mlCars](https://github.com/Robinlovelace/mlCars/) package. If you'd like to learn more about the mlCars package. You can access more code from the repository at [`preprocess.R`](https://github.com/Robinlovelace/mlCars/blob/master/vignettes/preprocess.R) and [`geo.R`](https://github.com/Robinlovelace/mlCars/blob/master/vignettes/geo.R).
+We've broadly covered some of the things you can do with the [mlCars](https://github.com/Robinlovelace/mlCars/) package. If you'd like to learn more about the mlCars package... You can access more code from the repository at [`preprocess.R`](https://github.com/Robinlovelace/mlCars/blob/master/vignettes/preprocess.R) and [`geo.R`](https://github.com/Robinlovelace/mlCars/blob/master/vignettes/geo.R).
