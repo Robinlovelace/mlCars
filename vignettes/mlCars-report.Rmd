@@ -56,19 +56,25 @@ Unless your car doubles as a life-support system, it is unlikley that you litera
 More likely you depend on the car for trips that are *seen as essential*, for modern life.
 Whether it's for doing the 'weekly shop', dropping children off at school or taking a sick relative to hospital at an affordable, car use can easily become integral modern life.
 
-Of course, each of these trips could have either been made by a different mode or not made at all and (except potentially in the case of taking a relative to hospital) nobody would die.
-Car dependency is thus about observed behaviour than hypothetical consequences of going *cold turkey*.
-The analogy of a drug dependency is useful.
-Drug dependents will not die if they can no longer indulge their addition.
-But life will be hard, at least for a while after, when they stop.
-Similarly, those who are car dependent will find it hard to adjust to life after their car has been taken away.
+<!-- Of course, each of these trips could have either been made by a different mode or not made at all and (except potentially in the case of taking a relative to hospital) nobody would die. -->
+<!-- Car dependency is thus about observed behaviour than hypothetical consequences of going *cold turkey*. -->
+<!-- The analogy of a drug dependency is useful. -->
+<!-- Drug dependents will not die if they can no longer indulge their addition. -->
+<!-- But life will be hard, at least for a while after, when they stop. -->
+<!-- Similarly, those who are car dependent will find it hard to adjust to life after their car has been taken away. -->
 
 What is actually meant by car dependency in the context of machine learning?
-There are many possible ways of defining and measuring car use. In this work we interpret car dependency as more about current behaviour than hypothetical future behaviours. Specifically, we define car dependency as:
+There are many possible ways of defining and measuring car use.
+@anable_complacent_2005, for example, defines car dependency in attitudinal terms
+The paper is also relevant methodologically, illustrating the potential benefits of applying cluster analysis, then a new method, to the question of 'car addicts' as the author puts it.
+In this work we interpret car dependency as more about current behaviour than hypothetical future behaviours. Specifically, we define car dependency as:
 
 > The proportion of people in a zone or along a particular desire line who drive, or are passengers in a car or van, as their main mode of transport, taking account of the distances of those trips.
 
 By 'taking account of the distances of those trips' we mean that a zone in which 50% of the population use a car for trips of 5 miles is more car dependent than a zone in which 50% of the population uses a car for trips of 20 miles. We define car dependency *relative to distance* because the policy motivation of this project is to help identify zones and routes where interventions could reduce car dependency. It is easier to intervene to reduce car use for 5 mile trips (e.g. by providing good walking and cycling facilities) than for 20 mile trips (e.g. by creating new bus routes or public transport stations).
+
+The importance of the spatial element in car dependency was highlighted in a recent article by @clark_temporal_2017, who found that an area's likelihood of becoming or remaining car dependent was greatly increased if surrounding areas had high levels of car ownership. This work was made possible by recent methodological developments, illustrating how new approaches to existing methods, and data, can yield new policy insights. 
+Before progressing to explore the methods, it is vital to understand the input data.
 
 ## Input data
 
@@ -105,7 +111,7 @@ The result is a data frame the first two columns of which contain a the code for
 
 We grouped together people who drive or are passengers to estimate car dependency. Further, we filtered out flows with an origin or destination outside West-Yorkshire, resulting in **53,807** OD pairs in the study region. This amount of data is sufficient for machine learning algorithms to work and extract complex insights, but small enough for experimentation and fast iteration of methods.
 
-To convert the non-geographical OD dataset into geographic data we used the function `od2line()` from the **stplanr** R package. The result is straight lines that can be plotted on the map and about which geographical variables, such as proximity to motorways, can be extracted.
+To convert the non-geographical OD dataset into geographic data we used the function `od2line()` from the **stplanr** R package [@lovelace_stplanr:_2017]. The result is straight lines that can be plotted on the map and about which geographical variables, such as proximity to motorways, can be extracted.
 
 ```{r, echo=F, out.width="49%", fig.show='hold', fig.cap="A sample of work commute flows in the West Yorkshire region (left), and a sample of the result of the code which calculates the distance between motorways (red) and flows (black), in this case discarding all flows within a certain distance of the motorway, as an example."}
 knitr::include_graphics(c("../figures/flows_500_westyorkshire.png", "../figures/dist_motorways.png"))
@@ -117,25 +123,7 @@ To this base table there are two ways to further increase the data included for 
 
 ### Socio-demographic data
 
-The geodemographic data relevant to each origin (home) MSOA consists of the following variables: number of people in particular age brackets, number of people of each gender, car or van availability (including number of homes with 0,1,2,etc. cars), population density, number of economically active and inactive people, general health (number of people with very good, fair, etc. general health), number of people per ethnicity group, number of people by maximum qualification level, and lastly, average number of rooms, bedrooms and fraction of homes with central heating.
-In addition, we included the workplace zone classification which assigns each destination MSOA one of the following groups:
-
-```{r wzclasstable, echo=FALSE, message=FALSE}
-df = readr::read_csv(
-'Workplace zone classification, Code
-                         Retail,1
-                       Top jobs,2
-                  Metro suburbs,3
-              Suburban services,4
- Manufacturing and distribution,5
-                          Rural,6
-            Servants of society,7
-'
-)
-knitr::kable(df, caption="The classification of workplace zones.")
-```
-
-\newpage
+The geodemographic data relevant to each origin (home) MSOA consists of the following variables: number of people in particular age brackets, number of people of each gender, car or van availability (including number of homes with 0,1,2,etc. cars), population density, number of economically active and inactive people, general health (number of people with very good, fair, etc. general health), number of people per ethnicity group, number of people by maximum qualification level, and lastly, average number of rooms, bedrooms and fraction of homes with central heating (see Appendix 1).
 
 ### Spatial data
 
@@ -191,6 +179,7 @@ Visualisation and descriptive statistics are tried and tested techniques for und
 For analysis aimed at informing locally targetted interventions, maps are an excellent starting point. Even though the data operate at a high geographical resolution (at the OD level), it is worth starting with visualisations at a low level of detail, to ensure that the data makes sense.
 
 ```{r highdependency, message=FALSE, fig.cap="Flows in West Yorkshire in which a high proportion of trips (95%+) of trips are made by commuting, for flows along which which 30+ people overall commute."}
+library(dplyr)
 data("wyflows")
 library(sp)
 library(tmap)
@@ -427,8 +416,9 @@ The uptake of new technologies like big data and machine learning in the transpo
 Maximising the value of machine learning in the UK transport industry requires addressing a number of key barriers. According to a report by the [Transport Systems Catapult (2017)](https://s3-eu-west-1.amazonaws.com/media.ts.catapult/wp-content/uploads/2017/04/12092544/15460-TSC-Q1-Report-Document-Suite-single-pages.pdf) and the [Open Data Institute (ODI)](https://theodi.org/), tackling these barriers and making better use of transport data could unlock £14 billion per annum for the UK by 2025. There is a sizeable data skills gap in the UK economy. The [Royal Society](https://royalsociety.org/~/media/policy/projects/machine-learning/publications/machine-learning-report.pdf) argues that the disruptive potential of new technologies like machine learning is held back by a shortage of data skills. The [Transport Systems Catapult](https://s3-eu-west-1.amazonaws.com/media.ts.catapult/wp-content/uploads/2017/04/12092544/15460-TSC-Q1-Report-Document-Suite-single-pages.pdf) also argues that the development of Intelligent Mobility in the UK is hindered by the lack of an effective skills strategy. The report suggests an increase in specialist apprenticeships and postgraduate degrees would narrow the skills gap. In addition, designing policies based on data-driven insights requires decision-makers have a foundational knowledge of statistics as well as the ethical challenges underpinning new data-driven technology. Failing to narrow the skills gap in Intelligent Mobility could lead to an estimated £50 billion loss in GDP per annum [Transport Systems Catapult (2016)](https://s3-eu-west-1.amazonaws.com/media.ts.catapult/wp-content/uploads/2017/04/12092544/15460-TSC-Q1-Report-Document-Suite-single-pages.pdf). There there needs to be significant investment in the research and development landscape in order to assist the UK in becoming a leader in transport innovation [Lovelace et al. (2015)](http://onlinelibrary.wiley.com/doi/10.1111/gean.12081/abstract); [Transport Systems Catapult (2016)](https://s3-eu-west-1.amazonaws.com/media.ts.catapult/wp-content/uploads/2017/04/12092544/15460-TSC-Q1-Report-Document-Suite-single-pages.pdf). 
 
 
-### Policy Implications
-As an inactive, highly polluting mode of transport, driving is associated with a range of health problems such as obesity, diabetes, coronary heart disease, asthma and lung cancer. In order to reduce car dependency, policy-makers and planners need to develop better infrastructure for walking and cycling. This could be achieved using open source planning systems like the [Propensity to Cycle Tool](http://pct.bike/) [Lovelace et al., 2017.](https://www.jtlu.org/index.php/jtlu/article/view/862). To illustrate, the [West Yorkshire Combined Authority (WYCA)](http://www.westyorks-ca.gov.uk/uploadedFiles/Content/Transport/Transport_Plan/Transport%20Main%20part%202%20reduced.pdf) is improving walking and cycling networks as well as investing in new infrastructure and redesigning the layout of streets to reduce conflict between drivers, cyclists and pedestrians. Rather than designing cities around the car, land use and transport planners should aim to reduce car dependency. This research has found that car dependency in West Yorkshire is higher near motorways. Building new services and housing close to dense, existing centres rather than on the periphery would encourage shorter journeys Newman et al. [(2016)](http://online.liverpooluniversitypress.co.uk/doi/abs/10.3828/tpr.2016.28). In addition, increasing density and improving public transport would encourage multi-modal mobility over car use ([Newman and Kenworthy, 1989](https://www.jtlu.org/index.php/jtlu/article/viewFile/583/812); [Newman et al., 2016](http://online.liverpooluniversitypress.co.uk/doi/abs/10.3828/tpr.2016.28); [Bertolini and Le Clercq, 2002)](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.451.9199&rep=rep1&type=pdf). This would have the added benefit of reducing urban sprawl in peripheral zones. The introduction of road pricing schemes, pioneered by London and the Congestion Charge, could reduce car dependency in designated parts of West Yorkshire. Improvements to transport planning should be supplemented by ‘soft’ interventions such as promotional campaigns and ‘nudging’ towards walking, cycling, public transport and car sharing. For example, ‘soft’ interventions could be aimed at more car dependent socio-economic groups. Implementing ‘soft’ and ‘hard’ measures to reduce car dependency would go a long way towards developing multi-modal mobility in the region. In many respects, the [WYCA](http://www.westyorks-ca.gov.uk/transport/) is at the forefront of sustainable transport innovation. By championing ‘One System Public Transport’ and prioritising the environment, health and wellbeing as part of its transport strategy, the [WYCA](http://www.westyorks-ca.gov.uk/uploadedFiles/Content/Transport/Transport_Plan/Transport%20Main%20part%202%20reduced.pdf) is leading the way in the development of sustainable, multi-modal mobility in the UK. The WYCA is also distinguished by its commitment to implementing ‘Smart ‘Futures’ as part of their strategy for future sustainable transport.  However, implementing the vision of a more integrated, sustainable transport system means overcoming barriers such as institutional conditions, political factors and market demand [Forward et al., 2014](http://www.rupprecht-consult.eu/uploads/tx_rupprecht/TRANSFORuM_D4-2_APPROVED_Challenges-and-barriers.pdf). This report ultimately argues that building a more sustainable transport system by reducing car dependency should be a priority for policy-makers.
+## Policy Implications
+
+As an inactive, highly polluting mode of transport, driving is associated with a range of health problems such as obesity, diabetes, coronary heart disease, asthma and lung cancer. In order to reduce car dependency, policy-makers and planners need to develop better infrastructure for walking and cycling. This could be achieved using open source planning systems like the [Propensity to Cycle Tool](http://pct.bike/) [@lovelace_propensity_2017]. To illustrate, the [West Yorkshire Combined Authority (WYCA)](http://www.westyorks-ca.gov.uk/uploadedFiles/Content/Transport/Transport_Plan/Transport%20Main%20part%202%20reduced.pdf) is improving walking and cycling networks as well as investing in new infrastructure and redesigning the layout of streets to reduce conflict between drivers, cyclists and pedestrians. Rather than designing cities around the car, land use and transport planners should aim to reduce car dependency. This research has found that car dependency in West Yorkshire is higher near motorways. Building new services and housing close to dense, existing centres rather than on the periphery would encourage shorter journeys Newman et al. [(2016)](http://online.liverpooluniversitypress.co.uk/doi/abs/10.3828/tpr.2016.28). In addition, increasing density and improving public transport would encourage multi-modal mobility over car use ([Newman and Kenworthy, 1989](https://www.jtlu.org/index.php/jtlu/article/viewFile/583/812); [Newman et al., 2016](http://online.liverpooluniversitypress.co.uk/doi/abs/10.3828/tpr.2016.28); [Bertolini and Le Clercq, 2002)](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.451.9199&rep=rep1&type=pdf). This would have the added benefit of reducing urban sprawl in peripheral zones. The introduction of road pricing schemes, pioneered by London and the Congestion Charge, could reduce car dependency in designated parts of West Yorkshire. Improvements to transport planning should be supplemented by ‘soft’ interventions such as promotional campaigns and ‘nudging’ towards walking, cycling, public transport and car sharing. For example, ‘soft’ interventions could be aimed at more car dependent socio-economic groups. Implementing ‘soft’ and ‘hard’ measures to reduce car dependency would go a long way towards developing multi-modal mobility in the region. In many respects, the [WYCA](http://www.westyorks-ca.gov.uk/transport/) is at the forefront of sustainable transport innovation. By championing ‘One System Public Transport’ and prioritising the environment, health and wellbeing as part of its transport strategy, the [WYCA](http://www.westyorks-ca.gov.uk/uploadedFiles/Content/Transport/Transport_Plan/Transport%20Main%20part%202%20reduced.pdf) is leading the way in the development of sustainable, multi-modal mobility in the UK. The WYCA is also distinguished by its commitment to implementing ‘Smart ‘Futures’ as part of their strategy for future sustainable transport.  However, implementing the vision of a more integrated, sustainable transport system means overcoming barriers such as institutional conditions, political factors and market demand [Forward et al., 2014](http://www.rupprecht-consult.eu/uploads/tx_rupprecht/TRANSFORuM_D4-2_APPROVED_Challenges-and-barriers.pdf). This report ultimately argues that building a more sustainable transport system by reducing car dependency should be a priority for policy-makers.
 
 
 # Recommendations
