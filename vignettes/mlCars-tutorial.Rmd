@@ -10,7 +10,7 @@ vignette: >
 ---
 
 ## Introduction
-This tutorial will provide a very brief overview of what you can do with the mlCars package. Here, we focus on exploring the data, performing regression analysis and some basic machine learning. To find out more about the DfT-funded mlCars project, visit...
+This tutorial will offer a brief overview of what you can do with the [mlCars](https://github.com/Robinlovelace/mlCars/) package. Here, we focus on exploring the data, performing regression analysis and some machine learning. To find out more about the DfT-funded mlCars project, read this [report](https://github.com/Robinlovelace/mlCars/tree/master/docs)
 
 To reproduce the results demonstrated in this tutorial we assume that:
 - You have some experience with programming in general or are not completely new to R. If you are new to R, we recommend you carry out a a few hours of this free [introductory course](https://www.datacamp.com/courses/free-introduction-to-r) from [Datacamp](https://www.datacamp.com/courses/free-introduction-to-r).
@@ -19,7 +19,7 @@ To reproduce the results demonstrated in this tutorial we assume that:
 ## Data
 A note about the **data**: the input data for this tutorial is an origin-destination matrix of travel patterns derived from the 2011 census and augmented with additional variables from open census and OSM data. These are represented as spatial lines (of class `SpatialLinesDataFrame` but which could be exported to a range of geographic data formats). It is not the purpose of this tutorial to explain how such datasets can be generated. This is covered in the [vignette](https://cran.r-project.org/web/packages/stplanr/vignettes/introducing-stplanr.html) of the [stplanr R package](https://github.com/ropensci/stplanr).
 
-From your RStudio session, the necessary packages and data can be installed with the following commands, which install the **devtools** and **mlCars** packages:
+From your RStudio session, the necessary packages and data can be installed with the following commands. This will install the requisite **devtools** and **mlCars** packages:
 
 ```{r, eval=FALSE}
 install.packages("devtools")
@@ -71,7 +71,7 @@ boxplot(wyflows$car)
 And... a bar chart
 ```{r}
 counts <- table(wyflows$car)
-barplot(counts, xlab='Distance', ylab='', ylim = c(0,14000), main="Car")
+barplot(counts, xlab='', ylab='', ylim = c(0,14000), main="Car")
 ```
 
 How about a static map to give our visualisations a spatial element?
@@ -81,12 +81,14 @@ wyflows = wyflows[wyflows$distance > 0,]
 qtm(wyflows[wyflows$npeople > 200,], lines.col = "car", lines.style = "pretty")
 ```
 
-Let's perform some regression analysis. First, we need to do some data cleaning
+Let's do some regression analysis. First, we need to do some data cleaning
 ```{r}
 str(wyflows)
-
 df.wyflows <- as.data.frame(wyflows)
+```
 
+Rename some of the columns
+```{r}
 names(df.wyflows)[13] <- "q1624"
 names(df.wyflows)[14] <- "q2534"
 names(df.wyflows)[15] <- "q3549"
@@ -95,14 +97,74 @@ names(df.wyflows)[17] <- "q6574"
 names(df.wyflows)[18] <- "q75plus"
 ```
 
-Ok, let's find out whether there is a statistical relationship between car ownership and health
+Build a few linear models with car as the dependent variable
 ```{r}
-Health <- lm(car ~ vghealth + ghealth + fhealth + bhealth + vbhealth + q1624 + q2534 + q3549 + q5064 + q6574 + q75plus, data=df.wyflows)
-summary(Health)
+mAge <- lm(car ~ q1624 + q2534 + q2534 + q3549 + q5064 + q6574 + q75plus, data =df.wyflows)
+summary(m0)
 ```
 
-Machine learning...
-XGBoost, deep learning
+```{r}
+mEcon <- lm(car ~ econactiv + econinactiv , data=df.wyflows)
+summary(mEcon)
+```
+
+```{r}
+mHealth <- lm(car ~ vghealth + ghealth + fhealth + bhealth + vbhealth + q1624 + q2534 + q3549 + q5064 + q6574 + q75plus, data=df.wyflows)
+summary(mHealth0)
+```
+
+```{r}
+mCentheat <- lm(car ~ centheat, data=df.wyflows)
+summary(mCentheat)
+```
+
+
+### Machine Learning (still needs quite a bit of work)
+**Idea: explore option of using proportions**
+
+Now that we've covered visualisation and traditional statistical analysis, let's do some machine learning! We've used [XGBoost](http://xgboost.readthedocs.io/), an accessible package for fitting boosted trees, to demonstrate how to build a machine learning model using transport data from the **mlCars** package.
+
+```{r}
+install.packages("xgboost")
+library(xgboost)
+```
+
+Set seed for reproducibility
+```{r}
+set.seed(2017)
+```
+
+Convert to numeric
+```{r}
+flows = mutate_all(df.wyflows, as.numeric)
+```
+
+Build a model, focusing on metro transport. In the analysis we focused on the car, however
+```{r}
+xg = xgboost(data = as.matrix(flows), label = wyflows$metro, nrounds = 10,  max_depth = 7)
+```
+
+Make a prediction
+```{r}
+xg_fitted = predict(xg, as.matrix(flows))
+```
+
+Plot the metro against the train and the fitted points
+```{r, fig.keep='all', out.width="50%"}
+plot(df.wyflows$metro, flows$train)
+plot(df.wyflows$metro, xg_fitted, col = "red")
+```
+
+Calculate how well the model has performed
+```{r}
+xgb1 = sqrt(c(crossprod(xg_fitted - df.wyflows$metro)) / nrow(flows))
+```
+
+Plot the variable importance
+```{r}
+importance_xgb = xgb.importance(model = xg, feature_names = names(flows))
+xgb.plot.importance(importance_xgb)
+```
 
 ## Conclusion
-We've broadly covered some of the things you can do with the [mlCars](https://github.com/Robinlovelace/mlCars/) package. If you'd like to learn more about the mlCars package... You can access more code from the repository at [`preprocess.R`](https://github.com/Robinlovelace/mlCars/blob/master/vignettes/preprocess.R) and [`geo.R`](https://github.com/Robinlovelace/mlCars/blob/master/vignettes/geo.R).
+We've covered some of the things you can do with the [**mlCars**](https://github.com/Robinlovelace/mlCars/) package including: visualisation, traditional statistical analysis and machine learning. The analysis here has not been used in the mlCars report, it is simply used to demonstrate some of the applications. If you'd like to learn more about the mlCars package you can read the report in the [vignettes]https://github.com/Robinlovelace/mlCars/blob/master/vignettes/) folder. You can also access more code from the repository at [`preprocess.R`](https://github.com/Robinlovelace/mlCars/blob/master/vignettes/preprocess.R) and [`geo.R`](https://github.com/Robinlovelace/mlCars/blob/master/vignettes/geo.R).
