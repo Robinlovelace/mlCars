@@ -104,8 +104,7 @@ summary(mCentheat)
 ```
 
 
-### Machine Learning (still needs quite a bit of work)
-**Idea: explore option of using proportions**
+### Machine Learning 
 
 Now that we've covered visualisation and traditional statistical analysis, let's do some machine learning! We've used [XGBoost](http://xgboost.readthedocs.io/), an accessible package for fitting boosted trees, to demonstrate how to build a machine learning model using transport data from the **mlCars** package.
 
@@ -119,35 +118,33 @@ Set seed for reproducibility
 set.seed(2017)
 ```
 
-Convert to numeric
+Select the variables to use in the training dataset and convert to numeric, on subset of data with > 20 car drivers:
+
 ```{r}
-flows = mutate_all(wyflows@data, as.numeric)
+flows = wyflows[wyflows$car > 100,]
+allmodes = select(flows@data, metro:othertransp) %>% 
+  mutate_all(function(x) x / rowSums(.)) %>% 
+  select(-car)
 ```
 
 Build a model, focusing on metro transport. In the analysis we focused on the car, however
 ```{r}
-xg = xgboost(data = as.matrix(flows), label = wyflows$metro, nrounds = 10,  max_depth = 7)
+xg = xgboost(data = as.matrix(allmodes), label = flows$car / nrow(flows), nrounds = 10,  max_depth = 7, weight = flows$car)
 ```
 
 Make a prediction
 ```{r}
-xg_fitted = predict(xg, as.matrix(flows))
-```
-
-Plot the metro against the train and the fitted points
-```{r, fig.keep='all', out.width="50%"}
-plot(wyflows@data$metro, flows$train)
-plot(wyflows@data$metro, xg_fitted, col = "red")
+xg_fitted = predict(xg, as.matrix(allmodes))
 ```
 
 Calculate how well the model has performed
 ```{r}
-xgb1 = sqrt(c(crossprod(xg_fitted - wyflows@data$metro)) / nrow(flows))
+cor(xg_fitted,  flows$car / nrow(wyflows))
 ```
 
 Plot the variable importance
 ```{r}
-importance_xgb = xgb.importance(model = xg, feature_names = names(flows))
+importance_xgb = xgb.importance(model = xg, feature_names = names(allmodes))
 xgb.plot.importance(importance_xgb)
 ```
 
