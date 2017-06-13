@@ -36,13 +36,13 @@ It is important to understand what we mean by the terms Big Data and Machine Lea
 
 This report summarises the work undertaken over the course of a 3 month project funded by the UK's Department for Transport (DfT) under the Transport Technology Research Innovation Grant (T-TRIG) stream. This funding stream is part of the Chief Scientist's [office](https://www.gov.uk/government/people/phil-blythe), which, among other things "helps develop the department’s links with the wider science, engineering, technology and innovation community".
 
-The report is self-standing but links to 3 Appendices, which can be consulted for futher details on the input data, methods and policy implications of the research, respectively. They are:
+The report is self-standing but links to 4 Appendices, which can be consulted for futher details on the input data, methods and policy implications of the research, respectively. They are:
 
 - Progress Report 1, which is focussed on the input data and data generation process and how official datasets were augmented with geographical data from OpenStreetMap.
 
 - Progress Report 2, which describes the Machine Learning algorithms used and provides code snippets and results to show how they performed.
 
-- A report, The Policy Implications of the research, which provides an up-to-date account of the state-of-the-art in terms of machine learning in public policy.
+- The Policy Implications of the research, which provides an up-to-date account of the state-of-the-art in terms of machine learning in public policy.
 
 - A tutorial on Big Data and Machine Learning for transport data analysis which explains how to use some of the methods outlined in this report, targetted at transport planners, consultancies and policy-makers relatively new to data science.
 
@@ -80,6 +80,10 @@ Before progressing to explore the methods, it is vital to understand the input d
 
 During the first stage of the project (2017-02-06 to 2017-03-20) the priority was to access and organise the data.
 Data preparation may not sound like exciting work, but it can consume a large proportion of analysts' time, so is worth taking seriously [@gillespie_efficient_2016; @grolemund_r_2016].
+Big data and machine learning offer the promise of more efficient and cheaper transport models based on rich, finely-grained data across a wider range of indicators. 
+As outlined in the Policy Report, the rise of open data and shared data has also enabled the development of more transparent and accessible transport tools and models. Drawing exclusively on datasets that are free, publicly-available and ‘big’, this research demonstrates a more open, innovative methodology for transport mobility.
+
+
 
 For simplicity and maximum accessibility this project uses only datasets which are open (publicly available). There are three main input dataset types:
 
