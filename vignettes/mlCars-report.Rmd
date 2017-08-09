@@ -15,10 +15,11 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include=FALSE}
+```{r}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE)
-# devtools::install_github("robinlovelace/mlCars")
+devtools::install_github("robinlovelace/mlCars")
 library(mlCars)
+wyflows = readRDS((system.file(package = "mlCars", "data/wyflows.Rds")))
 ```
 
 
@@ -184,7 +185,6 @@ For analysis aimed at informing locally targetted interventions, maps are an exc
 
 ```{r highdependency, message=FALSE, fig.cap="Flows in West Yorkshire in which a high proportion of trips (95%+) of trips are made by commuting, for flows along which which 30+ people overall commute."}
 library(dplyr)
-data("wyflows")
 library(sp)
 library(tmap)
 tmap_mode("view")
