@@ -15,11 +15,8 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r}
+```{r, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE)
-devtools::install_github("robinlovelace/mlCars")
-library(mlCars)
-wyflows = readRDS((system.file(package = "mlCars", "data/wyflows.Rds")))
 ```
 
 
@@ -46,6 +43,14 @@ The report is self-standing but links to 4 Appendices, which can be consulted fo
 - The Policy Implications of the research, which provides an up-to-date account of the state-of-the-art in terms of machine learning in public policy.
 
 - A tutorial on Big Data and Machine Learning for transport data analysis which explains how to use some of the methods outlined in this report, targetted at transport planners, consultancies and policy-makers relatively new to data science.
+
+Note that the results and figures presented in this report can be reproduced, by installing the **mlCars** R package and loading the example data:
+
+```{r, message=FALSE}
+devtools::install_github("robinlovelace/mlCars") # install the R package
+wyflows = readRDS((system.file(package = "mlCars", "data/wyflows.Rds"))) # load data
+```
+
 
 ## Car dependency: motivations and definitions
 
