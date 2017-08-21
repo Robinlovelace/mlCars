@@ -1,0 +1,72 @@
+---
+title: "Using Machine Learning and Big Data to Model Car Dependency"
+author: "Robin Lovelace (ITS Leeds) and Liam Bolton (your details here)"
+date: "`r Sys.Date()`"
+output:
+  ioslides_presentation:
+    transition: slower
+widescreen: true
+logo: its-logo-square.png
+bibliography: ../references.bib
+---
+
+# Introduction
+
+## Context
+
+## Outputs
+
+- Demonstration of how official datasets can be augmented with geographical data from OpenStreetMap.
+
+- Application of Machine Learning algorithms to widely available transport datasets.
+
+- Write-up on the policy implications of the research.
+
+- A tutorial on Big Data and Machine Learning targetted at transport planners, consultancies and policy-makers relatively new to data science.
+
+> - An R package, **mlCars** containing the source code and example data to ensure reproducibility.
+
+## What is big data?
+
+Big data is an ubrella term.
+
+> "**unconventional**  datasets  that  are  **difficult**  to  analyze
+**using established methods**. Often this difficulty relates to **size** but the form, format, and **complexity** are equally important" [@lovelace_big_2016]. 
+
+```{r, echo=FALSE, fig.width=3}
+knitr::include_graphics("https://openclipart.org/image/300px/svg_to_png/170637/1339577112.png")
+```
+
+## What is machine learning?
+
+-  From the report: 
+
+> "By machine learning, we mean simply that the functional form of the model is not specified by the user" 
+
+There are 2 main types of machine learning [@hastie_elements_2016]:
+
+> "[Either] supervised or unsupervised. In supervised learning, the goal is to pre-
+dict the value of an outcome measure based on a number of input measures;
+in unsupervised learning, there is no outcome measure, and the goal is to
+describe the associations and patterns among a set of input measures."
+
+Many transport problems can be framed as supervised ML problems.
+
+# Data and methods
+
+## Open access official data
+
+## OSM data
+
+## Classical statistical methods
+
+## Machine Learning
+
+## Directed Acyclic Graphs (DAGs)
+
+# Policy implicaitons
+
+## Your content here Liam
+
+## References
+
