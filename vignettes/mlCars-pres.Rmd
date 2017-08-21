@@ -1,6 +1,6 @@
 ---
 title: "Using Machine Learning and Big Data to Model Car Dependency"
-author: "Robin Lovelace (ITS Leeds) and Liam Bolton (your details here)"
+author: "Robin Lovelace (ITS Leeds) and Liam Bolton (UCL / Red Ninja)"
 date: "`r Sys.Date()`"
 output:
   ioslides_presentation:
@@ -67,16 +67,16 @@ Many transport problems can be framed as supervised ML problems.
 # Policy implicaitons
 
 ## Machine Learning and Big Data for the Transport Sector
-- Machine learning and big data present new opportunities for the transport sector.
+- Machine Learning and 'big data' present new opportunities for the transport sector.
 
-- Big data and machine learning offer the promise of more efficient and cheaper transport models based on rich, finely-grained data across a wider range of indicators.
+- 'Big data' and Machine Learning offer the promise of more efficient and cheaper transport models based on rich, finely-grained data across a wider range of indicators.
 
 - However, they should not supplant domain expertise or contextual knowledge in transport policy and planning. They are best used as aides to human decision-making rather than replacements.
 
 - Barriers to the effective and ethical uptake of innovative new technologies in transport include: access to skills, investment in R&D and organisational culture.
 
 ## The Policy Implications of Car Dependency
-- Car dependency is the cause of a variety of social, environmental and economic issues. 
+- Car dependency is the cause of a variety of social, environmental and economic issues in West Yorkshire. 
 
 - Creating more sustainable regions by reducing car dependency and developing multi-modal mobility requires a multi-faceted approach that involves both ‘hard’ and ‘soft’ policy interventions.
 
