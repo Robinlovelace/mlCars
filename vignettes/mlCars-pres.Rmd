@@ -67,7 +67,7 @@ Many transport problems can be framed as supervised ML problems.
 # Policy implicaitons
 
 ## Machine Learning and Big Data for the Transport Sector
-- Machine learning and big data present new opportunities for the transport industry.
+- Machine learning and big data present new opportunities for the transport sector.
 
 - Big data and machine learning offer the promise of more efficient and cheaper transport models based on rich, finely-grained data across a wider range of indicators.
 
