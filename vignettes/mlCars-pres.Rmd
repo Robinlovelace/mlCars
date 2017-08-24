@@ -55,14 +55,24 @@ Many transport problems can be framed as supervised ML problems.
 # Data and methods
 
 ## Open access official data
+- Origin-Desination (OD) data
+- Geographically aggregated socio-demographic data from the 2011 Census.
 
 ## OSM data
+- Spatial data from the OpenStreetMap API and the NAPTAN dataset
 
 ## Classical statistical methods
+- Descriptive Statistics
+- Visualisation
+- Linear Regression
 
 ## Machine Learning
+- Python and R for Machine Learning
+- Random Forest and Boosted Regression Trees (xgboost)
+- Theano, Spark, TensorFlow
 
 ## Directed Acyclic Graphs (DAGs)
+Directed Acyclic Graphs (DAGs) were used to explore causality between the variables.
 
 # Policy implicaitons
 
