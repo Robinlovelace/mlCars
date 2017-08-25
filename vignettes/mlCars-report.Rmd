@@ -19,6 +19,15 @@ vignette: >
 knitr::opts_chunk$set(echo = FALSE, message = FALSE)
 ```
 
+```{r, eval=FALSE, echo=FALSE}
+# library(UKCensusAPI)
+# u = "https://opendata.arcgis.com/datasets/5e14c6bedc8740d19683517e5e902057_2.geojson"
+# download.file(u, "lads.geojson")
+# lads = sf::st_read("lads.geojson")
+# plot(lads)
+```
+
+
 
 <!-- From a policy perspective car dependency is problematic due to its negative consequences, not in its own right.  -->
 <!-- Notwithstanding questions of whether government policy encourages car dependency,  -->

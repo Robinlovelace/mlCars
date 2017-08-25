@@ -1,7 +1,7 @@
 ---
 title: "Using Machine Learning and Big Data to Model Car Dependency"
 author: "Robin Lovelace (ITS Leeds) and Liam Bolton (UCL / Red Ninja)"
-date: "`r Sys.Date()`"
+date: "2017-08-31"
 output:
   ioslides_presentation:
     transition: slower
@@ -10,9 +10,62 @@ logo: its-logo-square.png
 bibliography: ../references.bib
 ---
 
+<!-- Detail: 25 minute presentation on our ml cars work on Thursday 31st -->
+
+## Contents
+
+> - Introduction
+> - Data and methods
+> - Policy and implications
+
 # Introduction
 
 ## Context
+
+- Project title: *Using Machine Learning and Big Data to Model Car Dependency: an Exploration Using Origin-Destination Data*
+- Submitted to the Transport Technology Research Innovation Grant (T-TRIG) funding stream
+- Big data targetted call
+
+Project outline: 
+
+> - This project will explore the potential for emerging methods in Big Data and Machine Learning to be applied to transport modelling, with a focus on car dependency at the origin-destination level.
+
+## Why car dependency?
+
+- Little *government funded* research into the issue (based on internet search)
+- Yet high impact (economic, social, environmental)
+- And builds on prior work with the PCT [@lovelace_propensity_2017]
+
+![](http://webarchive.nationalarchives.gov.uk/20110304133326/http://cfit.independent.gov.uk/pubs/2007/ebp/images/06.gif)
+
+## A personal definition of car-dependency
+
+> If for some reason you could not longer use a car, would you find it really inconvenient more or less every day never?
+
+- Source: [@anable_complacent_2005]
+
+![](https://www.london.gov.uk/sites/default/files/styles/gla_9_2_large/public/gla_migrate_files_destination/cars%20resize.jpg)
+
+## Evidence-based measures of car dependency
+
+Simple measures:
+
+- Percent driving to work
+- Number of cars per household
+- Road traffic data
+- Road casualties
+
+Complex measures:
+
+- Numbers who *could* have used another mode
+- People who could not get to work 'if the oil ran out' (Philips 2015)
+
+## Modal split | Source: [datashine](http://datashine.org.uk/#table=QS701EW&col=QS701EW0008&ramp=YlOrRd&layers=BTTT&zoom=13&lon=-1.4710&lat=53.7238)
+
+```{r, echo=FALSE}
+knitr::include_graphics("../figures/car-dep-datashine.png")
+```
+
 
 ## Outputs
 
@@ -55,24 +108,55 @@ Many transport problems can be framed as supervised ML problems.
 # Data and methods
 
 ## Open access official data
+
 - Origin-Desination (OD) data
-- Geographically aggregated socio-demographic data from the 2011 Census.
+- Geographically aggregated socio-demographic data from the 2011 Census
+
+```{r, echo=FALSE, out.width="70%"}
+knitr::include_graphics("../figures/flows_500_westyorkshire.png")
+```
 
 ## OSM data
 - Spatial data from the OpenStreetMap API and the NAPTAN dataset
 
+```{r, echo=FALSE, out.width="70%"}
+knitr::include_graphics("../figures/dist_motorways.png")
+```
+
+
+## Response variable
+
+![](../figures/response.png)
+
 ## Classical statistical methods
+
 - Descriptive Statistics
 - Visualisation
 - Linear Regression
 
+```{r, echo=FALSE, out.width="70%"}
+knitr::include_graphics("../figures/dist_fit.png")
+```
+
 ## Machine Learning
+
 - Python and R for Machine Learning
 - Random Forest and Boosted Regression Trees (xgboost)
 - Theano, Spark, TensorFlow
 
+```{r, echo=FALSE, out.width="70%"}
+knitr::include_graphics("../figures/decision_tree.png")
+```
+
 ## Directed Acyclic Graphs (DAGs)
-Directed Acyclic Graphs (DAGs) were used to explore causality between the variables.
+
+Directed Acyclic Graphs (DAGs) were used to explore causality between the variables 
+
+> - Tricky to create the DAG and implement (Rob Long)
+
+```{r, echo=FALSE, out.width="70%"}
+knitr::include_graphics("../figures/dag-dep.png")
+```
 
 # Policy implicaitons
 
