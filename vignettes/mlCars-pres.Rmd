@@ -77,7 +77,7 @@ knitr::include_graphics("../figures/car-dep-datashine.png")
 
 - A tutorial on Big Data and Machine Learning targetted at transport planners, consultancies and policy-makers relatively new to data science.
 
-> - An R package, **mlCars** containing the source code and example data to ensure reproducibility.
+> - An R package, **mlCars** containing the source code and example data to ensure reproducibility. The package can be accessed here: https://github.com/Robinlovelace/mlCars/
 
 ## What is big data?
 
