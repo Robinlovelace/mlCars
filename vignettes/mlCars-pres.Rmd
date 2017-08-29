@@ -172,10 +172,11 @@ knitr::include_graphics("../figures/dag-dep.png")
 
 ## Contact
 Robin Lovelace - Institute for Transport Studies (ITS), University of Leeds
-r.lovelace@leeds.ac.uk
+Email: r.lovelace@leeds.ac.uk
 
 Liam Bolton - Red Ninja / University College London
-liamthomasbolton@gmail.com
+Email: liamthomasbolton@gmail.com
+
 
 ## References
 
