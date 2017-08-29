@@ -15,8 +15,8 @@ bibliography: ../references.bib
 ## Contents
 
 > - Introduction
-> - Data and methods
-> - Policy and implications
+> - Data and Methods
+> - Policy Implications
 
 # Introduction
 
@@ -40,7 +40,7 @@ Project outline:
 
 ## A personal definition of car-dependency
 
-> If for some reason you could not longer use a car, would you find it really inconvenient more or less every day never?
+> If for some reason you could not longer use a car, would you find it... really inconvenient more or less every day never?
 
 - Source: [@anable_complacent_2005]
 
@@ -69,19 +69,19 @@ knitr::include_graphics("../figures/car-dep-datashine.png")
 
 ## Outputs
 
-- Demonstration of how official datasets can be augmented with geographical data from OpenStreetMap.
+- A demonstration of how official datasets can be augmented with geographical data from OpenStreetMap.
 
-- Application of Machine Learning algorithms to widely available transport datasets.
+- An application of Machine Learning algorithms to widely available transport datasets.
 
-- Write-up on the policy implications of the research.
+- A tutorial on Big Data and Machine Learning targetted at transport planners, consultants and policy-makers relatively new to data science.
 
-- A tutorial on Big Data and Machine Learning targetted at transport planners, consultancies and policy-makers relatively new to data science.
+- Write-up of the policy implications of the research.
 
-> - An R package, **mlCars** containing the source code and example data to ensure reproducibility. The package can be accessed here: https://github.com/Robinlovelace/mlCars/
+- An R package, **mlCars**, containing the source code, example data and reports to ensure reproducibility. The package can be accessed here: https://github.com/Robinlovelace/mlCars/
 
 ## What is big data?
 
-Big data is an ubrella term.
+Big data is an umbrella term. We define it as:
 
 > "**unconventional**  datasets  that  are  **difficult**  to  analyze
 **using established methods**. Often this difficulty relates to **size** but the form, format, and **complexity** are equally important" [@lovelace_big_2016]. 
@@ -92,22 +92,20 @@ knitr::include_graphics("https://openclipart.org/image/300px/svg_to_png/170637/1
 
 ## What is machine learning?
 
--  From the report: 
+> By machine learning, we mean simply that the functional form of the model is not specified by the user. 
 
-> "By machine learning, we mean simply that the functional form of the model is not specified by the user" 
+> There are two main types of machine learning [@hastie_elements_2016]:
 
-There are 2 main types of machine learning [@hastie_elements_2016]:
-
-> "[Either] supervised or unsupervised. In supervised learning, the goal is to pre-
+supervised or unsupervised. In supervised learning, the goal is to pre-
 dict the value of an outcome measure based on a number of input measures;
 in unsupervised learning, there is no outcome measure, and the goal is to
-describe the associations and patterns among a set of input measures."
+describe the associations and patterns among a set of input measures.
 
-Many transport problems can be framed as supervised ML problems.
+> Many transport problems can be framed as supervised Machine Learning problems.
 
 # Data and methods
 
-## Open access official data
+## Official, open access data
 
 - Origin-Desination (OD) data
 - Geographically aggregated socio-demographic data from the 2011 Census
@@ -122,8 +120,6 @@ knitr::include_graphics("../figures/flows_500_westyorkshire.png")
 ```{r, echo=FALSE, out.width="70%"}
 knitr::include_graphics("../figures/dist_motorways.png")
 ```
-
-
 ## Response variable
 
 ![](../figures/response.png)
@@ -150,9 +146,9 @@ knitr::include_graphics("../figures/decision_tree.png")
 
 ## Directed Acyclic Graphs (DAGs)
 
-Directed Acyclic Graphs (DAGs) were used to explore causality between the variables 
+Directed Acyclic Graphs (DAGs) were used to explore causality between the variables. 
 
-> - Tricky to create the DAG and implement (Rob Long)
+Tricky to create the DAG and implement - Rob Long.
 
 ```{r, echo=FALSE, out.width="70%"}
 knitr::include_graphics("../figures/dag-dep.png")
@@ -161,9 +157,9 @@ knitr::include_graphics("../figures/dag-dep.png")
 # Policy implicaitons
 
 ## Machine Learning and Big Data for the Transport Sector
-- Machine Learning and 'big data' present new opportunities for the transport sector.
+- Machine Learning and big data present new opportunities for the transport sector.
 
-- 'Big data' and Machine Learning offer the promise of more efficient and cheaper transport models based on rich, finely-grained data across a wider range of indicators.
+- Big data and Machine Learning offer the promise of more efficient and cheaper transport models based on rich, finely-grained data across a wider range of indicators.
 
 - However, they should not supplant domain expertise or contextual knowledge in transport policy and planning. They are best used as aides to human decision-making rather than replacements.
 
@@ -175,10 +171,10 @@ knitr::include_graphics("../figures/dag-dep.png")
 - Creating more sustainable regions by reducing car dependency and developing multi-modal mobility requires a multi-faceted approach that involves both ‘hard’ and ‘soft’ policy interventions.
 
 ## Contact
-Robin Lovelace, Institute for Transport Studies, University of Leeds
+Robin Lovelace - Institute for Transport Studies (ITS), University of Leeds
 r.lovelace@leeds.ac.uk
 
-Liam Bolton, Red Ninja / UCL
+Liam Bolton - Red Ninja / University College London
 liamthomasbolton@gmail.com
 
 ## References
