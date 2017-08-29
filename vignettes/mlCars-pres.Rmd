@@ -32,9 +32,9 @@ Project outline:
 
 ## Why car dependency?
 
-- Little *government funded* research into the issue (based on internet search)
-- Yet high impact (economic, social, environmental)
-- And builds on prior work with the PCT [@lovelace_propensity_2017]
+- Little *government funded* research into the issue
+- Yet high social, economic and environmental impact
+- It builds on prior work with the Propensity to Cycle Tool (PCT) [@lovelace_propensity_2017]
 
 ![](http://webarchive.nationalarchives.gov.uk/20110304133326/http://cfit.independent.gov.uk/pubs/2007/ebp/images/06.gif)
 
