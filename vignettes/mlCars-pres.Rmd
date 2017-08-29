@@ -174,5 +174,12 @@ knitr::include_graphics("../figures/dag-dep.png")
 
 - Creating more sustainable regions by reducing car dependency and developing multi-modal mobility requires a multi-faceted approach that involves both ‘hard’ and ‘soft’ policy interventions.
 
+## Contact
+Robin Lovelace, Institute for Transport Studies, University of Leeds
+r.lovelace@leeds.ac.uk
+
+Liam Bolton, Red Ninja / UCL
+liamthomasbolton@gmail.com
+
 ## References
 
