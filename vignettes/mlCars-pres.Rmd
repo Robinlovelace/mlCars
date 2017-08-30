@@ -30,7 +30,7 @@ Project outline:
 
 > - This project will explore the potential for emerging methods in Big Data and Machine Learning to be applied to transport modelling, with a focus on car dependency at the origin-destination level.
 
-## Why car dependency?
+## Why Car Dependency?
 
 - Little *government funded* research into the issue
 - Yet high social, economic and environmental impact
@@ -38,7 +38,7 @@ Project outline:
 
 ![](http://webarchive.nationalarchives.gov.uk/20110304133326/http://cfit.independent.gov.uk/pubs/2007/ebp/images/06.gif)
 
-## A personal definition of car-dependency
+## A Personal Definition of Car Dependency
 
 > If for some reason you could not longer use a car, would you find it... really inconvenient more or less every day never?
 
@@ -46,7 +46,7 @@ Project outline:
 
 ![](https://www.london.gov.uk/sites/default/files/styles/gla_9_2_large/public/gla_migrate_files_destination/cars%20resize.jpg)
 
-## Evidence-based measures of car dependency
+## Evidence-Based Measures of Car Dependency
 
 Simple measures:
 
@@ -79,7 +79,7 @@ knitr::include_graphics("../figures/car-dep-datashine.png")
 
 - An R package, **mlCars**, containing the source code, example data and reports to ensure reproducibility. The package can be accessed here: https://github.com/Robinlovelace/mlCars/
 
-## What is big data?
+## What is Big Data?
 
 Big data is an umbrella term. We define it as:
 
@@ -90,7 +90,7 @@ Big data is an umbrella term. We define it as:
 knitr::include_graphics("https://openclipart.org/image/300px/svg_to_png/170637/1339577112.png")
 ```
 
-## What is machine learning?
+## What is Machine Learning?
 
 > By machine learning, we mean simply that the functional form of the model is not specified by the user. 
 
@@ -103,9 +103,9 @@ describe the associations and patterns among a set of input measures.
 
 > Many transport problems can be framed as supervised Machine Learning problems.
 
-# Data and methods
+# Data and Methods
 
-## Official, open access data
+## Official, Open access Data
 
 - Origin-Desination (OD) data
 - Geographically aggregated socio-demographic data from the 2011 Census
@@ -114,17 +114,17 @@ describe the associations and patterns among a set of input measures.
 knitr::include_graphics("../figures/flows_500_westyorkshire.png")
 ```
 
-## OSM data
+## OSM Data
 - Spatial data from the OpenStreetMap API and the NAPTAN dataset
 
 ```{r, echo=FALSE, out.width="70%"}
 knitr::include_graphics("../figures/dist_motorways.png")
 ```
-## Response variable
+## Response Variable
 
 ![](../figures/response.png)
 
-## Classical statistical methods
+## Classical Statistical Methods
 
 - Descriptive Statistics
 - Visualisation
@@ -154,7 +154,7 @@ Tricky to create the DAG and implement - Rob Long.
 knitr::include_graphics("../figures/dag-dep.png")
 ```
 
-# Policy implicaitons
+# Policy Implicaitons
 
 ## The Policy Implications of Car Dependency
 - Car dependency is the cause of a variety of social, environmental and economic issues in West Yorkshire. 
