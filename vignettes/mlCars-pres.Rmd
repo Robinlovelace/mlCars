@@ -156,6 +156,11 @@ knitr::include_graphics("../figures/dag-dep.png")
 
 # Policy implicaitons
 
+## The Policy Implications of Car Dependency
+- Car dependency is the cause of a variety of social, environmental and economic issues in West Yorkshire. 
+
+- Creating more sustainable regions by reducing car dependency and developing multi-modal mobility requires a multi-faceted approach that involves both ‘hard’ and ‘soft’ policy interventions.
+
 ## Machine Learning and Big Data for the Transport Sector
 - Machine Learning and big data present new opportunities for the transport sector.
 
@@ -164,11 +169,6 @@ knitr::include_graphics("../figures/dag-dep.png")
 - However, they should not supplant domain expertise or contextual knowledge in transport policy and planning. They are best used as aides to human decision-making rather than replacements.
 
 - Barriers to the effective and ethical uptake of innovative new technologies in transport include: access to skills, investment in R&D and organisational culture.
-
-## The Policy Implications of Car Dependency
-- Car dependency is the cause of a variety of social, environmental and economic issues in West Yorkshire. 
-
-- Creating more sustainable regions by reducing car dependency and developing multi-modal mobility requires a multi-faceted approach that involves both ‘hard’ and ‘soft’ policy interventions.
 
 ## Contact
 Robin Lovelace - Institute for Transport Studies (ITS), University of Leeds.
