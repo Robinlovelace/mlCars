@@ -155,7 +155,36 @@ Tricky to create the DAG and implement - Rob Long.
 knitr::include_graphics("../figures/dag-dep.png")
 ```
 
-# Policy Implicaitons
+# Policy Implications
+
+## Methodological implications
+
+Oportunties:
+
+- Can be used to uncover patterns in complex multi-dimensional data that previous methods cannot
+- Encourages transport researchers to use a range of new datasets
+- ML development is primarily open source: opportunity for citizen science
+
+Risks:
+
+- Can be abused (e.g. to cherry-pick): enforce reproducibility
+- Easy to spend longer setting-up model than actually focussing on issue 
+
+## Methodological Recommendations:
+
+- Not a question of *whether* to use it but *when*, *how* and *by whom*
+- Use Keras: "Being able to go from idea to result with the least possible delay is key to doing good research."
+
+```{r, eval=FALSE}
+install.packages("keras")
+```
+
+- *Do not* use machine learning on a dataset unless:
+
+> - It is very well understood
+> - It has been cross-validated against other sources
+> - Value has been maximised by visualisation and analysis (imagine if the PCT had become a machine learning project!)
+
 
 ## The Policy Implications of Car Dependency
 - Car dependency is the cause of a variety of social, environmental and economic issues in West Yorkshire. 
