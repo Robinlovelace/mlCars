@@ -32,19 +32,20 @@ Project outline:
 
 ## Why Car Dependency?
 
-- Little *government funded* research into the issue
+- Little *government funded* research into the issue ([CfIT](http://webarchive.nationalarchives.gov.uk/20110304132841/http://cfit.independent.gov.uk/) abolished 2010)
 - Yet high social, economic and environmental impact
 - Builds on DfT work: Propensity to Cycle Tool (PCT) [@lovelace_propensity_2017]
 
-![](http://webarchive.nationalarchives.gov.uk/20110304133326/http://cfit.independent.gov.uk/pubs/2007/ebp/images/06.gif)
+![](http://webarchive.nationalarchives.gov.uk/20110304133326/http://cfit.independent.gov.uk/pubs/2007/ebp/images/06.gif) (Source: [CfIT](http://webarchive.nationalarchives.gov.uk/20110304132841/http://cfit.independent.gov.uk/))
 
-## A Personal Definition of Car Dependency
+## A Person Level Definition of Car Dependency
 
 > If for some reason you could not longer use a car, would you find it... really inconvenient more or less every day never?
 
 - Source: [@anable_complacent_2005]
 
-![](https://www.london.gov.uk/sites/default/files/styles/gla_9_2_large/public/gla_migrate_files_destination/cars%20resize.jpg)
+
+![](https://files.datapress.com/london/wp-uploads/20150610005357/London-UK-traffic-congested-city.jpeg)
 
 ## Evidence-Based Measures of Car Dependency
 
